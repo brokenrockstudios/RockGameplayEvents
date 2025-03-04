@@ -16,6 +16,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	static void BroadcastEvent(UPARAM(ref) FRockGameplayEventDelegate& EventDelegate, const AController* EventInstigator);
 
+	// TODO: Make a helper function for registering new EventDelegates at runtime that works for both C++ and Blueprint
+	// Similar to Multicast delegate's  MulticastDelegate.AddDynamic(this, &MyActor::SomeClass)
+	
+
 	
 	// This function is used by the FMemberReference to narrow down the type of bindable functions as the PrototypeFunction
 	UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly)
