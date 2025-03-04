@@ -1,11 +1,11 @@
 // Copyright Broken Rock Studios LLC. All Rights Reserved.
 // See the LICENSE file for details.
 
-#include "Library/RockGameplayEventFunctionLibrary.h"
+#include "Library/RockGameplayEventsFunctionLibrary.h"
 
 #include "Delegate/RockGameplayEventDelegate.h"
 
-inline void URockGameplayEventFunctionLibrary::BroadcastEvent(FRockGameplayEventDelegate& EventDelegate, const AController* EventInstigator)
+inline void URockGameplayEventsFunctionLibrary::BroadcastEvent(FRockGameplayEventDelegate& EventDelegate, const AController* EventInstigator)
 {
 	EventDelegate.BroadcastEvent(EventInstigator);
 }

@@ -4,17 +4,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "RockGameplayEventDelegateData.h"
+#include "RockGameplayEventListener.h"
 #include "UObject/Object.h"
 #include "RockGameplayEventDelegate.generated.h"
 
 USTRUCT(BlueprintType, Category = "RockGameplayEventMessages")
-struct ROCKGAMEPLAYEVENTMESSAGES_API FRockGameplayEventDelegate
+struct ROCKGAMEPLAYEVENTS_API FRockGameplayEventDelegate
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere)
-	TArray<FRockGameplayEventDelegateData> EventSubscriptions;
+	UPROPERTY(EditInstanceOnly, Category = "Rock|GameplayEvents")
+	TArray<FRockGameplayEventListener> EventListeners;
 	
 	void BroadcastEvent(const AController* EventInstigator);
 

@@ -2,12 +2,12 @@
 // See the LICENSE file for details.
 
 #include "Delegate/RockGameplayEventDelegate.h"
-#include "Delegate/RockGameplayEventDelegateData.h"
+#include "Delegate/RockGameplayEventListener.h"
 
 void FRockGameplayEventDelegate::BroadcastEvent(const AController* EventInstigator)
 {
-	for (FRockGameplayEventDelegateData& EventData : EventSubscriptions)
+	for (FRockGameplayEventListener& EventListener : EventListeners)
 	{
-		EventData.BroadcastEvent(EventInstigator);
+		EventListener.BroadcastEvent(EventInstigator);
 	}
 }

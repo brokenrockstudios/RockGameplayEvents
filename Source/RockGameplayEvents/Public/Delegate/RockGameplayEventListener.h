@@ -5,10 +5,10 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
-#include "RockGameplayEventDelegateData.generated.h"
+#include "RockGameplayEventListener.generated.h"
 
 USTRUCT(BlueprintType)
-struct ROCKGAMEPLAYEVENTMESSAGES_API FRockGameplayEventDelegateData
+struct ROCKGAMEPLAYEVENTS_API FRockGameplayEventListener
 {
 	GENERATED_BODY()
 	friend struct FRockGameplayEventDelegate;
@@ -16,7 +16,7 @@ struct ROCKGAMEPLAYEVENTMESSAGES_API FRockGameplayEventDelegateData
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TObjectPtr<AActor> TargetActor;
 
-	UPROPERTY(EditAnywhere, meta=(FunctionReference, PrototypeFunction="/Script/RockGameplayEventMessages.RockGameplayEventDelegateFunctionLibrary.Prototype_SendController"))
+	UPROPERTY(EditAnywhere, meta=(FunctionReference, PrototypeFunction="/Script/RockGameplayEvents.RockGameplayEventsFunctionLibrary.Prototype_SendController"))
 	FMemberReference EventFunctionReference;
 
 private:

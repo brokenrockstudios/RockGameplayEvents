@@ -6,7 +6,7 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
-class FRockGameplayEventMessagesEditorModule : public IModuleInterface
+class FRockGameplayEventsEditorModule : public IModuleInterface
 {
 public:
 	virtual void StartupModule() override;

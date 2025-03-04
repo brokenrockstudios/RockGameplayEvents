@@ -1,9 +1,9 @@
 // Copyright Broken Rock Studios LLC. All Rights Reserved.
 // See the LICENSE file for details.
 
-#include "Delegate/RockGameplayEventDelegateData.h"
+#include "Delegate/RockGameplayEventListener.h"
 
-void FRockGameplayEventDelegateData::BroadcastEvent(const AController* EventInstigator)
+void FRockGameplayEventListener::BroadcastEvent(const AController* EventInstigator)
 {
 	if (IsValid(TargetActor) && EventFunctionReference.GetMemberName().IsValid())
 	{

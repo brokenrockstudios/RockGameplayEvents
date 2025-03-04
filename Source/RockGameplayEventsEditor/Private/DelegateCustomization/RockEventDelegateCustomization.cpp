@@ -5,7 +5,7 @@
 
 #include "DetailWidgetRow.h"
 #include "PropertyCustomizationHelpers.h"
-#include "Delegate/RockGameplayEventDelegateData.h"
+#include "Delegate/RockGameplayEventListener.h"
 #include "Kismet2/BlueprintEditorUtils.h"
 
 #define LOCTEXT_NAMESPACE "FRockEventDelegateDetails"
@@ -81,9 +81,9 @@ void FRockEventDelegateDetails::CustomizeHeader(
 {
 	if (IModularFeatures::Get().IsModularFeatureAvailable("PropertyAccessEditor"))
 	{
-		TargetActorHandle = PropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FRockGameplayEventDelegateData, TargetActor));
+		TargetActorHandle = PropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FRockGameplayEventListener, TargetActor));
 		EventFunctionReferenceHandle = PropertyHandle->
-			GetChildHandle(GET_MEMBER_NAME_CHECKED(FRockGameplayEventDelegateData, EventFunctionReference));
+			GetChildHandle(GET_MEMBER_NAME_CHECKED(FRockGameplayEventListener, EventFunctionReference));
 
 		const FString& PrototypeFunctionName = EventFunctionReferenceHandle->GetMetaData("PrototypeFunction");
 		PrototypeFunction = PrototypeFunctionName.IsEmpty() ? nullptr : FindObject<UFunction>(nullptr, *PrototypeFunctionName);

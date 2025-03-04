@@ -6,16 +6,18 @@
 #include "CoreMinimal.h"
 #include "Delegate/RockGameplayEventDelegate.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
-#include "RockGameplayEventFunctionLibrary.generated.h"
+#include "RockGameplayEventsFunctionLibrary.generated.h"
 
 UCLASS()
-class ROCKGAMEPLAYEVENTMESSAGES_API URockGameplayEventFunctionLibrary : public UBlueprintFunctionLibrary
+class ROCKGAMEPLAYEVENTS_API URockGameplayEventsFunctionLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 public:
 	UFUNCTION(BlueprintCallable)
 	static void BroadcastEvent(UPARAM(ref) FRockGameplayEventDelegate& EventDelegate, const AController* EventInstigator);
 
+	
+	// This function is used by the FMemberReference to narrow down the type of bindable functions as the PrototypeFunction
 	UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly)
 	static void Prototype_SendController(AController* EventInstigator) {};
 

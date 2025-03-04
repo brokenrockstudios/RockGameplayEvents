@@ -3,16 +3,16 @@
 
 using UnrealBuildTool;
 
-public class RockGameplayEventMessagesEditor : ModuleRules
+public class RockGameplayEventsEditor : ModuleRules
 {
-	public RockGameplayEventMessagesEditor(ReadOnlyTargetRules Target) : base(Target)
+	public RockGameplayEventsEditor(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
 		PublicDependencyModuleNames.AddRange(
 			[
 				"Core",
-				"RockGameplayEventMessages",
+				"RockGameplayEvents",
 				"UnrealEd"
 			]
 		);
@@ -24,7 +24,8 @@ public class RockGameplayEventMessagesEditor : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
-				"InputCore"
+				"InputCore",
+				"PropertyEditor",
 			]
 		);
 	}

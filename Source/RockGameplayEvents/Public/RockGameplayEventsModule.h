@@ -5,7 +5,7 @@
 
 #include "Modules/ModuleManager.h"
 
-class FRockGameplayEventMessagesModule : public IModuleInterface
+class FRockGameplayEventsModule : public IModuleInterface
 {
 public:
 
