@@ -2,26 +2,25 @@
 	"FileVersion": 3,
 	"Version": 1,
 	"VersionName": "1.0",
-	"FriendlyName": "RockGameplayEventMessages",
-	"Description": "events",
+	"FriendlyName": "RockGameplayEvents",
+	"Description": "GameplayEvents for instanced event binding",
 	"Category": "Other",
 	"CreatedBy": "Broken Rock Studios, LLC",
-	"CreatedByURL": "",
-	"DocsURL": "",
-	"MarketplaceURL": "",
-	"SupportURL": "",
+	"CreatedByURL": "https://github.com/brokenrockstudios/RockGameplayEvents",
+	"DocsURL": "https://github.com/brokenrockstudios/RockGameplayEvents/wiki",
+	"SupportURL": "https://github.com/brokenrockstudios/RockGameplayEvents/issues",
 	"CanContainContent": true,
 	"IsBetaVersion": false,
 	"IsExperimentalVersion": false,
 	"Installed": false,
 	"Modules": [
 		{
-			"Name": "RockGameplayEventMessages",
+			"Name": "RockGameplayEvents",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		},
 		{
-			"Name": "RockGameplayEventMessagesEditor",
+			"Name": "RockGameplayEventsEditor",
 			"Type": "Editor",
 			"LoadingPhase": "Default"
 		}
