@@ -1,7 +1,8 @@
 // Copyright Broken Rock Studios LLC. All Rights Reserved.
 // See the LICENSE file for details.
 
-#include "DelegateCustomization/RockEventDelegateCustomization.h"
+
+#include "DetailCustomization/RockGameplayEventListenerCustomization.h"
 
 #include "DetailWidgetRow.h"
 #include "PropertyCustomizationHelpers.h"
@@ -10,12 +11,12 @@
 
 #define LOCTEXT_NAMESPACE "FRockEventDelegateDetails"
 
-TSharedRef<IPropertyTypeCustomization> FRockEventDelegateDetails::MakeInstance()
+TSharedRef<IPropertyTypeCustomization> FRockGameplayEventListenerCustomization::MakeInstance()
 {
-	return MakeShareable(new FRockEventDelegateDetails());
+	return MakeShareable(new FRockGameplayEventListenerCustomization());
 }
 
-FText FRockEventDelegateDetails::GetSelectedFunctionName() const
+FText FRockGameplayEventListenerCustomization::GetSelectedFunctionName() const
 {
 	FMemberReference MemberReference;
 	void* StructData = nullptr;
@@ -28,13 +29,13 @@ FText FRockEventDelegateDetails::GetSelectedFunctionName() const
 }
 
 
-TSharedRef<SWidget> FRockEventDelegateDetails::MakeFunctionItemWidget(const TSharedPtr<FString> InItem)
+TSharedRef<SWidget> FRockGameplayEventListenerCustomization::MakeFunctionItemWidget(const TSharedPtr<FString> InItem)
 {
 	return SNew(STextBlock)
 		.Text(FText::FromString(*InItem));
 }
 
-bool FRockEventDelegateDetails::IsCompatibleFunction(const UFunction* TestFunction) const
+bool FRockGameplayEventListenerCustomization::IsCompatibleFunction(const UFunction* TestFunction) const
 {
 	if (TestFunction && PrototypeFunction)
 	{
@@ -47,7 +48,7 @@ bool FRockEventDelegateDetails::IsCompatibleFunction(const UFunction* TestFuncti
 	return false;
 }
 
-void FRockEventDelegateDetails::UpdateFunctionList()
+void FRockGameplayEventListenerCustomization::UpdateFunctionList()
 {
 	FunctionList.Empty();
 
@@ -70,13 +71,13 @@ void FRockEventDelegateDetails::UpdateFunctionList()
 	}
 }
 
-void FRockEventDelegateDetails::OnTargetActorChanged(const FAssetData& NewAssetData)
+void FRockGameplayEventListenerCustomization::OnTargetActorChanged(const FAssetData& NewAssetData)
 {
 	UpdateFunctionList();
 }
 
 
-void FRockEventDelegateDetails::CustomizeHeader(
+void FRockGameplayEventListenerCustomization::CustomizeHeader(
 	TSharedRef<IPropertyHandle> PropertyHandle, FDetailWidgetRow& HeaderRow, IPropertyTypeCustomizationUtils& InStructCustomizationUtils)
 {
 	if (IModularFeatures::Get().IsModularFeatureAvailable("PropertyAccessEditor"))
@@ -90,12 +91,12 @@ void FRockEventDelegateDetails::CustomizeHeader(
 
 		UpdateFunctionList();
 		HeaderRow
-			.NameContent()
-			[
-				PropertyHandle->CreatePropertyNameWidget()
-			]
-			.ValueContent()
-			.MinDesiredWidth(500.f)
+			// .NameContent()
+			// [
+			// 	PropertyHandle->CreatePropertyNameWidget()
+			// ]
+			// .ValueContent()
+			// .MinDesiredWidth(500.f)
 			[
 				SNew(SVerticalBox)
 				+ SVerticalBox::Slot()
@@ -104,7 +105,7 @@ void FRockEventDelegateDetails::CustomizeHeader(
 					SNew(SObjectPropertyEntryBox)
 					.PropertyHandle(TargetActorHandle)
 					.AllowedClass(AActor::StaticClass())
-					.OnObjectChanged(this, &FRockEventDelegateDetails::OnTargetActorChanged)
+					.OnObjectChanged(this, &FRockGameplayEventListenerCustomization::OnTargetActorChanged)
 				]
 				+ SVerticalBox::Slot()
 				.AutoHeight()
@@ -112,19 +113,24 @@ void FRockEventDelegateDetails::CustomizeHeader(
 					// TODO: FoodForThought Is there a better way to leverage the BlueprintMemberReferenceCustomization
 					SNew(SComboBox<TSharedPtr<FString>>)
 					.OptionsSource(&FunctionList)
-					.OnGenerateWidget(this, &FRockEventDelegateDetails::MakeFunctionItemWidget)
-					.OnSelectionChanged(this, &FRockEventDelegateDetails::OnFunctionSelected)
+					.OnGenerateWidget(this, &FRockGameplayEventListenerCustomization::MakeFunctionItemWidget)
+					.OnSelectionChanged(this, &FRockGameplayEventListenerCustomization::OnFunctionSelected)
 					.Content()
 					[
 						SNew(STextBlock)
-						.Text(this, &FRockEventDelegateDetails::GetSelectedFunctionName)
+						.Text(this, &FRockGameplayEventListenerCustomization::GetSelectedFunctionName)
 					]
 				]
 			];
 	}
 }
 
-void FRockEventDelegateDetails::OnFunctionSelected(const TSharedPtr<FString> Item, ESelectInfo::Type SelectInfo)
+void FRockGameplayEventListenerCustomization::CustomizeChildren(
+	TSharedRef<IPropertyHandle> PropertyHandle, IDetailChildrenBuilder& InChildBuilder, IPropertyTypeCustomizationUtils& InStructCustomizationUtils)
+{
+}
+
+void FRockGameplayEventListenerCustomization::OnFunctionSelected(const TSharedPtr<FString> Item, ESelectInfo::Type SelectInfo)
 {
 	if (Item.IsValid())
 	{
