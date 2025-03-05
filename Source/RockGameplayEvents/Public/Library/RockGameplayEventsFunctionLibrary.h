@@ -16,15 +16,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 	static void BroadcastEvent(UPARAM(ref) FRockGameplayEventDelegate& EventDelegate, const AController* EventInstigator);
 
-	// TODO: Make a helper function for registering new EventDelegates at runtime that works for both C++ and Blueprint
-	// Similar to Multicast delegate's  MulticastDelegate.AddDynamic(this, &MyActor::SomeClass)
-	
-
-	
 	// This function is used by the FMemberReference to narrow down the type of bindable functions as the PrototypeFunction
 	UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly)
-	static void Prototype_SendController(AController* EventInstigator) {};
+	static void Prototype_SendController(const AController* EventInstigator) {};
+	
+	// TODO: Make a helper function for registering new EventDelegates at runtime that works for both C++ and Blueprint
+	// Similar to Multicast delegate's MulticastDelegate.AddDynamic(this, &MyActor::SomeClass)
 
+	// TODO: Register a new EventDelegate to be used in the EventSystem
+	//UFUNCTION(BlueprintCallable)
+	// static void RegisterEventDelegate(UPARAM(ref) FRockGameplayEventDelegate& EventDelegate, AActor* TargetActor, TFunction<void(AController*)>&& Callback);
 
 	// TODO: Experimental support for ambiguous structs similar to GameplayMessageSubsystem
 	// UFUNCTION(BlueprintCallable, CustomThunk, Category=Messaging, meta=(CustomStructureParam="Message", AllowAbstract="false", DisplayName="Broadcast Event"))

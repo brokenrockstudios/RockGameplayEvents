@@ -11,15 +11,27 @@ inline void URockGameplayEventsFunctionLibrary::BroadcastEvent(FRockGameplayEven
 }
 
 
+
+
 // TODO: Experimental
+
+// void URockGameplayEventsFunctionLibrary::RegisterEventDelegate(FRockGameplayEventDelegate& EventDelegate, AActor* TargetActor, TFunction<void(AController*)>&& Callback)
+// {
+// 	FRockGameplayEventListener EventListener;
+// 	EventListener.TargetActor = TargetActor;
+// 	// TODO:
+// 	// EventListener.cachedFunction = MoveTemp(Callback);
+// 	
+// 	EventDelegate.EventListeners.Add(EventListener);
+// }
 //
-// void URockGameplayEventFunctionLibrary::K2_BroadcastEvent(const int32& Message)
+// void URockGameplayEventsFunctionLibrary::K2_BroadcastEvent(const int32& Message)
 // {
 // 	// This will never be called, the exec version below will be hit instead
 // 	checkNoEntry();
 // }
 //
-// DEFINE_FUNCTION(URockGameplayEventFunctionLibrary::execK2_BroadcastEvent)
+// DEFINE_FUNCTION(URockGameplayEventsFunctionLibrary::execK2_BroadcastEvent)
 // {
 // 	Stack.MostRecentPropertyAddress = nullptr;
 // 	Stack.StepCompiledIn<FStructProperty>(nullptr);

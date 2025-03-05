@@ -8,23 +8,31 @@
 #include "UObject/Object.h"
 #include "RockGameplayEventDelegate.generated.h"
 
+//declare multicast delegate
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FRockGameplayEvent, const AController*, EventInstigator);
+
 USTRUCT(BlueprintType, Category = "RockGameplayEventMessages")
 struct ROCKGAMEPLAYEVENTS_API FRockGameplayEventDelegate
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditInstanceOnly, Category = "Rock|GameplayEvents")
-	TArray<FRockGameplayEventListener> EventListeners;
-	
 	void BroadcastEvent(const AController* EventInstigator);
 
+	// Used for any and all runtime subscriptions
+	UPROPERTY(BlueprintAssignable, EditAnywhere, BlueprintReadWrite, Category = "Rock|GameplayEvents")
+	FRockGameplayEvent OnGameplayEvent;
+	
+private:
+	friend class FRockGameplayEventDelegateCustomization;
+	
+	// Only used for Placed In level imposed subscriptions
+	UPROPERTY(EditInstanceOnly, Category = "Rock|GameplayEvents", meta = (AllowPrivateAccess = "true"))
+	TArray<FRockGameplayEventListener> EventListeners;
+	
 	// TODO:
 	// Add support for arbitrary struct or perhaps a generic UObject* similar to GAS for arbitrary payloads?
 	// void BroadcastMessage(const FMessageStructType& Message)
 };
-
-
-
 
 
 // TODO: Food for thought
