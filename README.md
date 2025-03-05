@@ -42,6 +42,8 @@ However, most all of these don't support hooking up 2 independent actors that ar
 
 Any portions of the code that are not covered by Epic's EULA are licensed under the MIT License, as specified in the LICENSE file.
 
+- Unreal Engine EULA: https://www.unrealengine.com/eula
+- Unreal Engine Content EULA: https://www.unrealengine.com/eula/content
 
 # Credit
 
