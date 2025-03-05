@@ -1,9 +1,16 @@
 # RockGameplayEvents
 A relatively simple event system for hooking up instanced actors and ability to broadcast events
 
+# The problem we are trying to solve
+If you have ever wanted to connect the output event from 1 actor placed in the editor and hooked up without the level blueprint.
+Additionally without potential limitations of interfaces and/or components.
+
 # Why you should use this plugin
 If you want to connect an broadcastable event from 1 actor to another in the editor. 
 If you want to accomplish this with ANY actor, no components and no interfaces.
+
+Trigger: All you need is either an exposed RockGameplayEventDelegate variable in C++ or BP on the triggering actor
+Receiver: All you need is a Function that matches the signature `void AnyNamedFunction(const AController*)` in either C++ or Blueprint. 
 
 # How simple is it?
 All you have to do is add a Broadcast Event when something happens
