@@ -2,7 +2,7 @@
 A relatively simple event system for hooking up instanced actors and ability to broadcast events
 
 # The problem we are trying to solve
-If you have ever wanted to connect the output event from 1 actor placed in the editor and hooked up without the level blueprint.
+If you have ever wanted to connect the output event from 1 actor placed in the editor and trigger a function on another actor, but specifically hooking it up without the level blueprint and in the level editor.
 Additionally without potential limitations of interfaces and/or components.
 
 # Why you should use this plugin
