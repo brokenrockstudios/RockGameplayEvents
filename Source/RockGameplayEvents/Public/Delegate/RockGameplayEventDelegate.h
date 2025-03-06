@@ -8,7 +8,6 @@
 #include "UObject/Object.h"
 #include "RockGameplayEventDelegate.generated.h"
 
-//declare multicast delegate
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FRockGameplayEvent, const AController*, EventInstigator);
 
 USTRUCT(BlueprintType, Category = "RockGameplayEventMessages")

@@ -3,7 +3,7 @@
 	"Version": 1,
 	"VersionName": "1.0",
 	"FriendlyName": "RockGameplayEvents",
-	"Description": "GameplayEvents for instanced event binding",
+	"Description": "GameplayEvents for level editor event binding",
 	"Category": "Other",
 	"CreatedBy": "Broken Rock Studios, LLC",
 	"CreatedByURL": "https://github.com/brokenrockstudios/RockGameplayEvents",
