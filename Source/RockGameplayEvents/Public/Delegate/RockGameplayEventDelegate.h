@@ -8,7 +8,19 @@
 #include "UObject/Object.h"
 #include "RockGameplayEventDelegate.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FRockGameplayEvent, const AController*, EventInstigator);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FRockGameplayEvent_Basic);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FRockGameplayEvent, const AController*, EventInstigator); // deprecated
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FRockGameplayEvent_Controller, const AController*, EventController);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FRockGameplayEvent_Object, const UObject*, EventObject);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FRockGameplayEvent_String, const FString, EventString);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FRockGameplayEvent_Int, const int32, EventInt);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FRockGameplayEvent_Float, const float, EventFloat);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FRockGameplayEvent_Bool, const bool, EventBool);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FRockGameplayEvent_Vector, const FVector, EventVector);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FRockGameplayEvent_Rotator, const FRotator, EventRotator);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FRockGameplayEvent_Transform, const FTransform, EventTransform);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FRockGameplayEvent_Actor, const AActor*, EventActor);
+
 
 USTRUCT(BlueprintType, Category = "RockGameplayEventMessages")
 struct ROCKGAMEPLAYEVENTS_API FRockGameplayEventDelegate

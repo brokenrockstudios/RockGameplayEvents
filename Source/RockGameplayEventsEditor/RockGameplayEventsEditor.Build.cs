@@ -26,7 +26,10 @@ public class RockGameplayEventsEditor : ModuleRules
 				"SlateCore",
 				"InputCore",
 				"PropertyEditor",
-				"LiveCoding"
+				"LiveCoding",
+				"UnrealEd",
+				"BlueprintGraph",
+				"ToolWidgets",
 			]
 		);
 	}
