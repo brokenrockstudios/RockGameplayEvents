@@ -5,36 +5,8 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Delegate/RockGameplayEventConnection.h"
 #include "RockDelegateConnectorComponent.generated.h"
-
-USTRUCT(BlueprintType)
-struct FRockGameplayEventBinding
-{
-	GENERATED_BODY()
-	UPROPERTY(EditAnywhere)
-	TObjectPtr<AActor> TargetActor;
-
-	// This must match the signature of FRockGameplayEventConnection::DelegatePropertyName
-	UPROPERTY(EditAnywhere)
-	FName FunctionNameToBind; 
-};
-
-USTRUCT(BlueprintType)
-struct FRockGameplayEventConnection
-{
-	GENERATED_BODY()
-	// The owner's Multicast Delegate Property to bind to
-	UPROPERTY(EditAnywhere)
-	FName DelegatePropertyName;
-	
-	UPROPERTY(EditAnywhere)
-	TArray<FRockGameplayEventBinding> Bindings;
-
-private:
-	friend class URockDelegateConnectorComponent;
-	void Connect(const UClass* SourceClass);
-};
-
 
 UCLASS(ClassGroup=(RockGameplayEvents), meta=(BlueprintSpawnableComponent), HideCategories = (Activation, Navigation, Tags, Cooking, AssetUserData))
 class ROCKGAMEPLAYEVENTS_API URockDelegateConnectorComponent : public UActorComponent
@@ -42,12 +14,19 @@ class ROCKGAMEPLAYEVENTS_API URockDelegateConnectorComponent : public UActorComp
 	GENERATED_BODY()
 public:
 	URockDelegateConnectorComponent();
-
-	UPROPERTY(EditAnywhere, Category = "Delegates")
+	
+	UPROPERTY(EditAnywhere, AdvancedDisplay)
+	bool bShowSparseDelegates = true;
+	
+	UPROPERTY(EditAnywhere, AdvancedDisplay)
+	bool bAutoDestroyAfterBind = true;
+	
+	// TODO: Wrap this in something else that can be optionally stuck on actor via a UObject instead of ActorComponent?
+	UPROPERTY(EditAnywhere)
 	TArray<FRockGameplayEventConnection> DelegateConnections;
 	
 protected:
-	// Called when the game starts
 	virtual void BeginPlay() override;
-
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+	virtual void OnRegister() override;
 };

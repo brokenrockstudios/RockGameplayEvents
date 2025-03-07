@@ -3,7 +3,9 @@
 
 #include "RockGameplayEventsEditorModule.h"
 
+#include "Component/RockDelegateConnectorComponent.h"
 #include "Delegate/RockGameplayEventDelegate.h"
+#include "DetailCustomization/RockGameplayEventDelegateConnectionsCustomization.h"
 #include "DetailCustomization/RockGameplayEventDelegateCustomization.h"
 
 #define LOCTEXT_NAMESPACE "FRockGameplayEventMessagesModule"
@@ -12,8 +14,11 @@ void FRockGameplayEventsEditorModule::StartupModule()
 {
 	FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
 
-	PropertyModule.RegisterCustomPropertyTypeLayout(FRockGameplayEventDelegate::StaticStruct()->GetFName(),
-		FOnGetPropertyTypeCustomizationInstance::CreateStatic(&FRockGameplayEventDelegateCustomization::MakeInstance));
+	//PropertyModule.RegisterCustomPropertyTypeLayout(FRockGameplayEventDelegate::StaticStruct()->GetFName(),
+	// FOnGetPropertyTypeCustomizationInstance::CreateStatic(&FRockGameplayEventDelegateCustomization::MakeInstance));
+	
+	PropertyModule.RegisterCustomPropertyTypeLayout(FRockGameplayEventConnection::StaticStruct()->GetFName(),
+		FOnGetPropertyTypeCustomizationInstance::CreateStatic(&FRockGameplayEventDelegateConnectionsCustomization::MakeInstance));
 }
 
 void FRockGameplayEventsEditorModule::ShutdownModule()
@@ -21,7 +26,8 @@ void FRockGameplayEventsEditorModule::ShutdownModule()
 	if (UObjectInitialized() && FModuleManager::Get().IsModuleLoaded("PropertyEditor"))
 	{
 		FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
-		PropertyModule.UnregisterCustomPropertyTypeLayout(FRockGameplayEventDelegate::StaticStruct()->GetFName());
+		// PropertyModule.UnregisterCustomPropertyTypeLayout(FRockGameplayEventDelegate::StaticStruct()->GetFName());
+		PropertyModule.UnregisterCustomPropertyTypeLayout(FRockGameplayEventConnection::StaticStruct()->GetFName());
 	}
 }
 
