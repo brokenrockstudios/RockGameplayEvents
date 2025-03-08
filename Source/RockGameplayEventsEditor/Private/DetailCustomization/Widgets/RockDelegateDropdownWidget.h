@@ -1,12 +1,10 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Broken Rock Studios LLC. All Rights Reserved.
+// See the LICENSE file for details.
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
-
-// Generated is for UCLASS and USTRUCTs
-//#include "RockDelegateDropdownWidget.generated.h"
 
 struct FRockDelegateInfo;
 DECLARE_DELEGATE_TwoParams(FOnDelegateSelected, TSharedPtr<FRockDelegateInfo>, ESelectInfo::Type);
@@ -14,7 +12,7 @@ DECLARE_DELEGATE_TwoParams(FOnDelegateSelected, TSharedPtr<FRockDelegateInfo>, E
 class ROCKGAMEPLAYEVENTSEDITOR_API SRockDelegateDropdownWidget : public SCompoundWidget
 {
 	SLATE_BEGIN_ARGS(SRockDelegateDropdownWidget)
-		:_ComboButtonStyle(nullptr)
+		: _ComboButtonStyle(nullptr)
 		, _ButtonStyle(nullptr)
 		, _ContentPadding(FMargin(4.0f, 2.0f))
 		, _MaxListHeight(450.0f)

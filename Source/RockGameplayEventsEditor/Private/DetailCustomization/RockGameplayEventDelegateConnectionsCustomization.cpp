@@ -9,10 +9,10 @@
 #include "PropertyCustomizationHelpers.h"
 #include "RandomFunctions.h"
 #include "Component/RockDelegateConnectorComponent.h"
-#include "DetailCustomization/RockDelegateDropdownWidget.h"
-#include "DetailCustomization/RockFunctionDropdownWidget.h"
 #include "Kismet2/BlueprintEditorUtils.h"
 #include "Misc/MiscHelperFunctions.h"
+#include "Widgets/RockDelegateDropdownWidget.h"
+#include "Widgets/RockFunctionDropdownWidget.h"
 #include "Widgets/Text/STextBlock.h"
 
 #define LOCTEXT_NAMESPACE "FRockEventDelegateDetails"
@@ -46,12 +46,6 @@ void FRockGameplayEventDelegateConnectionsCustomization::CustomizeHeader(
 
 	uint32 NumElements;
 	BindingsHandler->GetNumChildren(NumElements);
-
-	// BindingsHandler->SetOnPropertyValueChanged(FSimpleDelegate::CreateLambda(
-	// 	[&InStructCustomizationUtils]()
-	// 	{
-	// 		//InStructCustomizationUtils.GetPropertyUtilities()->ForceRefresh();
-	// 	}));
 
 	HeaderRow
 		.NameContent()
@@ -92,16 +86,13 @@ void FRockGameplayEventDelegateConnectionsCustomization::CustomizeChildren(
 	{
 		return;
 	}
-
 	AvailableDelegates.Empty();
-	AvailableDelegatesStrings.Empty();
 	auto delegates = UMiscHelperFunctions::GetDelegatesForActorClass(PropertyOwnerClass);
 
 	for (const FRockDelegateInfo& Delegate : delegates)
 	{
 		AvailableDelegates.Add(MakeShareable(new FRockDelegateInfo(Delegate)));
 	}
-	FilterableDelegates = AvailableDelegates;
 
 	InChildBuilder.AddProperty(DelegatePropertyNameHandler.ToSharedRef())
 		.CustomWidget()
@@ -115,7 +106,6 @@ void FRockGameplayEventDelegateConnectionsCustomization::CustomizeChildren(
 				SNew(STextBlock)
 				.Text(this, &FRockGameplayEventDelegateConnectionsCustomization::GetSelectedDelegate)
 			]
-		//	MakePopupButton()
 		];
 
 	uint32 NumChildren;
@@ -168,23 +158,6 @@ void FRockGameplayEventDelegateConnectionsCustomization::CustomizeChildren(
 							SNew(STextBlock)
 							.Text(this, &FRockGameplayEventDelegateConnectionsCustomization::GetSelectedFunctionName, ElementHandle)
 						]
-						// {
-						// 	UE_LOG(LogTemp, Warning, TEXT("Function Selected"));
-						// 	//OnFunctionChanged(Function, SelectType, ElementHandle);
-						// })
-						
-						
-					// SNew(SComboBox<TSharedPtr<FString>>)
-					// .OptionsSource(&FunctionList)
-					// .OnGenerateWidget_Lambda([](const TSharedPtr<FString>& InItem)
-					// {
-					// 	return SNew(STextBlock).Text(FText::FromString(*InItem));
-					// })
-					// .OnSelectionChanged(this, &FRockGameplayEventDelegateConnectionsCustomization::OnFunctionChanged, ElementHandle)
-					// [
-					// 	SNew(STextBlock)
-					// 	.Text(this, &FRockGameplayEventDelegateConnectionsCustomization::GetSelectedFunctionName, ElementHandle)
-					// ]
 				]
 			]
 			+ SHorizontalBox::Slot()
@@ -197,151 +170,6 @@ void FRockGameplayEventDelegateConnectionsCustomization::CustomizeChildren(
 }
 
 
-FText FRockGameplayEventDelegateConnectionsCustomization::GetSelectedFunctionName(TSharedPtr<IPropertyHandle> PropertyHandle) const
-{
-	const TSharedPtr<IPropertyHandle> TargetActorHandle = PropertyHandle->GetChildHandle(
-		GET_MEMBER_NAME_CHECKED(FRockGameplayEventBinding, TargetActor), false);
-	const TSharedPtr<IPropertyHandle> EventFunctionReferenceHandle = PropertyHandle->GetChildHandle(
-		GET_MEMBER_NAME_CHECKED(FRockGameplayEventBinding, FunctionNameToBind), false);
-
-	const AActor* Actor = GetActorFromHandle(TargetActorHandle);
-	const UBlueprint* Blueprint = GetBlueprintClassFromActor(Actor);
-	if (TargetActorHandle.IsValid() && EventFunctionReferenceHandle.IsValid())
-	{
-		void* StructData = nullptr;
-		const FPropertyAccess::Result Result = EventFunctionReferenceHandle->GetValueData(StructData);
-		if (Result == FPropertyAccess::Success)
-		{
-			check(StructData);
-			//FMemberReference* MemberReference = static_cast<FMemberReference*>(StructData);
-			FName Name = *static_cast<FName*>(StructData);
-			return FText::FromName(Name);
-			//if (UFunction* Function = MemberReference->ResolveMember<UFunction>(Blueprint->SkeletonGeneratedClass))
-			// {
-			//	return FText::FromName(Function->GetFName());
-			//}
-		}
-	}
-	return FText::FromString("");
-}
-
-
-UBlueprint* FRockGameplayEventDelegateConnectionsCustomization::GetBlueprintClassFromActor(const AActor* Actor) const
-{
-	if (Actor)
-	{
-		UClass* ActorClass = Actor->GetClass();
-		if (ActorClass)
-		{
-			return Cast<UBlueprint>(ActorClass->ClassGeneratedBy);
-		}
-	}
-	return nullptr;
-}
-
-AActor* FRockGameplayEventDelegateConnectionsCustomization::GetActorFromHandle(const TSharedPtr<IPropertyHandle>& PropertyHandle) const
-{
-	UObject* TargetActorObject = nullptr;
-	PropertyHandle->GetValue(TargetActorObject);
-	return Cast<AActor>(TargetActorObject);
-}
-
-void FRockGameplayEventDelegateConnectionsCustomization::OnFunctionSelected( UFunction* theFunction, ESelectInfo::Type someType, TSharedPtr<IPropertyHandle> ElementHandle)
-{
-	if (theFunction)
-	{
-		OnFunctionChanged(MakeShareable(new FString(theFunction->GetName())), someType, ElementHandle);
-	}
-	else
-	{
-		OnFunctionChanged(MakeShareable(new FString("None")), someType, ElementHandle);
-	}
-}
-	
-	
-void FRockGameplayEventDelegateConnectionsCustomization::OnFunctionChanged(
-	TSharedPtr<FString> Item,
-	ESelectInfo::Type SelectInfo,
-	TSharedPtr<IPropertyHandle> ElementHandle) const
-{
-	FString itemStr = *Item;
-	UE_LOG(LogTemp, Warning, TEXT("OnFunctionChanged Item: %s"), *itemStr);
-
-	const TSharedPtr<IPropertyHandle> TargetActorHandle = ElementHandle->GetChildHandle(
-		GET_MEMBER_NAME_CHECKED(FRockGameplayEventBinding, TargetActor), false);
-	const TSharedPtr<IPropertyHandle> EventFunctionReferenceHandle = ElementHandle->GetChildHandle(
-		GET_MEMBER_NAME_CHECKED(FRockGameplayEventBinding, FunctionNameToBind), false);
-	if (Item.IsValid() && TargetActorHandle.IsValid() && EventFunctionReferenceHandle.IsValid())
-	{
-		// Get the selected function name
-		const FString SelectedFunctionNameStr(*Item);
-		const FName SelectedFunctionName(*Item);
-		if (SelectedFunctionNameStr == "None")
-		{
-			// Set the function name to none
-			FString NoneFunction = "";
-			EventFunctionReferenceHandle->SetValue(NoneFunction);
-			return;
-		}
-		EventFunctionReferenceHandle->SetValue(SelectedFunctionName);
-		
-		// 	const AActor* Actor = GetActorFromHandle(TargetActorHandle);
-		// 	if (!Actor)
-		// 	{
-		// 		// Failed to cast the target actor to AActor.
-		// 		return;
-		// 	}
-		//
-		// 	const UClass* ScopeClass = Actor->GetClass();
-		// 	if (ScopeClass == nullptr)
-		// 	{
-		// 		// Failed to retrieve the class of the target actor.
-		// 		return;
-		// 	}
-		//
-		// 	const UFunction* Function = ScopeClass->FindFunctionByName(SelectedFunctionName);
-		// 	if (Function == nullptr)
-		// 	{
-		// 		// Failed to find the function by name.
-		// 		return;
-		// 	}
-		//
-		// 	const UBlueprint* Blueprint = GetBlueprintClassFromActor(Actor);
-		// 	if (Blueprint == nullptr)
-		// 	{
-		// 		// Failed to cast the class generated by the blueprint.
-		// 		return;
-		// 	}
-		//
-		// void* StructData = nullptr;
-		// const FPropertyAccess::Result Result = EventFunctionReferenceHandle->GetValueData(StructData);
-		// if (Result == FPropertyAccess::Success)
-		// {
-		// 	check(StructData)
-		// 	FName* Name = static_cast<FName*>(StructData);
-		// 	//const bool bSelfContext = (Blueprint->GeneratedClass != nullptr && Blueprint->GeneratedClass->IsChildOf(ScopeClass)) ||
-		// 	//	(Blueprint->SkeletonGeneratedClass != nullptr && Blueprint->SkeletonGeneratedClass->IsChildOf(ScopeClass));
-		//
-		// 	*Name = SelectedFunctionName;
-		// 	//MemberReference->SetFromField<UFunction>(Function, bSelfContext);
-		// }
-	}
-}
-
-//void FRockGameplayEventDelegateConnectionsCustomization::OnMulticastDelegateSelected(TSharedPtr<FRockDelegateInfo> InItem, ESelectInfo::Type arg)
-void FRockGameplayEventDelegateConnectionsCustomization::OnMulticastDelegateSelected(TSharedPtr<FRockDelegateInfo> InItem, ESelectInfo::Type arg)
-{
-	if (DelegatePropertyNameHandler.IsValid())
-	{
-		DelegatePropertyNameHandler->SetValue(InItem->Name);
-	}
-	if (DelegatePropertyTypeHandler.IsValid())
-	{
-		ERockDelegateType type = InItem->bIsSparse ? ERockDelegateType::Sparse : ERockDelegateType::Regular;
-		DelegatePropertyTypeHandler->SetValue(static_cast<int32>(type));
-	}
-}
-
 void FRockGameplayEventDelegateConnectionsCustomization::UpdateFunctionList(const TSharedPtr<IPropertyHandle>& TargetActorHandle)
 {
 	ElementFunctionListMap[TargetActorHandle].Empty();
@@ -350,7 +178,6 @@ void FRockGameplayEventDelegateConnectionsCustomization::UpdateFunctionList(cons
 	const FText SelectedDelegate2 = GetSelectedDelegate();
 	if (!PropertyOwnerClass || SelectedDelegate2.IsEmpty())
 	{
-		//ElementFunctionListMap[TargetActorHandle].Add(NoneFunction);
 		return;
 	}
 
@@ -358,12 +185,10 @@ void FRockGameplayEventDelegateConnectionsCustomization::UpdateFunctionList(cons
 		*SelectedDelegate2.ToString());
 	if (!MulticastDelegateProperty)
 	{
-		//ElementFunctionListMap[TargetActorHandle].Add(NoneFunction);
 		return;
 	}
 	auto pprotoTypeFunction = MulticastDelegateProperty->SignatureFunction;
 
-	// IsCompatiableFunction Lambda
 	auto IsCompatibleFunction = [this, pprotoTypeFunction](const UFunction* TestFunction) -> bool
 	{
 		if (TestFunction && pprotoTypeFunction)
@@ -394,14 +219,85 @@ void FRockGameplayEventDelegateConnectionsCustomization::UpdateFunctionList(cons
 			}
 		}
 	}
-	// Let's always have at least 1 option
-	//if (Function_List.Num() == 0)
+}
+
+
+	
+void FRockGameplayEventDelegateConnectionsCustomization::OnMulticastDelegateSelected(TSharedPtr<FRockDelegateInfo> InItem, ESelectInfo::Type arg)
+{
+	if (DelegatePropertyNameHandler.IsValid())
 	{
-		//Function_List.Add(NoneFunction);
+		DelegatePropertyNameHandler->SetValue(InItem->Name);
+	}
+	if (DelegatePropertyTypeHandler.IsValid())
+	{
+		ERockDelegateType type = InItem->bIsSparse ? ERockDelegateType::Sparse : ERockDelegateType::Regular;
+		DelegatePropertyTypeHandler->SetValue(static_cast<int32>(type));
 	}
 }
 
-const UClass* FRockGameplayEventDelegateConnectionsCustomization::GetPropertyOwnerClassFromBindingsHandler()
+void FRockGameplayEventDelegateConnectionsCustomization::OnFunctionSelected( UFunction* theFunction, ESelectInfo::Type someType, TSharedPtr<IPropertyHandle> ElementHandle)
+{
+	FString itemStr = "None";
+	if (theFunction)
+	{
+		itemStr = *theFunction->GetName();
+	}
+	UE_LOG(LogTemp, Warning, TEXT("OnFunctionSelected Item: %s"), *itemStr);
+	const TSharedPtr<IPropertyHandle> EventFunctionReferenceHandle = ElementHandle->GetChildHandle(
+		GET_MEMBER_NAME_CHECKED(FRockGameplayEventBinding, FunctionNameToBind), false);
+	if (!itemStr.IsEmpty() && EventFunctionReferenceHandle.IsValid())
+	{
+		// Get the selected function name
+		const FString SelectedFunctionNameStr(*itemStr);
+		const FName SelectedFunctionName(*itemStr);
+		if (SelectedFunctionNameStr == "None")
+		{
+			// Set the function name to none
+			FString NoneFunction = "";
+			EventFunctionReferenceHandle->SetValue(NoneFunction);
+			return;
+		}
+		EventFunctionReferenceHandle->SetValue(SelectedFunctionName);
+	}
+}
+
+FText FRockGameplayEventDelegateConnectionsCustomization::GetSelectedDelegate() const
+{
+	FName DelegateName;
+	if (DelegatePropertyNameHandler.IsValid())
+	{
+		DelegatePropertyNameHandler->GetValue(DelegateName);
+	}
+	return DelegateName.IsNone() ? FText::FromString("None") : FText::FromName(DelegateName);
+}
+
+FText FRockGameplayEventDelegateConnectionsCustomization::GetSelectedFunctionName(TSharedPtr<IPropertyHandle> PropertyHandle) const
+{
+	const TSharedPtr<IPropertyHandle> EventFunctionReferenceHandle = PropertyHandle->GetChildHandle(
+		GET_MEMBER_NAME_CHECKED(FRockGameplayEventBinding, FunctionNameToBind), false);
+
+	if (EventFunctionReferenceHandle.IsValid())
+	{
+		void* StructData = nullptr;
+		if (EventFunctionReferenceHandle->GetValueData(StructData) == FPropertyAccess::Success)
+		{
+			check(StructData);
+			const FName Name = *static_cast<FName*>(StructData);
+			return FText::FromName(Name);
+		}
+	}
+	return FText::FromString("");
+}
+
+AActor* FRockGameplayEventDelegateConnectionsCustomization::GetActorFromHandle(const TSharedPtr<IPropertyHandle>& PropertyHandle) const
+{
+	UObject* TargetActorObject = nullptr;
+	PropertyHandle->GetValue(TargetActorObject);
+	return Cast<AActor>(TargetActorObject);
+}
+
+const UClass* FRockGameplayEventDelegateConnectionsCustomization::GetPropertyOwnerClassFromBindingsHandler() const
 {
 	TArray<UObject*> OutObjects;
 	BindingsHandler->GetOuterObjects(OutObjects);
@@ -422,156 +318,4 @@ const UClass* FRockGameplayEventDelegateConnectionsCustomization::GetPropertyOwn
 	}
 	const UClass* PropertyOwnerClass = CompOwner->GetClass();
 	return PropertyOwnerClass;
-}
-
-
-TSharedRef<SWidget> FRockGameplayEventDelegateConnectionsCustomization::OnGetMenuContent()
-{
-	
-
-	//return newMenuContent;
-	
-	// This works:
-	return CreateAddNewPopupSearch();
-
-
-	
-	//
-	// return SNew(SHorizontalBox)
-	// 	+ SHorizontalBox::Slot()
-	// 	.AutoWidth()
-	// 	.VAlign(VAlign_Center)
-	// 	.Padding(0.0f, 0.0f, 5.0f, 0.0f)
-	// 	[
-	// 		SNew(STextBlock).Text(FText::FromString("Multicast Delegate")).Font(IDetailLayoutBuilder::GetDetailFont())
-	// 	]
-	// 	+ SHorizontalBox::Slot()
-	// 	.FillWidth(1)
-	// 	[
-	// 		SNew(SVerticalBox)
-	// 		+ SVerticalBox::Slot()
-	// 		.AutoHeight()
-	// 		[
-	// 			SNew(SSearchBox)
-	// 			.HintText(FText::FromString("Search for Delegates"))
-	// 			.OnTextChanged(this, &FRockGameplayEventDelegateConnectionsCustomization::OnSearchTextChanged)
-	// 		]
-	// 		+ SVerticalBox::Slot()
-	// 		[
-	// 	];
-}
-
-void FRockGameplayEventDelegateConnectionsCustomization::PrintHelloWorld() const
-{
-	UE_LOG(LogTemp, Warning, TEXT("Hello World"));
-}
-
-FText FRockGameplayEventDelegateConnectionsCustomization::GetSelectedDelegate() const
-{
-	FName DelegateName;
-	if (DelegatePropertyNameHandler.IsValid())
-	{
-		DelegatePropertyNameHandler->GetValue(DelegateName);
-	}
-
-	return DelegateName.IsNone() ? FText::FromString("None") : FText::FromName(DelegateName);
-}
-
-
-TSharedRef<SWidget> FRockGameplayEventDelegateConnectionsCustomization::MakePopupButton()
-{
-	return SAssignNew(MenuAnchor, SMenuAnchor)
-	 	.Placement(MenuPlacement_BelowAnchor)
-	 	.OnGetMenuContent(this, &FRockGameplayEventDelegateConnectionsCustomization::OnGetMenuContent)
-	 	[
-	 		SNew(SButton)
-	 		.OnClicked(this, &FRockGameplayEventDelegateConnectionsCustomization::ToggleDropDown)
-	 		[
-	 			SNew(STextBlock)
-	 			.Text(this, &FRockGameplayEventDelegateConnectionsCustomization::GetSelectedDelegate)
-	 		]
-	 	];
-}
-
-
-FReply FRockGameplayEventDelegateConnectionsCustomization::ToggleDropDown()
-{
-	if (MenuAnchor->IsOpen())
-	{
-		MenuAnchor->SetIsOpen(false);
-	}
-	else
-	{
-		MenuAnchor->SetIsOpen(true);
-	}
-	return FReply::Handled();
-}
-
-
-TSharedRef<SWidget> FRockGameplayEventDelegateConnectionsCustomization::CreateAddNewPopupSearch()
-{
-	constexpr bool bInShouldCloseWindowAfterMenuSelection = true;
-	FMenuBuilder MenuBuilder(bInShouldCloseWindowAfterMenuSelection, nullptr);
-	BuildOverridableFunctionsMenu(MenuBuilder);
-	TSharedRef<SWidget> MenuWidget = MenuBuilder.MakeWidget();
-	return MenuWidget;
-}
-
-void FRockGameplayEventDelegateConnectionsCustomization::BuildOverridableFunctionsMenu(FMenuBuilder& MenuBuilder)
-{
-	bool bFirst = true;
-	UClass* DelegateClass = nullptr;
-	FString DelegateName = "";
-	FString DelegateSignature = "";
-	for (TSharedPtr<FRockDelegateInfo> Delegate : AvailableDelegates)
-	{
-		if (Delegate->DefiningClass != DelegateClass)
-		{
-			DelegateClass = Delegate->DefiningClass;
-			DelegateName = Delegate->DefiningClass->GetName();
-			//DelegateSignature = Delegate->GetNameWithClass();
-			if (!bFirst)
-			{
-				MenuBuilder.EndSection();
-			}
-			bFirst = false;
-			MenuBuilder.BeginSection(NAME_None, FText::FromString(DelegateName));
-		}
-
-		// Make a horizontal box with the name on the left aligned, and the defining class on the right aligned
-		TSharedRef<SHorizontalBox> DelegateBox = SNew(SHorizontalBox)
-			+ SHorizontalBox::Slot()
-			.AutoWidth()
-			.VAlign(VAlign_Center)
-			.HAlign(HAlign_Left)
-			.Padding(FMargin(0, 0, 20, 0))
-			[
-				SNew(STextBlock)
-				//.Text(FText::FromString(*Delegate->Name))
-				.Text(Delegate->GetSignatureFunctionString())
-			]
-			+ SHorizontalBox::Slot()
-			.VAlign(VAlign_Center)
-			.HAlign(HAlign_Right)
-			[
-				SNew(STextBlock)
-				.Text(FText::FromString(DelegateName))
-				.ColorAndOpacity(FSlateColor::UseSubduedForeground())
-			];
-
-		MenuBuilder.AddMenuEntry(
-			FUIAction(
-				FExecuteAction::CreateSP(
-					this,
-					&FRockGameplayEventDelegateConnectionsCustomization::OnMulticastDelegateSelected,
-					Delegate,
-					ESelectInfo::OnMouseClick)
-			),
-			DelegateBox,
-			NAME_None,
-			FText::FromString("Tooltip"),
-			EUserInterfaceActionType::Button
-		);
-	}
-	MenuBuilder.EndSection();
 }

@@ -1,8 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Broken Rock Studios LLC. All Rights Reserved.
+// See the LICENSE file for details.
 
-
-#include "DetailCustomization/RockDelegateDropdownWidget.h"
-
+#include "RockDelegateDropdownWidget.h"
 #include "Delegate/DelegateFunctionInfo.h"
 
 //-----------------------------------------------------------------------------
@@ -23,9 +22,6 @@ void SRockDelegateDropdownWidget::Construct(const FArguments& InArgs)
     {
         GenerateAvailableDelegatesFromClass(InArgs._FilterByClass);
     }
-    
-    // Create the combo button
-    // Why is this even a ComboButton?
     
     ComboButton = SNew(SComboButton)
         // .ComboButtonStyle(InArgs._ComboButtonStyle)

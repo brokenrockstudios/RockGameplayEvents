@@ -3,9 +3,7 @@
 
 #pragma once
 
-/**
- * 
- */
+
 UENUM()
 enum class ERockDelegateType : uint8
 {

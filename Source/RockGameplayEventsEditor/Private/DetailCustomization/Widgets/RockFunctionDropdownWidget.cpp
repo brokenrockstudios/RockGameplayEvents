@@ -1,7 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Broken Rock Studios LLC. All Rights Reserved.
+// See the LICENSE file for details.
 
-
-#include "DetailCustomization/RockFunctionDropdownWidget.h"
+#include "RockFunctionDropdownWidget.h"
 
 //-----------------------------------------------------------------------------
 // SRockFunctionDropdownWidget implementation
@@ -15,13 +15,9 @@ void SRockFunctionDropdownWidget::Construct(const FArguments& InArgs)
     {
         AvailableFunctions = InArgs._AvailableFunctions;
     }
-    else if (InArgs._FilterByClass)
-    {
-        // GenerateAvailableFunctionsFromClass(InArgs._FilterByClass);
-    }
-    
     
     ComboButton = SNew(SComboButton)
+        .IsEnabled(AvailableFunctions.Num() > 0)
         // .ComboButtonStyle(InArgs._ComboButtonStyle)
         //.ButtonStyle(InArgs._ButtonStyle)
         .ButtonContent()
@@ -29,7 +25,6 @@ void SRockFunctionDropdownWidget::Construct(const FArguments& InArgs)
             InArgs._ButtonContent.Widget
         ]
         .OnGetMenuContent(this, &SRockFunctionDropdownWidget::CreateDropdownMenu)
-        .IsEnabled(AvailableFunctions.Num() > 0)
         .ContentPadding(InArgs._ContentPadding);
     // Set the root widget
     ChildSlot
