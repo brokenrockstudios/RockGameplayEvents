@@ -11,16 +11,4 @@ ARockGameplayNode_FixedData::ARockGameplayNode_FixedData()
 	PrimaryActorTick.bCanEverTick = true;
 }
 
-// Called when the game starts or when spawned
-void ARockGameplayNode_FixedData::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void ARockGameplayNode_FixedData::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
 

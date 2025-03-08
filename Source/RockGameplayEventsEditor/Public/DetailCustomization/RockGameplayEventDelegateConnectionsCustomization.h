@@ -33,6 +33,8 @@ public:
 	FText GetSelectedFunctionName(TSharedPtr<IPropertyHandle> PropertyHandle) const;
 	UBlueprint* GetBlueprintClassFromActor(const AActor* Actor) const;
 	AActor* GetActorFromHandle(const TSharedPtr<IPropertyHandle>& PropertyHandle) const;
+	
+	void OnFunctionSelected(UFunction* theFunction, ESelectInfo::Type someType, TSharedPtr<IPropertyHandle> ElementHandle);
 	// Need to incorporate which Event?
 	bool IsCompatibleFunction(const UFunction* TestFunction) const;
 	void OnFunctionChanged(TSharedPtr<FString> Item, ESelectInfo::Type SelectInfo, TSharedPtr<IPropertyHandle> ElementHandle) const;
@@ -59,7 +61,7 @@ public:
 	TSharedPtr<IPropertyHandle> BindingsHandler;
 	TSharedPtr<IPropertyHandle> DelegatePropertyNameHandler;
 	TSharedPtr<IPropertyHandle> DelegatePropertyTypeHandler;
-	TMap<TSharedPtr<IPropertyHandle>, TArray<TSharedPtr<FString>>> ElementFunctionListMap;
+	TMap<TSharedPtr<IPropertyHandle>, TArray<UFunction*>> ElementFunctionListMap;
 	//FunctionList 
 	TSharedPtr<SMenuAnchor> MenuAnchor;
 

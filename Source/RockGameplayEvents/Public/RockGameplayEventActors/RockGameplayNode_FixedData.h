@@ -37,8 +37,6 @@ public:
 	FRockGameplayEvent_Actor OnTriggeredActor;
 	UPROPERTY()
 	FRockGameplayEvent_Object OnTriggeredObject;
-	UPROPERTY()
-	FRockGameplayEvent_Controller OnTriggeredController;
 
 	// Perhaps instead do a TMap of Structs with various data to send to respective multicast events?
 	// What about 'delay nodes'?  Is this being over engineery? Perhaps this could/should be an Abstract class? where you have to integrate the relevant data yourself somewhere?

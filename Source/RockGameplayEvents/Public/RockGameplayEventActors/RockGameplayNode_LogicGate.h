@@ -79,8 +79,8 @@ public:
 
 private:
 	// Track the state of each input
-	bool bInputAState;
-	bool bInputBState;
+	bool bInputAState = false;
+	bool bInputBState = false;
 
 	// Evaluate the gate logic based on current inputs
 	void EvaluateGate();

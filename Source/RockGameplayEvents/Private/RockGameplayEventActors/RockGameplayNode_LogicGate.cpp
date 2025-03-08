@@ -48,37 +48,37 @@ void ARockGameplayNode_LogicGate::ResetGate()
 
 void ARockGameplayNode_LogicGate::EvaluateGate()
 {
-	int32 bShouldTrigger = 0;
+	int32 ShouldTrigger = 0;
 	switch (GateType)
 	{
 	case ERockLogicGateType::AND:
-		bShouldTrigger = bInputAState && bInputBState;
+		ShouldTrigger = bInputAState && bInputBState;
 		break;
 	case ERockLogicGateType::OR:
-		bShouldTrigger = bInputAState || bInputBState;
+		ShouldTrigger = bInputAState || bInputBState;
 		break;
 	case ERockLogicGateType::XOR:
-		bShouldTrigger = bInputAState != bInputBState;
+		ShouldTrigger = bInputAState != bInputBState;
 		break;
 	case ERockLogicGateType::NOT:
 		// NOT operates only on input A
-		bShouldTrigger = !bInputAState;
+		ShouldTrigger = !bInputAState;
 		break;
 	case ERockLogicGateType::NAND:
-		bShouldTrigger = !(bInputAState && bInputBState);
+		ShouldTrigger = !(bInputAState && bInputBState);
 		break;
 	case ERockLogicGateType::NOR:
-		bShouldTrigger = !(bInputAState || bInputBState);
+		ShouldTrigger = !(bInputAState || bInputBState);
 		break;
 	case ERockLogicGateType::XNOR:
-		bShouldTrigger = !(bInputAState != bInputBState);
+		ShouldTrigger = !(bInputAState != bInputBState);
 		break;
 	default:
 		break;
 	}
 	
-	OnOutputChanged.Broadcast(bShouldTrigger);
-	if (bShouldTrigger != 0)
+	OnOutputChanged.Broadcast(nullptr, ShouldTrigger);
+	if (ShouldTrigger != 0)
 	{
 		TriggerOutput();
 	}

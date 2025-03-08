@@ -25,10 +25,11 @@ void URockGameplayEventWorldSubsystem::RemoveComponent(URockDelegateConnectorCom
 
 void URockGameplayEventWorldSubsystem::DestroyAllComponents()
 {
+	UE_LOG(LogTemp, Warning, TEXT("DestroyAllComponents 🤖"));
 	for (int i = 0; i < Components.Num(); i++)
 	{
 		URockDelegateConnectorComponent* Component = Components[i];
-		if (Component->bAutoDestroyAfterBind)
+		if (IsValid(Component) && Component->bAutoDestroyAfterBind)
 		{
 			Component->DestroyComponent();
 		}

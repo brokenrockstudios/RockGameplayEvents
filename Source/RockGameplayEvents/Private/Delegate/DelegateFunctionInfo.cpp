@@ -26,7 +26,13 @@ FText FRockDelegateInfo::GetDisplayName() const
 FText FRockDelegateInfo::GetSignatureFunctionString() const
 {
 	// get all the parameter types and put them in a foo(int, float, bool) format
-	const FString SignatureString = Name + "(" + UMiscHelperFunctions::BuildFunctionParameterString(SignatureFunction, true, false, false) + ")";
+
+	auto parameters = UMiscHelperFunctions::BuildFunctionParameterString(SignatureFunction, false);
+	if (parameters.Len() > 0)
+	{
+		parameters = "(" + parameters + ")";
+	}
+	const FString SignatureString = Name + parameters;
 	return FText::FromString(SignatureString);
 }
 

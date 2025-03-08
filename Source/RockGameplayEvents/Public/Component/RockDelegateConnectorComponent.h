@@ -21,12 +21,10 @@ public:
 	UPROPERTY(EditAnywhere, AdvancedDisplay)
 	bool bAutoDestroyAfterBind = true;
 	
-	// TODO: Wrap this in something else that can be optionally stuck on actor via a UObject instead of ActorComponent?
 	UPROPERTY(EditAnywhere)
 	TArray<FRockGameplayEventConnection> DelegateConnections;
-	
 protected:
+	virtual void OnRegister() override;
 	virtual void BeginPlay() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
-	virtual void OnRegister() override;
 };

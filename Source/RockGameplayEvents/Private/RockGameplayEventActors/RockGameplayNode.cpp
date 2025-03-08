@@ -7,10 +7,8 @@
 
 ARockGameplayNode::ARockGameplayNode()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	
-	GameplayConnector = CreateDefaultSubobject<URockDelegateConnectorComponent>(TEXT("GameplayConnector"));
+	GameplayConnector = CreateDefaultSubobject<URockDelegateConnectorComponent>(TEXT("DelegateConnector"));
 }
 
 void ARockGameplayNode::TriggerOutput()

@@ -14,29 +14,19 @@ void URockDelegateConnectorComponent::OnRegister()
 {
 	Super::OnRegister();
 	UE_LOG(LogTemp, Warning, TEXT("RockDelegateConnectorComponent registered"));
+
+	AActor* Owner = GetOwner();
+	const UClass* OwnerClass = Owner->GetClass();
+	for (auto Connection : DelegateConnections)
+	{
+		Connection.Connect(Owner, OwnerClass);
+	}
 }
 
 void URockDelegateConnectorComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	GetWorld()->GetSubsystem<URockGameplayEventWorldSubsystem>()->AddComponent(this);
-	
-	UE_LOG(LogTemp, Warning, TEXT("RockDelegateConnectorComponent BeginPlay"));
-	AActor* Owner = GetOwner();
-	if (!Owner)
-	{
-		return;
-	}
-	const UClass* OwnerClass = Owner->GetClass();
-	if (!OwnerClass)
-	{
-		return;
-	}
-
-	for (auto Connection : DelegateConnections)
-	{
-		Connection.Connect(Owner, OwnerClass);
-	}
 }
 
 void URockDelegateConnectorComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)

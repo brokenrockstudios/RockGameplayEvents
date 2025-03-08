@@ -39,6 +39,7 @@ TArray<FRockDelegateInfo> UMiscHelperFunctions::GetDelegatesForActorClass(const 
 			{
 				Info.SignatureFunction = DelegateProperty->SignatureFunction;
 			}
+			
 
 			DelegateInfos.Add(Info);
 		}
@@ -159,20 +160,24 @@ FString UMiscHelperFunctions::BuildFunctionParameterString(UFunction* InFunction
 	{
 		return ParamString;
 	}
+	// If they are all false, don't add a bunch of ","
+	if (bIncludeParameterType == false && bIncludeParameterName == false && bIncludeParameterFlags == false)
+	{
+		return ParamString;
+	}
 	for (TFieldIterator<FProperty> ParamIt(InFunction); ParamIt; ++ParamIt)
 	{
 		// We could add more info like the Type instead, which is what we need for compability purposes.
 		FProperty* Param = *ParamIt;
-		FString ParamInfo;
-			
+		
 		// TODO: Move these to UDeveloperSettings
 		if (bIncludeParameterName)
 		{
-			ParamInfo = Param->GetName() + TEXT(" : ");
+			ParamString += Param->GetName() + TEXT(":");
 		}
 		if (bIncludeParameterType)
 		{
-			ParamInfo += Param->GetCPPType();
+			ParamString += Param->GetCPPType();
 		}
 		if (bIncludeParameterFlags)
 		{
