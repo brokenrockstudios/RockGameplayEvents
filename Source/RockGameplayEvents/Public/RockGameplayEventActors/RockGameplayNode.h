@@ -34,10 +34,10 @@ public:
 
 	// Enable and Disable the Gameplay Node
 	UFUNCTION(BlueprintCallable, Category = "Rock|Events")
-	virtual void Enable(AController* EventInstigator);
+	virtual void Enable(AActor* EventInstigator);
 
 	UFUNCTION(BlueprintCallable, Category = "Rock|Events")
-	virtual void Disable(AController* EventInstigator);
+	virtual void Disable(AActor* EventInstigator);
 
 	UFUNCTION(BlueprintPure, Category = "Rock|Events")
 	bool IsEnabled() const;

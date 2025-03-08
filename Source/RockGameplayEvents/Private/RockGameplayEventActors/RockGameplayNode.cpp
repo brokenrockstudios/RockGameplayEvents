@@ -11,12 +11,12 @@ ARockGameplayNode::ARockGameplayNode()
 	GameplayConnector = CreateDefaultSubobject<URockDelegateConnectorComponent>(TEXT("DelegateConnector"));
 }
 
-void ARockGameplayNode::Enable(AController* EventInstigator)
+void ARockGameplayNode::Enable(AActor* EventInstigator)
 {
 	bIsEnabled = true;
 }
 
-void ARockGameplayNode::Disable(AController* EventInstigator)
+void ARockGameplayNode::Disable(AActor* EventInstigator)
 {
 	bIsEnabled = false;
 }

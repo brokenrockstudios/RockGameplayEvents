@@ -9,20 +9,21 @@
 #include "RockGameplayEventBinding.generated.h"
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FRockGameplayEvent, const AController*, EventInstigator);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FRockGameplayEvent, const AActor*, EventInstigator);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FRockGameplayEvent_Basic);
 
-// AController can be null and doesn't always have to be provided, but in many cases it can be useful to know the pawn, controller, playerstate, etc.
-// But also having it in the signature, helps eliminate some of the default delegates in function object dropdowns.
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FRockGameplayEvent_Object, const AController*, EventInstigator, const UObject*, EventObject);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FRockGameplayEvent_String, const AController*, EventInstigator, const FString, EventString);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FRockGameplayEvent_Int, const AController*, EventInstigator, const int32, EventInt);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FRockGameplayEvent_Float, const AController*, EventInstigator, const float, EventFloat);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FRockGameplayEvent_Bool, const AController*, EventInstigator, const bool, EventBool);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FRockGameplayEvent_Vector, const AController*, EventInstigator, const FVector, EventVector);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FRockGameplayEvent_Rotator, const AController*, EventInstigator, const FRotator, EventRotator);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FRockGameplayEvent_Transform, const AController*, EventInstigator, const FTransform, EventTransform);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FRockGameplayEvent_Actor, const AController*, EventInstigator, const AActor*, EventActor);
+// EventInstigator might be a 'pawn', 'character', acontroller, aplayercontroller or even can be null
+// But also having it in the signature, helps eliminate some of the default delegates and function object dropdowns.
+// Generally it's useful to know 'who' triggered a thing. 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FRockGameplayEvent_Object, const AActor*, EventInstigator, const UObject*, EventObject);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FRockGameplayEvent_String, const AActor*, EventInstigator, const FString, EventString);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FRockGameplayEvent_Int, const AActor*, EventInstigator, const int32, EventInt);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FRockGameplayEvent_Float, const AActor*, EventInstigator, const float, EventFloat);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FRockGameplayEvent_Bool, const AActor*, EventInstigator, const bool, EventBool);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FRockGameplayEvent_Vector, const AActor*, EventInstigator, const FVector, EventVector);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FRockGameplayEvent_Rotator, const AActor*, EventInstigator, const FRotator, EventRotator);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FRockGameplayEvent_Transform, const AActor*, EventInstigator, const FTransform, EventTransform);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FRockGameplayEvent_Actor, const AActor*, EventInstigator, const AActor*, EventActor);
 
 
 /**
