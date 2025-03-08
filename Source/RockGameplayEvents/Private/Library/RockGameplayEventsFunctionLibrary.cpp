@@ -5,8 +5,8 @@
 
 #include "Delegate/RockGameplayEventDelegate.h"
 
-inline void URockGameplayEventsFunctionLibrary::BroadcastEvent(FRockGameplayEventDelegate& EventDelegate, const AController* EventInstigator)
-{
-	EventDelegate.BroadcastEvent(EventInstigator);
-}
+// inline void URockGameplayEventsFunctionLibrary::BroadcastEvent(FRockGameplayEventDelegate& EventDelegate, const AController* EventInstigator)
+// {
+// 	EventDelegate.BroadcastEvent(EventInstigator);
+// }
 

@@ -5,6 +5,7 @@
 
 #include "CoreMinimal.h"
 #include "RockGameplayNode.h"
+#include "Misc/FindBetterHome.h"
 #include "RockGameplayNode_LogicGate.generated.h"
 
 // Enum for the different gate types

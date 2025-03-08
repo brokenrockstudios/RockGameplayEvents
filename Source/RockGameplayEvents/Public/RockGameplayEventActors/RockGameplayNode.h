@@ -4,8 +4,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Delegate/RockGameplayEventDelegate.h"
+#include "Delegate/RockGameplayEventBinding.h"
 #include "GameFramework/Actor.h"
+#include "Misc/FindBetterHome.h"
 #include "RockGameplayNode.generated.h"
 
 class URockDelegateConnectorComponent;

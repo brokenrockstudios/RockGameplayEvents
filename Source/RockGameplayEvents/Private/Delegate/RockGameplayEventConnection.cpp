@@ -16,6 +16,7 @@ void FRockGameplayEventConnection::Connect(AActor* Actor, const UClass* SourceCl
 	{
 	case ERockDelegateType::Regular:
 		{
+			// Could we cache this during the initial setup? instead of doing this at Connect time?
 			const FMulticastDelegateProperty* DelegateProperty = FindFProperty<FMulticastDelegateProperty>(SourceClass, DelegatePropertyName);
 			if (DelegateProperty)
 			{

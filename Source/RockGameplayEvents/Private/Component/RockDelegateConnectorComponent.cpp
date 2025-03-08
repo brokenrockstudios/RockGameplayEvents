@@ -13,8 +13,18 @@ URockDelegateConnectorComponent::URockDelegateConnectorComponent()
 void URockDelegateConnectorComponent::OnRegister()
 {
 	Super::OnRegister();
-	UE_LOG(LogTemp, Warning, TEXT("RockDelegateConnectorComponent registered"));
+}
 
+void URockDelegateConnectorComponent::BeginPlay()
+{
+	Super::BeginPlay();
+	GetWorld()->GetSubsystem<URockGameplayEventWorldSubsystem>()->AddComponent(this);
+	
+	// DO NOT move to OnRegister, can end up multiple registering the same delegate, unless we were to add some kind of check for World or something
+	// But BeginPlay should be otherwise fine?
+	// Otherwise we could store if it's been registered or not, but that's just more state to manage.
+	// Especially if you aren't careful about unbinding them during delete or other edge cases
+	// If this were to ever become a problem, we could investigate an OnRegister (pre beginplay approach?) 
 	AActor* Owner = GetOwner();
 	const UClass* OwnerClass = Owner->GetClass();
 	for (auto Connection : DelegateConnections)
@@ -23,10 +33,14 @@ void URockDelegateConnectorComponent::OnRegister()
 	}
 }
 
-void URockDelegateConnectorComponent::BeginPlay()
+void URockDelegateConnectorComponent::OnUnregister()
 {
-	Super::BeginPlay();
-	GetWorld()->GetSubsystem<URockGameplayEventWorldSubsystem>()->AddComponent(this);
+	Super::OnUnregister();
+	
+	// for (auto Connection : DelegateConnections)
+	// {
+	// 	Connection.Disconnect();
+	// }
 }
 
 void URockDelegateConnectorComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)

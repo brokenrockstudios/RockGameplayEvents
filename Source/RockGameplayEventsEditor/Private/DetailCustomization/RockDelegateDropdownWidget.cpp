@@ -23,7 +23,6 @@ void SRockDelegateDropdownWidget::Construct(const FArguments& InArgs)
     {
         GenerateAvailableDelegatesFromClass(InArgs._FilterByClass);
     }
-
     
     // Create the combo button
     // Why is this even a ComboButton?

@@ -4,9 +4,7 @@
 #include "RockGameplayEventsEditorModule.h"
 
 #include "Component/RockDelegateConnectorComponent.h"
-#include "Delegate/RockGameplayEventDelegate.h"
 #include "DetailCustomization/RockGameplayEventDelegateConnectionsCustomization.h"
-#include "DetailCustomization/RockGameplayEventDelegateCustomization.h"
 
 #define LOCTEXT_NAMESPACE "FRockGameplayEventMessagesModule"
 
@@ -26,7 +24,6 @@ void FRockGameplayEventsEditorModule::ShutdownModule()
 	if (UObjectInitialized() && FModuleManager::Get().IsModuleLoaded("PropertyEditor"))
 	{
 		FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
-		// PropertyModule.UnregisterCustomPropertyTypeLayout(FRockGameplayEventDelegate::StaticStruct()->GetFName());
 		PropertyModule.UnregisterCustomPropertyTypeLayout(FRockGameplayEventConnection::StaticStruct()->GetFName());
 	}
 }

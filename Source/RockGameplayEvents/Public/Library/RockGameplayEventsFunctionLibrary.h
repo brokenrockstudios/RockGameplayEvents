@@ -4,7 +4,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Delegate/RockGameplayEventDelegate.h"
+#include "Misc/FindBetterHome.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "RockGameplayEventsFunctionLibrary.generated.h"
 
@@ -13,8 +13,8 @@ class ROCKGAMEPLAYEVENTS_API URockGameplayEventsFunctionLibrary : public UBluepr
 {
 	GENERATED_BODY()
 public:
-	UFUNCTION(BlueprintCallable)
-	static void BroadcastEvent(UPARAM(ref) FRockGameplayEventDelegate& EventDelegate, const AController* EventInstigator);
+	// UFUNCTION(BlueprintCallable)
+	// static void BroadcastEvent(UPARAM(ref) FRockGameplayEventDelegate& EventDelegate, const AController* EventInstigator);
 
 	// This function is used by the FMemberReference to narrow down the type of bindable functions as the PrototypeFunction
 	UFUNCTION(BlueprintCallable, BlueprintInternalUseOnly)

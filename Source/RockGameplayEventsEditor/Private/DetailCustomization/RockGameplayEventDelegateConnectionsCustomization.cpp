@@ -163,6 +163,11 @@ void FRockGameplayEventDelegateConnectionsCustomization::CustomizeChildren(
 					SNew(SRockFunctionDropdownWidget)
 						.AvailableFunctions(FunctionList)
 						.OnFunctionSelected(this, &FRockGameplayEventDelegateConnectionsCustomization::OnFunctionSelected, ElementHandle)
+						.ButtonContent()
+					    						[
+							SNew(STextBlock)
+							.Text(this, &FRockGameplayEventDelegateConnectionsCustomization::GetSelectedFunctionName, ElementHandle)
+						]
 						// {
 						// 	UE_LOG(LogTemp, Warning, TEXT("Function Selected"));
 						// 	//OnFunctionChanged(Function, SelectType, ElementHandle);
@@ -243,7 +248,14 @@ AActor* FRockGameplayEventDelegateConnectionsCustomization::GetActorFromHandle(c
 
 void FRockGameplayEventDelegateConnectionsCustomization::OnFunctionSelected( UFunction* theFunction, ESelectInfo::Type someType, TSharedPtr<IPropertyHandle> ElementHandle)
 {
-	OnFunctionChanged(MakeShareable(new FString(theFunction->GetName())), someType, ElementHandle);
+	if (theFunction)
+	{
+		OnFunctionChanged(MakeShareable(new FString(theFunction->GetName())), someType, ElementHandle);
+	}
+	else
+	{
+		OnFunctionChanged(MakeShareable(new FString("None")), someType, ElementHandle);
+	}
 }
 	
 	
@@ -264,7 +276,15 @@ void FRockGameplayEventDelegateConnectionsCustomization::OnFunctionChanged(
 		// Get the selected function name
 		const FString SelectedFunctionNameStr(*Item);
 		const FName SelectedFunctionName(*Item);
-
+		if (SelectedFunctionNameStr == "None")
+		{
+			// Set the function name to none
+			FString NoneFunction = "";
+			EventFunctionReferenceHandle->SetValue(NoneFunction);
+			return;
+		}
+		EventFunctionReferenceHandle->SetValue(SelectedFunctionName);
+		
 		// 	const AActor* Actor = GetActorFromHandle(TargetActorHandle);
 		// 	if (!Actor)
 		// 	{
@@ -293,18 +313,18 @@ void FRockGameplayEventDelegateConnectionsCustomization::OnFunctionChanged(
 		// 		return;
 		// 	}
 		//
-		void* StructData = nullptr;
-		const FPropertyAccess::Result Result = EventFunctionReferenceHandle->GetValueData(StructData);
-		if (Result == FPropertyAccess::Success)
-		{
-			check(StructData)
-			FName* Name = static_cast<FName*>(StructData);
-			//const bool bSelfContext = (Blueprint->GeneratedClass != nullptr && Blueprint->GeneratedClass->IsChildOf(ScopeClass)) ||
-			//	(Blueprint->SkeletonGeneratedClass != nullptr && Blueprint->SkeletonGeneratedClass->IsChildOf(ScopeClass));
-
-			*Name = SelectedFunctionName;
-			//MemberReference->SetFromField<UFunction>(Function, bSelfContext);
-		}
+		// void* StructData = nullptr;
+		// const FPropertyAccess::Result Result = EventFunctionReferenceHandle->GetValueData(StructData);
+		// if (Result == FPropertyAccess::Success)
+		// {
+		// 	check(StructData)
+		// 	FName* Name = static_cast<FName*>(StructData);
+		// 	//const bool bSelfContext = (Blueprint->GeneratedClass != nullptr && Blueprint->GeneratedClass->IsChildOf(ScopeClass)) ||
+		// 	//	(Blueprint->SkeletonGeneratedClass != nullptr && Blueprint->SkeletonGeneratedClass->IsChildOf(ScopeClass));
+		//
+		// 	*Name = SelectedFunctionName;
+		// 	//MemberReference->SetFromField<UFunction>(Function, bSelfContext);
+		// }
 	}
 }
 
@@ -325,13 +345,12 @@ void FRockGameplayEventDelegateConnectionsCustomization::OnMulticastDelegateSele
 void FRockGameplayEventDelegateConnectionsCustomization::UpdateFunctionList(const TSharedPtr<IPropertyHandle>& TargetActorHandle)
 {
 	ElementFunctionListMap[TargetActorHandle].Empty();
-	UFunction* NoneFunction = nullptr;
 
 	const UClass* PropertyOwnerClass = GetPropertyOwnerClassFromBindingsHandler();
 	const FText SelectedDelegate2 = GetSelectedDelegate();
 	if (!PropertyOwnerClass || SelectedDelegate2.IsEmpty())
 	{
-		ElementFunctionListMap[TargetActorHandle].Add(NoneFunction);
+		//ElementFunctionListMap[TargetActorHandle].Add(NoneFunction);
 		return;
 	}
 
@@ -339,7 +358,7 @@ void FRockGameplayEventDelegateConnectionsCustomization::UpdateFunctionList(cons
 		*SelectedDelegate2.ToString());
 	if (!MulticastDelegateProperty)
 	{
-		ElementFunctionListMap[TargetActorHandle].Add(NoneFunction);
+		//ElementFunctionListMap[TargetActorHandle].Add(NoneFunction);
 		return;
 	}
 	auto pprotoTypeFunction = MulticastDelegateProperty->SignatureFunction;
@@ -376,9 +395,9 @@ void FRockGameplayEventDelegateConnectionsCustomization::UpdateFunctionList(cons
 		}
 	}
 	// Let's always have at least 1 option
-	if (Function_List.Num() == 0)
+	//if (Function_List.Num() == 0)
 	{
-		Function_List.Add(NoneFunction);
+		//Function_List.Add(NoneFunction);
 	}
 }
 

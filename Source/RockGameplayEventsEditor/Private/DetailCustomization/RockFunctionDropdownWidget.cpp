@@ -17,8 +17,9 @@ void SRockFunctionDropdownWidget::Construct(const FArguments& InArgs)
     }
     else if (InArgs._FilterByClass)
     {
-        GenerateAvailableFunctionsFromClass(InArgs._FilterByClass);
+        // GenerateAvailableFunctionsFromClass(InArgs._FilterByClass);
     }
+    
     
     ComboButton = SNew(SComboButton)
         // .ComboButtonStyle(InArgs._ComboButtonStyle)
@@ -28,6 +29,7 @@ void SRockFunctionDropdownWidget::Construct(const FArguments& InArgs)
             InArgs._ButtonContent.Widget
         ]
         .OnGetMenuContent(this, &SRockFunctionDropdownWidget::CreateDropdownMenu)
+        .IsEnabled(AvailableFunctions.Num() > 0)
         .ContentPadding(InArgs._ContentPadding);
     // Set the root widget
     ChildSlot
@@ -85,6 +87,40 @@ void SRockFunctionDropdownWidget::BuildFunctionsMenu(FMenuBuilder& MenuBuilder)
         {
             continue;
         }
+        
+        TSharedRef<SHorizontalBox> EmptyFunctionBox = SNew(SHorizontalBox)
+                + SHorizontalBox::Slot()
+                .AutoWidth()
+                .VAlign(VAlign_Center)
+                .HAlign(HAlign_Left)
+                .Padding(FMargin(0, 0, 20, 0))
+                [
+                    SNew(STextBlock)
+                    .Text(FText::FromString("None"))
+                ]
+                + SHorizontalBox::Slot()
+                .VAlign(VAlign_Center)
+                .HAlign(HAlign_Right)
+                [
+                    SNew(STextBlock)
+                    .Text(FText::FromString(""))
+                    .ColorAndOpacity(FSlateColor::UseSubduedForeground())
+                ];
+        UFunction* emptyFunction = nullptr;
+        MenuBuilder.AddMenuEntry(
+                FUIAction(
+                    FExecuteAction::CreateSP(
+                        this,
+                        &SRockFunctionDropdownWidget::HandleFunctionSelection,
+                        emptyFunction,
+                        ESelectInfo::OnMouseClick)
+                ),
+                EmptyFunctionBox,
+                NAME_None,
+                FText::GetEmpty(),
+                EUserInterfaceActionType::Button
+            );
+        
         
         // Add section for this class
         FString ClassName = FunctionClass->GetName();
