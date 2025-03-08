@@ -23,6 +23,11 @@
 			"Name": "RockGameplayEventsEditor",
 			"Type": "Editor",
 			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "RockGameplayEventsVisualizers",
+			"Type": "Editor",
+			"LoadingPhase": "PostEngineInit"
 		}
 	]
 }

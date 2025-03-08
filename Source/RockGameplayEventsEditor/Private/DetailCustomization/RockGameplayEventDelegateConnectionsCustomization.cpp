@@ -163,6 +163,8 @@ void FRockGameplayEventDelegateConnectionsCustomization::CustomizeChildren(
 			+ SHorizontalBox::Slot()
 			.AutoWidth()
 			[
+				// Is there a way we can prevent the user from adding a bunch of 'empty nodes'
+				// or should we complain if they exist later? 
 				ElementHandle->CreateDefaultPropertyButtonWidgets()
 			]
 		];
@@ -207,7 +209,6 @@ void FRockGameplayEventDelegateConnectionsCustomization::UpdateFunctionList(cons
 	const AActor* TargetActor = GetActorFromHandle(TargetActorHandle);
 	if (TargetActor)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("TargetActor: %s"), *TargetActor->GetName());
 		UClass* ActorClass = TargetActor->GetClass();
 		for (TFieldIterator<UFunction> FunctionIter(ActorClass, EFieldIteratorFlags::IncludeSuper); FunctionIter; ++FunctionIter)
 		{

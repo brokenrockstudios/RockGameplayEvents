@@ -10,16 +10,22 @@
 
 void FRockGameplayEventsEditorModule::StartupModule()
 {
-	FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
+	RegisterPropertyTypeCustomizations();
+}
 
-	//PropertyModule.RegisterCustomPropertyTypeLayout(FRockGameplayEventDelegate::StaticStruct()->GetFName(),
-	// FOnGetPropertyTypeCustomizationInstance::CreateStatic(&FRockGameplayEventDelegateCustomization::MakeInstance));
-	
+void FRockGameplayEventsEditorModule::ShutdownModule()
+{
+	UnregisterPropertyTypeCustomizations();
+}
+
+void FRockGameplayEventsEditorModule::RegisterPropertyTypeCustomizations() const
+{
+	FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
 	PropertyModule.RegisterCustomPropertyTypeLayout(FRockGameplayEventConnection::StaticStruct()->GetFName(),
 		FOnGetPropertyTypeCustomizationInstance::CreateStatic(&FRockGameplayEventDelegateConnectionsCustomization::MakeInstance));
 }
 
-void FRockGameplayEventsEditorModule::ShutdownModule()
+void FRockGameplayEventsEditorModule::UnregisterPropertyTypeCustomizations() const
 {
 	if (UObjectInitialized() && FModuleManager::Get().IsModuleLoaded("PropertyEditor"))
 	{

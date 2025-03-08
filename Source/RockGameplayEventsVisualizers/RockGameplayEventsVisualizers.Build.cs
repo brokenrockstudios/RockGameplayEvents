@@ -3,9 +3,13 @@
 
 using UnrealBuildTool;
 
-public class RockGameplayEventsEditor : ModuleRules
+
+// Note
+// Visualizers rely on GUnrealEd which isn't available unless the module is PostEngineInit
+
+public class RockGameplayEventsVisualizers : ModuleRules
 {
-	public RockGameplayEventsEditor(ReadOnlyTargetRules Target) : base(Target)
+	public RockGameplayEventsVisualizers(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	

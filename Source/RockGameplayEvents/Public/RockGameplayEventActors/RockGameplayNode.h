@@ -18,9 +18,16 @@ UCLASS()
 class ROCKGAMEPLAYEVENTS_API ARockGameplayNode : public AActor
 {
 	GENERATED_BODY()
-
+protected:
+	
+#if WITH_EDITORONLY_DATA
+	/** Editor only component used to display the sprite so as to be able to see the location of the Component  */
+	UPROPERTY(EditDefaultsOnly, Category = "Rock|Components")
+	TObjectPtr<UBillboardComponent> SpriteComponent;
+#endif
+	
 public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Rock|Gameplay")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Rock|Components")
 	TObjectPtr<URockDelegateConnectorComponent> GameplayConnector = nullptr;
 	
 	// Sets default values for this actor's properties

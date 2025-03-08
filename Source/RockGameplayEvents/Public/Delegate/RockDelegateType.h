@@ -3,7 +3,6 @@
 
 #pragma once
 
-
 UENUM()
 enum class ERockDelegateType : uint8
 {
@@ -20,3 +19,4 @@ enum class ERockDelegateType : uint8
 	// Multicast can't have return values, but other delegates can have return values
 	RockDelegateType_MAX UMETA(Hidden)
 };
+
