@@ -11,7 +11,25 @@ ARockGameplayNode::ARockGameplayNode()
 	GameplayConnector = CreateDefaultSubobject<URockDelegateConnectorComponent>(TEXT("DelegateConnector"));
 }
 
+void ARockGameplayNode::Enable(AController* EventInstigator)
+{
+	bIsEnabled = true;
+}
+
+void ARockGameplayNode::Disable(AController* EventInstigator)
+{
+	bIsEnabled = false;
+}
+
+bool ARockGameplayNode::IsEnabled() const
+{
+	return bIsEnabled;
+}
+
 void ARockGameplayNode::TriggerOutput()
 {
-	OnTriggered.Broadcast();
+	if (bIsEnabled)
+	{
+		OnTriggered.Broadcast();
+	}
 }

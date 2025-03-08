@@ -55,7 +55,9 @@ public:
 
 	// Will trigger on any inputs
 	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, Category = "Rock|Logic Gate")
-	FRockGameplayEvent_Int OnOutputChanged;
+	FRockGameplayEvent OnTrueOutput;
+	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, Category = "Rock|Logic Gate")
+	FRockGameplayEvent OnFalseOutput;
 	
 	// Input A event
 	UFUNCTION(BlueprintCallable, Category = "Rock|Logic Gate")

@@ -76,8 +76,15 @@ void ARockGameplayNode_LogicGate::EvaluateGate()
 	default:
 		break;
 	}
-	
-	OnOutputChanged.Broadcast(nullptr, ShouldTrigger);
+
+	if (ShouldTrigger != 0)
+	{
+		OnTrueOutput.Broadcast(nullptr);
+	}
+	else
+	{
+		OnFalseOutput.Broadcast(nullptr);
+	}
 	if (ShouldTrigger != 0)
 	{
 		TriggerOutput();
