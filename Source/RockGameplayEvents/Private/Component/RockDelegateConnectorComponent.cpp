@@ -5,6 +5,10 @@
 
 #include "Component/RockGameplayEventWorldSubsystem.h"
 
+#if WITH_EDITOR
+#include "Misc/DataValidation.h"
+#endif
+
 URockDelegateConnectorComponent::URockDelegateConnectorComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
@@ -20,10 +24,9 @@ void URockDelegateConnectorComponent::BeginPlay()
 	Super::BeginPlay();
 	GetWorld()->GetSubsystem<URockGameplayEventWorldSubsystem>()->AddComponent(this);
 	
-	// DO NOT move to OnRegister, can end up multiple registering the same delegate, unless we were to add some kind of check for World or something
-	// But BeginPlay should be otherwise fine?
-	// Otherwise we could store if it's been registered or not, but that's just more state to manage.
-	// Especially if you aren't careful about unbinding them during delete or other edge cases
+	// DO NOT move to OnRegister, can end up multiple registering the same delegate, unless we were to add some kind of check
+	// Otherwise, we could store if it's been registered or not, but that's just more state to manage.
+	// Especially if we aren't careful about unbinding them during delete or other edge cases
 	// If this were to ever become a problem, we could investigate an OnRegister (pre beginplay approach?) 
 	AActor* Owner = GetOwner();
 	const UClass* OwnerClass = Owner->GetClass();
@@ -54,3 +57,25 @@ void URockDelegateConnectorComponent::EndPlay(const EEndPlayReason::Type EndPlay
 	Super::EndPlay(EndPlayReason);
 }
 
+// void URockDelegateConnectorComponent::PurgeStaleConnections()
+// {
+// 	
+// }
+
+#if WITH_EDITOR
+EDataValidationResult URockDelegateConnectorComponent::IsDataValid(class FDataValidationContext& Context) const
+{
+	EDataValidationResult SuperResult = Super::IsDataValid(Context);
+	
+	for (const FRockGameplayEventConnection& Connection : DelegateConnections)
+	{
+		EDataValidationResult ConnectionResult = Connection.IsDataValid(Context);
+		if (ConnectionResult == EDataValidationResult::Invalid)
+		{
+			Context.AddWarning(FText::Format( NSLOCTEXT("RockGameplayEvents", "DelegateConnectionInvalid", "Delegate Connection is invalid: {0}"), FText::FromString(Connection.ToString()) ) );
+			return EDataValidationResult::Invalid;
+		}
+	}
+	return SuperResult;
+}
+#endif

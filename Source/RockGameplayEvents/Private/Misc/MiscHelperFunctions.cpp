@@ -23,21 +23,21 @@ TArray<FRockDelegateInfo> UMiscHelperFunctions::GetDelegatesForActorClass(const 
 	{
 		FProperty* Property = *PropIt;
 
-		if (FMulticastDelegateProperty* DelegateProperty = CastField<FMulticastDelegateProperty>(Property))
+		if (FMulticastDelegateProperty* MulticastDelegateProperty = CastField<FMulticastDelegateProperty>(Property))
 		{
 			FRockDelegateInfo Info;
-			Info.Name = DelegateProperty->GetName();
-			if (DelegateProperty->GetOwnerClass())
+			Info.Name = MulticastDelegateProperty->GetName();
+			if (MulticastDelegateProperty->GetOwnerClass())
 			{
-				Info.DefiningClass = DelegateProperty->GetOwnerClass();
+				Info.DefiningClass = MulticastDelegateProperty->GetOwnerClass();
 			}
 			Info.bIsMulticast = true;
-			Info.bIsSparse = DelegateProperty->GetClass()->HasAnyCastFlags(CASTCLASS_FMulticastSparseDelegateProperty);
+			Info.bIsSparse = MulticastDelegateProperty->GetClass()->HasAnyCastFlags(CASTCLASS_FMulticastSparseDelegateProperty);
 			// HasAnyCastFlags(CASTCLASS_FDelegateProperty | CASTCLASS_FMulticastDelegateProperty | CASTCLASS_FMulticastInlineDelegateProperty | CASTCLASS_FMulticastSparseDelegateProperty)
 			
-			if (DelegateProperty->SignatureFunction)
+			if (MulticastDelegateProperty->SignatureFunction)
 			{
-				Info.SignatureFunction = DelegateProperty->SignatureFunction;
+				Info.SignatureFunction = MulticastDelegateProperty->SignatureFunction;
 			}
 			
 
@@ -47,12 +47,12 @@ TArray<FRockDelegateInfo> UMiscHelperFunctions::GetDelegatesForActorClass(const 
 		{
 			FRockDelegateInfo Info;
 			Info.Name = SingleDelegateProperty->GetName();
-			if (DelegateProperty->GetOwnerClass())
+			if (SingleDelegateProperty->GetOwnerClass())
 			{
-				Info.DefiningClass = DelegateProperty->GetOwnerClass();
+				Info.DefiningClass = SingleDelegateProperty->GetOwnerClass();
 			}
 			Info.bIsMulticast = false;
-			Info.bIsSparse = DelegateProperty->GetClass()->HasAnyCastFlags(CASTCLASS_FMulticastSparseDelegateProperty);
+			Info.bIsSparse = SingleDelegateProperty->GetClass()->HasAnyCastFlags(CASTCLASS_FMulticastSparseDelegateProperty);
 			if (SingleDelegateProperty->SignatureFunction)
 			{
 				Info.SignatureFunction = SingleDelegateProperty->SignatureFunction;

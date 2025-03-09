@@ -26,11 +26,21 @@ public:
 	UPROPERTY(EditAnywhere)
 	TArray<FRockGameplayEventConnection> DelegateConnections;
 
+	// Incoming readonly connections
+	UPROPERTY(VisibleAnywhere)
+	TArray<FRockGameplayIncomingConnection> IncomingConnections;
+
 protected:
 	virtual void OnRegister() override;
 	virtual void BeginPlay() override;
 	virtual void OnUnregister() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
+	//void PurgeStaleConnections();
+
+#if WITH_EDITOR
+	virtual EDataValidationResult IsDataValid(class FDataValidationContext& Context) const override;
+#endif
 };
 
 

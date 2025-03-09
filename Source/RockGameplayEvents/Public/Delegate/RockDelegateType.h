@@ -7,9 +7,13 @@ UENUM()
 enum class ERockDelegateType : uint8
 {
 	// This is a regular Multicast Delegate
-	Regular,
-	// This is a Sparse Delegate
-	Sparse,
+	MulticastDelegate,
+	// Non multicast delegate
+	BlueprintDelegate,
+
+	
+	// This is a Sparse Delegate.  It appears like we might not need to differentiate on this?
+	// Sparse,
 
 	// Unknown,
 	// MulticastDelegate, // FMulticastDelegateProperty

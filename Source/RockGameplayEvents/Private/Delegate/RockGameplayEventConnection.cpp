@@ -3,6 +3,10 @@
 
 #include "Delegate/RockGameplayEventConnection.h"
 
+#if WITH_EDITOR
+#include "Misc/DataValidation.h"
+#endif
+
 void FRockGameplayEventConnection::Connect(AActor* Actor, const UClass* SourceClass)
 {
 	if (!Actor || !SourceClass)
@@ -12,9 +16,15 @@ void FRockGameplayEventConnection::Connect(AActor* Actor, const UClass* SourceCl
 		return;
 	}
 
+	// Instead of a switch
+	// Perhaps we just hold a pointer to the 2 FDelegateProperty and FMulticastDelegateProperty
+	// the PropertyName(12 bytes) + type (1byte) +3 padding= >16.  But 2 pointers is 16 bytes
+	// So size wise they are identical for now
+	// But we save the 'computational time' of having to do FindFProperty, which I'm sure is O(n) where n is the FPropertys in the class? 
+
 	switch (DelegateType)
 	{
-	case ERockDelegateType::Regular:
+	case ERockDelegateType::MulticastDelegate:
 		{
 			// Could we cache this during the initial setup? instead of doing this at Connect time?
 			const FMulticastDelegateProperty* DelegateProperty = FindFProperty<FMulticastDelegateProperty>(SourceClass, DelegatePropertyName);
@@ -22,40 +32,83 @@ void FRockGameplayEventConnection::Connect(AActor* Actor, const UClass* SourceCl
 			{
 				for (FRockGameplayEventBinding connection : Bindings)
 				{
-					connection.BindDelegate(Actor, DelegateProperty);
+					connection.BindMulticastDelegate(Actor, DelegateProperty);
 				}
-				return;
 			}
 			break;
 		}
-	case ERockDelegateType::Sparse:
+	case ERockDelegateType::BlueprintDelegate:
 		{
-			// ResolveSparseDelegate WILL check(false) so we MUST return before reaching it, if it's not a SparseDelegate
-			FSparseDelegate* SparseDelegate = FSparseDelegateStorage::ResolveSparseDelegate(Actor, DelegatePropertyName);
-			if (SparseDelegate)
+			FDelegateProperty* DelegateProperty = FindFProperty<FDelegateProperty>(SourceClass, DelegatePropertyName);
+			if (DelegateProperty)
 			{
 				for (FRockGameplayEventBinding connection : Bindings)
 				{
-					connection.BindSparseDelegate(Actor, DelegatePropertyName, SparseDelegate);
+					connection.BindBlueprintDelegate(Actor, DelegateProperty);
 				}
-				return;
 			}
+			break;
+		}
+	default:
+		{
+			UE_LOG(LogTemp, Error, TEXT("DelegateType not implemented"));
 			break;
 		}
 	}
 }
 
+FString FRockGameplayEventConnection::ToString() const
+{
+	return FString::Printf(TEXT("Delegate: %s, Bindings: %d"), *DelegatePropertyName.ToString(), Bindings.Num());
+}
+
+#if WITH_EDITOR
+EDataValidationResult FRockGameplayEventConnection::IsDataValid(class FDataValidationContext& Context) const
+{
+	for (int i = 0; i < Bindings.Num(); i++)
+	{
+		if (!Bindings[i].IsValid())
+		{
+			Context.AddWarning(FText::Format(NSLOCTEXT("GameplayEventConnection", "InvalidBinding", "Invalid binding at index {1}"),
+				FText::FromName(DelegatePropertyName), i));
+			return EDataValidationResult::Invalid;
+		}
+	}
+	return EDataValidationResult::Valid;
+}
+#endif
+
+// It's unclear to me, but Inline and Sparse seems to successfully bind to the above Delegate
+// Even in the PyConversion.cpp,  they only handle FMulticastDelegateProperty and FDelegateProperty
+// Though they do have a 'TODO' about SparseDelegateProperty?
+// I think it's because all 3 (Multicast, Sparse, and Inline) of them override the same AddDelegate? 
 
 
-	// TODO thought?
-	//{
-		// DelegateProperty->GetMulticastDelegate();
-		// Do I Want FMulticastScriptDelegate or FMulticastDelegateProperty ???????
-		//FMulticastScriptDelegate* DelegateTest = nullptr;
-		//DelegateTest->Add(Delegate);
-	//}
-	// Is there a difference here between BlueprintDelegate and a MulticastDelegate?
-	// class FMulticastDelegateProperty;
-	// class FMulticastSparseDelegateProperty;
-	// class FMulticastInlineDelegateProperty;
-	// ?? FMulticastScriptDelegate
+// case ERockDelegateType::Sparse:
+// 	{
+// 		// ResolveSparseDelegate WILL check(false) so we MUST return before reaching it, if it's not a SparseDelegate
+// 		FSparseDelegate* SparseDelegate = FSparseDelegateStorage::ResolveSparseDelegate(Actor, DelegatePropertyName);
+// 		if (SparseDelegate)
+// 		{
+// 			for (FRockGameplayEventBinding connection : Bindings)
+// 			{
+// 				UE_LOG(LogTemp, Warning, TEXT("SparseDelegate"));
+// 				connection.BindSparseDelegate(Actor, DelegatePropertyName, SparseDelegate);
+// 			}
+// 		}
+// 		break;
+// 	}
+
+
+// TODO thought?
+//{
+// DelegateProperty->GetMulticastDelegate();
+// Do I Want FMulticastScriptDelegate or FMulticastDelegateProperty ???????
+//FMulticastScriptDelegate* DelegateTest = nullptr;
+//DelegateTest->Add(Delegate);
+//}
+// Is there a difference here between BlueprintDelegate and a MulticastDelegate?
+// class FMulticastDelegateProperty;
+// class FMulticastSparseDelegateProperty;
+// class FMulticastInlineDelegateProperty;
+// ?? FMulticastScriptDelegate

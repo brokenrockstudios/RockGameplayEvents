@@ -29,4 +29,26 @@ struct ROCKGAMEPLAYEVENTS_API FRockGameplayEventConnection
 private:
 	friend class URockDelegateConnectorComponent;
 	void Connect(AActor* actor, const UClass* SourceClass);
+
+	FString ToString() const;
+	
+#if WITH_EDITOR
+	EDataValidationResult IsDataValid(class FDataValidationContext& Context) const;
+#endif
+};
+
+
+
+USTRUCT(BlueprintType)
+struct ROCKGAMEPLAYEVENTS_API FRockGameplayIncomingConnection
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<AActor> SourceActor;
+	
+	// The owner's Multicast Delegate Property to bind to
+	// This technically could be a FMemberReference? But what that extra data buys us is questionable?
+	UPROPERTY(EditAnywhere)
+	FName DelegatePropertyName;
 };
