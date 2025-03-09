@@ -16,7 +16,7 @@ USTRUCT(BlueprintType)
 struct ROCKGAMEPLAYEVENTS_API FRockGameplayEventConnection
 {
 	GENERATED_BODY()
-	
+
 	// The owner's Multicast Delegate Property to bind to
 	UPROPERTY(EditAnywhere)
 	FName DelegatePropertyName;
@@ -31,24 +31,28 @@ private:
 	void Connect(AActor* actor, const UClass* SourceClass);
 
 	FString ToString() const;
-	
+
 #if WITH_EDITOR
 	EDataValidationResult IsDataValid(class FDataValidationContext& Context) const;
 #endif
 };
 
-
-
 USTRUCT(BlueprintType)
 struct ROCKGAMEPLAYEVENTS_API FRockGameplayIncomingConnection
 {
 	GENERATED_BODY()
-	
+
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<AActor> SourceActor;
-	
+
 	// The owner's Multicast Delegate Property to bind to
 	// This technically could be a FMemberReference? But what that extra data buys us is questionable?
 	UPROPERTY(EditAnywhere)
 	FName DelegatePropertyName;
+
+	bool operator==(const FRockGameplayIncomingConnection& other) const
+	{
+		return SourceActor == other.SourceActor && DelegatePropertyName == other.DelegatePropertyName;
+	};
+	
 };
