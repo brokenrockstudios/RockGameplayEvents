@@ -176,10 +176,21 @@ void FRockGameplayEventDelegateConnectionsCustomization::UpdateFunctionList(cons
 {
 	ElementFunctionListMap[TargetActorHandle].Empty();
 
+	if (!BindingsHandler.IsValid())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("UpdateFunctionList Changed not valid????"));
+	}
 	const UClass* PropertyOwnerClass = GetPropertyOwnerClassFromBindingsHandler();
 	const FText SelectedDelegate2 = GetSelectedDelegate();
-	if (!PropertyOwnerClass || SelectedDelegate2.IsEmpty())
+	UE_LOG(LogTemp, Warning, TEXT("UpdateFunctionList1"));
+	if (!PropertyOwnerClass)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("UpdateFunctionList1 return 1"));
+		return;
+	}
+	if (SelectedDelegate2.IsEmpty())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("UpdateFunctionList1 return 2"));
 		return;
 	}
 
