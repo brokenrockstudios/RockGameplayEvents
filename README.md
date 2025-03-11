@@ -1,5 +1,9 @@
-FYI: Massive rewrite is happening in the /dev branch.
+<div style="text-align: center;>
 
+[![Star][star-image]][star-url]
+[![Package License][package-license-image]][package-license-url]
+
+</div>
 
 # RockGameplayEvents
 A relatively simple event system for hooking up instanced actors and ability to broadcast events
@@ -66,3 +70,6 @@ Any portions of the code that are not covered by Epic's EULA are licensed under 
 I'd love to further refine or polish this off for a wider audience. I invite everyone to either request features or make suggestions or contribute via PR. 
 
 
+
+[star-url]: https://github.com/brokenrockstudios/RockGameplayEvents/stargazers
+[package-license-url]: https://opensource.org/licenses/MIT
