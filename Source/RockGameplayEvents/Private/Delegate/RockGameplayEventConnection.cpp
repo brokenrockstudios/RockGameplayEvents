@@ -41,7 +41,7 @@ void FRockGameplayEventConnection::Connect(UObject* DelegateOwner, const UClass*
 		}
 	case ERockDelegateType::BlueprintDelegate:
 		{
-			FDelegateProperty* DelegateProperty = FindFProperty<FDelegateProperty>(SourceClass, DelegatePropertyName);
+			const FDelegateProperty* DelegateProperty = FindFProperty<FDelegateProperty>(SourceClass, DelegatePropertyName);
 			if (DelegateProperty)
 			{
 				for (FRockGameplayEventBinding connection : Bindings)

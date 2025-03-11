@@ -19,10 +19,6 @@ void SRockDelegateDropdownWidget::Construct(const FArguments& InArgs)
 	{
 		AvailableDelegates = InArgs._AvailableDelegates;
 	}
-	else if (InArgs._FilterByClass)
-	{
-		GenerateAvailableDelegatesFromClass(InArgs._FilterByClass);
-	}
 
 	ComboButton = SNew(SComboButton)
 		// .ComboButtonStyle(InArgs._ComboButtonStyle)
@@ -152,38 +148,4 @@ void SRockDelegateDropdownWidget::HandleDelegateSelection(TSharedPtr<FRockDelega
 void SRockDelegateDropdownWidget::SetAvailableDelegates(const TArray<TSharedPtr<FRockDelegateInfo>>& InDelegates)
 {
 	AvailableDelegates = InDelegates;
-}
-
-void SRockDelegateDropdownWidget::GenerateAvailableDelegatesFromClass(UClass* FilterClass)
-{
-	// Clear existing delegates
-	AvailableDelegates.Empty();
-
-	if (!FilterClass)
-	{
-		return;
-	}
-
-	// This is a simplified implementation - in a real implementation, you would need to:
-	// 1. Iterate through all properties of the class and its parent classes
-	// 2. Look for multicast delegate properties
-	// 3. Create FRockDelegateInfo objects for each
-
-	// Example implementation (this won't work directly as is - just illustrating the concept)
-	for (TFieldIterator<FMulticastDelegateProperty> PropertyIt(FilterClass); PropertyIt; ++PropertyIt)
-	{
-		FMulticastDelegateProperty* DelegateProperty = *PropertyIt;
-
-		if (DelegateProperty)
-		{
-			TSharedPtr<FRockDelegateInfo> DelegateInfo = MakeShared<FRockDelegateInfo>();
-			DelegateInfo->DefiningClass = DelegateProperty->GetOwnerClass();
-			// TODO: Prefer FName or StringName?
-			FName DelegateInfoFName = DelegateProperty->GetFName();
-			DelegateInfo->Name = DelegateProperty->GetName();
-			DelegateInfo->SignatureFunction = DelegateProperty->SignatureFunction;
-
-			AvailableDelegates.Add(DelegateInfo);
-		}
-	}
 }

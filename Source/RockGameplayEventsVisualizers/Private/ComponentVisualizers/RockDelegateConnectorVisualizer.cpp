@@ -78,7 +78,7 @@ void FRockDelegateConnectorVisualizer::DrawVisualization(const UActorComponent* 
 
 		for (const FRockGameplayIncomingConnection connection : ConnectorComponent->IncomingConnections)
 		{
-			if (!connection.SourceActor)
+			if (!connection.SourceActor.IsValid())
 			{
 				continue;
 			}

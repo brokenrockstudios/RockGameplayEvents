@@ -8,7 +8,7 @@
 #include "Delegate/RockGameplayEventConnection.h"
 #include "RockDelegateConnectorComponent.generated.h"
 
-UCLASS(ClassGroup="RockGameplayEvents", DisplayName="GameplayEventConnector",
+UCLASS(ClassGroup="RockGameplayEvents", DisplayName="RockDelegateConnector",
 	meta=(BlueprintSpawnableComponent), HideCategories = (Activation, Navigation, Tags, Cooking, AssetUserData))
 class ROCKGAMEPLAYEVENTS_API URockDelegateConnectorComponent : public UActorComponent
 {

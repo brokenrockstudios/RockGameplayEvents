@@ -205,28 +205,3 @@ void SRockFunctionDropdownWidget::SetAvailableFunctions(const TArray<UFunction*>
 {
     AvailableFunctions = InFunctions;
 }
-
-
-void SRockFunctionDropdownWidget::GenerateAvailableFunctionsFromClass(UClass* FilterClass)
-{
-    // Clear existing functions
-    AvailableFunctions.Empty();
-    
-    if (!FilterClass)
-    {
-        return;
-    }
-    
-    // Iterate through functions in the class and its parent classes
-    for (TFieldIterator<UFunction> FunctionIt(FilterClass, EFieldIteratorFlags::IncludeSuper); FunctionIt; ++FunctionIt)
-    {
-        UFunction* Function = *FunctionIt;
-        
-        // Add filtering logic here if needed
-        // For example, only include BlueprintCallable functions
-        if (Function && Function->HasAnyFunctionFlags(FUNC_BlueprintCallable))
-        {
-            AvailableFunctions.Add(Function);
-        }
-    }
-}

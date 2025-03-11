@@ -60,6 +60,25 @@ Also, there are many times where you likely just want to use a traditional `DECL
 However, most all of these don't support hooking up 2 independent actors that are placed in a level without the usage of the Level Blueprint or other handcoded mechanisms.
 
 
+# Supported Delegates
+
+Blueprints
+
+C++
+```cpp
+// DECLARE_DYNAMIC_MULTICAST_DELEGATE
+UPROPERTY(BlueprintAssignable)
+FRockTestMulticast OnTestNativeMulticast;
+// DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE_OneParam
+UPROPERTY(BlueprintAssignable)
+FRockTestMulticastSparse OnTestNativeMulticastSparse;
+// DECLARE_DYNAMIC_DELEGATE
+UPROPERTY(EditAnywhere, BlueprintReadWrite)
+FRockDelegateDynamic OnTestNativeDelegate;
+```
+
+![img.png](img.png)
+
 # License
 
 Any portions of the code that are not covered by Epic's EULA are licensed under the MIT License, as specified in the LICENSE file.

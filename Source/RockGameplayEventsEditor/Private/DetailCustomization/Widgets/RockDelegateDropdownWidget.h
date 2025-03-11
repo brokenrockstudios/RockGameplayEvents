@@ -32,10 +32,6 @@ class ROCKGAMEPLAYEVENTSEDITOR_API SRockDelegateDropdownWidget : public SCompoun
 	SLATE_EVENT(FOnDelegateSelected, OnDelegateSelected)
 	/** Optional list of available delegates to show (will be generated if not provided) */
 	SLATE_ARGUMENT(TArray<TSharedPtr<FRockDelegateInfo>>, AvailableDelegates)
-	// /** Optional list of available functions to show (will be generated if not provided) */
-	//SLATE_ARGUMENT(TArray<UFunction*>, AvailableFunctions)
-	/** Base class to filter delegates/functions from (if generating the list) */
-	SLATE_ARGUMENT(UClass*, FilterByClass)
 SLATE_END_ARGS()
 
 	/** Constructs this widget */
@@ -50,8 +46,6 @@ private:
 	/** Handler for delegate selection */
 	void HandleDelegateSelection(TSharedPtr<FRockDelegateInfo> Delegate, ESelectInfo::Type SelectType);
     
-	/** Generates a list of available delegates from the filter class */
-	void GenerateAvailableDelegatesFromClass(UClass* FilterClass);
 private:
 	/** Callback for delegate selection */
 	FOnDelegateSelected DelegateSelectedCallback;

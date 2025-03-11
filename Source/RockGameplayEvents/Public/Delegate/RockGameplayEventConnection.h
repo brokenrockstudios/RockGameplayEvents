@@ -21,14 +21,13 @@ struct ROCKGAMEPLAYEVENTS_API FRockGameplayEventConnection
 	UPROPERTY(EditAnywhere)
 	FName DelegatePropertyName;
 	// Multicast or Singular type
-	UPROPERTY()
-	ERockDelegateType DelegateType; 
+	UPROPERTY(VisibleAnywhere)
+	ERockDelegateType DelegateType;
 
 	UPROPERTY(VisibleAnywhere, DisplayName = "Delegate Parameters")
 	FString DelegateParameterList;
-	// UPROPERTY(EditAnywhere)
-	// FText DelegateParameterListText;
-//# endif
+
+
 	
 	//UPROPERTY(EditAnywhere)
 	//UFunction* DelegateFunction;
@@ -55,7 +54,7 @@ struct ROCKGAMEPLAYEVENTS_API FRockGameplayIncomingConnection
 	GENERATED_BODY()
 
 	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<AActor> SourceActor;
+	TWeakObjectPtr<AActor> SourceActor;
 
 	// The owner's Multicast Delegate Property to bind to
 	// This technically could be a FMemberReference? But what that extra data buys us is questionable?

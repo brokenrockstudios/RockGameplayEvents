@@ -35,8 +35,6 @@ class ROCKGAMEPLAYEVENTSEDITOR_API SRockFunctionDropdownWidget : public SCompoun
 	SLATE_ARGUMENT(TArray<UFunction*>, AvailableFunctions)
 	//void EventFunctionReferenceHandle(bool shared);
 	SLATE_ARGUMENT(TSharedPtr<IPropertyHandle>, EventFunctionReferenceHandle)
-	/** Base class to filter delegates/functions from (if generating the list) */
-	SLATE_ARGUMENT(UClass*, FilterByClass)
 SLATE_END_ARGS()
 
 	/** Constructs this widget */

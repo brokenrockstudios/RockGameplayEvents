@@ -58,9 +58,7 @@ void FRockDelegateConnectionsCustomization::CustomizeHeader(
 			[
 				SNew(SImage)
 				.Image(FAppStyle::GetBrush("Icons.Info"))
-				// TODO Bind ot the full function signature
 				.ToolTipText(this, &FRockDelegateConnectionsCustomization::GetDelegateParameterList)
-				//LOCTEXT("DelegateWarning", "This delegate is not bound to any functions"))
 			]
 		]
 		.ValueContent()
@@ -87,7 +85,6 @@ void FRockDelegateConnectionsCustomization::CustomizeChildren(
 {
 	PropUtils = InStructCustomizationUtils.GetPropertyUtilities().Get();
 
-	// InStructCustomizationUtils.GetPropertyUtilities()
 	AvailableDelegates.Empty();
 	auto delegates = UMiscHelperFunctions::GetDelegatesForActorClass(CachedActorClass);
 	for (const FRockDelegateInfo& Delegate : delegates)
@@ -173,10 +170,29 @@ void FRockDelegateConnectionsCustomization::CustomizeChildren(
 
 void FRockDelegateConnectionsCustomization::UpdateFunctionList(const TSharedPtr<IPropertyHandle>& TargetActorHandle)
 {
-	ElementFunctionListMap[TargetActorHandle].Empty();
+	if (TArray<UFunction*>* ListMap = ElementFunctionListMap.Find(TargetActorHandle))
+	{
+		ListMap->Empty();
+	}
 
-	const FText SelectedDelegateText = GetSelectedDelegate();
-	const FString SelectedDelegateStr = SelectedDelegateText.ToString();
+	if (CachedActorClass == nullptr)
+	{
+		// We don't have a valid actor class to search for functions
+		return;
+	}
+	
+	FName DelegateName;
+	if (DelegatePropertyNameHandler.IsValid())
+	{
+		DelegatePropertyNameHandler->GetValue(DelegateName);
+	}
+	if (DelegateName == NAME_None)
+	{
+		UE_LOG(LogRockGameplayEvents, Warning, TEXT("DelegateName is None"));
+		return;
+	}
+	
+	const FString SelectedDelegateStr = DelegateName.ToString();
 
 	TObjectPtr<UFunction> DelegateSignatureFunction;
 	if (const FMulticastDelegateProperty* MulticastDelegateProperty = FindFProperty<FMulticastDelegateProperty>(CachedActorClass,
@@ -190,8 +206,7 @@ void FRockDelegateConnectionsCustomization::UpdateFunctionList(const TSharedPtr<
 	}
 	else
 	{
-		// This happens when Actor is empty?
-		UE_LOG(LogRockGameplayEvents, Warning, TEXT("Unknown FProperty"));
+		UE_LOG(LogRockGameplayEvents, Warning, TEXT("Unknown FProperty: %s"), *SelectedDelegateStr);
 		return;
 	}
 	TArray<UFunction*>& Function_List = ElementFunctionListMap.FindOrAdd(TargetActorHandle);
@@ -231,39 +246,38 @@ void FRockDelegateConnectionsCustomization::OnTargetActorSelected(
 
 void FRockDelegateConnectionsCustomization::OnMulticastDelegateSelected(TSharedPtr<FRockDelegateInfo> InItem, ESelectInfo::Type arg)
 {
-	if (CachedConnection)
+	//if (CachedConnection)
+	if (MyPropertyHandle.IsValid() && CachedConnection)
+		//DelegateParameterListHandler.IsValid() && DelegatePropertyNameHandler.IsValid() && DelegateTypeHandler.IsValid())
 	{
-		// TODO: Will clean this up later
-		if (DelegateParameterListHandler.IsValid())
-		{
-			DelegateParameterListHandler->NotifyPreChange();
-		}
-		if (DelegatePropertyNameHandler.IsValid())
-		{
-			DelegatePropertyNameHandler->NotifyPreChange();
-		}
-		if (DelegateTypeHandler.IsValid())
-		{
-			DelegateTypeHandler->NotifyPreChange();
-		}
+		// Not sure which is best way to handle this
+		// TODO: revisit
+		MyPropertyHandle->NotifyPreChange();
+		
+		// void* RawData = nullptr;
+		// if (MyPropertyHandle->GetValueData(RawData) == FPropertyAccess::Success)
+		// {
+		// 	CachedConnection = static_cast<FRockGameplayEventConnection*>(RawData);
+		// }
+		//DelegateParameterListHandler->NotifyPreChange();
+		//DelegatePropertyNameHandler->NotifyPreChange();
+		//DelegateTypeHandler->NotifyPreChange();
 
 		CachedConnection->DelegatePropertyName = *InItem->Name;
 		FString FunctionString = UMiscHelperFunctions::BuildFunctionParameterString(InItem->SignatureFunction, true, true);
 		CachedConnection->DelegateParameterList = FunctionString;
 		CachedConnection->DelegateType = InItem->DelegateType;
 
-		if (DelegateParameterListHandler.IsValid())
-		{
-			DelegateParameterListHandler->NotifyPostChange(EPropertyChangeType::ValueSet);
-		}
-		if (DelegatePropertyNameHandler.IsValid())
-		{
-			DelegatePropertyNameHandler->NotifyPostChange(EPropertyChangeType::ValueSet);
-		}
-		if (DelegateTypeHandler.IsValid())
-		{
-			DelegateTypeHandler->NotifyPostChange(EPropertyChangeType::ValueSet);
-		}
+		//DelegatePropertyNameHandler->NotifyPostChange(EPropertyChangeType::ValueSet);
+		//DelegateParameterListHandler->NotifyPostChange(EPropertyChangeType::ValueSet);
+		//DelegateTypeHandler->NotifyPostChange(EPropertyChangeType::ValueSet);
+		MyPropertyHandle->NotifyPostChange(EPropertyChangeType::ValueSet);
+		
+		//DelegatePropertyNameHandler->NotifyFinishedChangingProperties();
+		//DelegateParameterListHandler->NotifyFinishedChangingProperties();
+		//DelegateTypeHandler->NotifyFinishedChangingProperties();
+		MyPropertyHandle->NotifyFinishedChangingProperties();
+		
 	}
 }
 
