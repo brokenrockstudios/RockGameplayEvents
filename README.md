@@ -5,10 +5,10 @@
 </div>
 
 <div align="center">
-
+  
 [![Star][star-image]][star-url]
 [![Package License][package-license-image]][package-license-url]
-
+[![Issues][issues-open-image]][issues-url]
 </div>
 
 <hr>
@@ -63,8 +63,8 @@ Any portions of the code that are not covered by Epic's EULA are licensed under 
 # Credit
 
 * Inspiration came from UEFN's Direct Event Binding
-* Inspiration came from Valve's Source Engine System Trigger System.
-* Inspiration came from Minecraft's Redstone system.
+* Inspiration came from Valve's Source Engine Trigger System
+* Inspiration came from Minecraft's Redstone System
 * ben🍃ui's recent tutorial https://benui.ca/unreal/choosing-function-in-editor/
 
 # Similiar Products
@@ -88,3 +88,5 @@ I'd love to further refine or polish this off for a wider audience. I invite eve
 [star-image]: https://img.shields.io/github/stars/brokenrockstudios/RockGameplayEvents?label=stars&style=plastic&color=blue
 [package-license-url]: https://opensource.org/licenses/MIT
 [package-license-image]: https://img.shields.io/badge/License-MIT-blue.svg?style=plastic&color=green
+[issues-open-image]: https://img.shields.io/github/issues/brokenrockstudios/RockGameplayEvents?label=Issues&style=plastic
+[issues-url]: https://github.com/brokenrockstudios/RockGameplayEvents/issues
