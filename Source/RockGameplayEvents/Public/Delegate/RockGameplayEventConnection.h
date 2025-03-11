@@ -22,7 +22,7 @@ struct ROCKGAMEPLAYEVENTS_API FRockGameplayEventConnection
 	FName DelegatePropertyName;
 	// Multicast or Singular type
 	UPROPERTY(VisibleAnywhere)
-	ERockDelegateType DelegateType;
+	ERockDelegateType DelegateType = ERockDelegateType::MulticastDelegate;
 
 	UPROPERTY(VisibleAnywhere, DisplayName = "Delegate Parameters")
 	FString DelegateParameterList;
