@@ -1,11 +1,11 @@
 <div align="center">
   <a href="https://github.com/brokenrockstudios/RockGameplayEvents">
-    <img src="docs/images/banner.png" alt="Banner">
+    <img src="docs/images/banner-640.png" alt="Banner">
   </a>
 </div>
 
 <div align="center">
-
+  
 [![Star][star-image]][star-url]
 [![Package License][package-license-image]][package-license-url]
 
@@ -14,50 +14,43 @@
 <hr>
 
 # RockGameplayEvents
-A relatively simple event system for hooking up instanced actors and ability to broadcast events
+A relatively simple direct event system for hooking up instanced actors and ability to broadcast events in the level editor.
+
+This system is inspired by UEFN, Source, and many other game engines that provide a similiar system but sadly UE does not, outside of the Level Blueprint.
 
 # The problem we are trying to solve
-If you have ever wanted to connect the output event from 1 actor placed in the editor and trigger a function on another actor, but specifically hooking it up without the level blueprint and in the level editor.
-Additionally without potential limitations of interfaces and/or components.
+Connect the output event from an actor, to trigger a function on another actor.  Without any required setup, interfaces, or extra components.
+
+Some common scenarios might be as simple as hooking up a lightswitch to various lights, or a lever to unlock a door.
+
 
 # Why you should use this plugin
-If you want to connect an broadcastable event from 1 actor to another in the editor. 
-If you want to accomplish this with ANY actor, no components and no interfaces.
 
-Trigger: All you need is either an exposed RockGameplayEventDelegate variable in C++ or BP on the triggering actor
-Receiver: All you need is a Function that matches the signature `void AnyNamedFunction(const AController*)` in either C++ or Blueprint. 
+* If you want to connect an broadcastable event from an actor to another in the editor. 
+* If you want to accomplish this with ANY actor, no components and no interfaces.
 
-# How simple is it?
-All you have to do is add a Broadcast Event when something happens
+TriggerActor: Have an appropriate Delegate(e.g. MulticastDelegate) and to add a URockDelegateConnectorComponent to the actor. This can be added per instanced actor or blueprint attached.
+ReceiverActor: Have a matching function signature to the trigger's selected delegate. 
 
-## C++
-`OnHit.BroadcastEvent(someController);`
-## Blueprint
-![image](https://github.com/user-attachments/assets/19790a09-cb8a-405c-b154-24385d11c250)
-
-
-To add at runtime
-
-## C++
-`OnHit.OnGameplayEvent.AddDynamic(this, &ABoxBase::SpinReceiver);`
-## Blueprint
-TBD
-
-
+This system will work with any existing delegates and functions. No registration, no additional setup required.
 
 # How does it look in the editor?
 
-With this plugin: you can hook up event listeners in the Unreal Engine's level editor. Between placed actors
-Such as with a lightswitch and a light or a TriggerPad and a Door.
+![image](https://github.com/user-attachments/assets/22787026-773a-46a0-b7fc-7b96044718ea)
 
-![image](https://github.com/user-attachments/assets/d0ceb039-39cc-4a02-a728-adb7eca77f6b)
+![image](https://github.com/user-attachments/assets/decf118c-55c7-433a-afae-5ff432b9041d)
 
 
-There are other great event systems out there that solve different issues.
-Such as Lyra's GameplayMessageSubsystem or our modified version of it https://github.com/brokenrockstudios/GameplayMessageRouter
+# Other solutions
 
-Also, there are many times where you likely just want to use a traditional `DECLARE_MULTICAST_DELEGATE` or some other built in solutions.
-However, most all of these don't support hooking up 2 independent actors that are placed in a level without the usage of the Level Blueprint or other handcoded mechanisms.
+There are other great event systems out there that either solve similiar but different problems or have different design goals.
+
+## Lyra's GameplayMessageSubsystem
+This works well for a global system that you setup using Channels ahead of time. Good for highscores, and larger sweeping changes
+Our modified version of it https://github.com/brokenrockstudios/GameplayMessageRouter
+
+## Todo: Add more examples here
+
 
 
 # Supported Delegates
@@ -88,9 +81,21 @@ Any portions of the code that are not covered by Epic's EULA are licensed under 
 
 # Credit
 
-* Inspiration for this plugin came from UEFN's Direct Event Binding and I hope we can further expand and refine this particular solution.
+* Inspiration came from UEFN's Direct Event Binding
+* Inspiration came from Valve's Source Engine Trigger System
+* Inspiration came from Minecraft's Redstone System
 * ben🍃ui's recent tutorial https://benui.ca/unreal/choosing-function-in-editor/
 
+# Similiar Products
+
+* [ActorIO](https://github.com/HorizonGamesRoland/ActorIO/tree/main)
+    * Most similiar. Has slightly different design goals.
+* [LEventDelegate](https://github.com/liufei2008/LEventDelegate/tree/5.2)
+    * Somewhat similiar, less flexible.
+* [Interactive Lights System](https://www.fab.com/listings/e1062ebc-abd9-4688-bedc-c34ba95409a6)
+    * Lights only. Requires to use their custom actors (Switches and lights)
+* Interaction only [EasyInteractionSystem](https://www.fab.com/listings/dbb8f567-d3cd-43e9-8e9d-3bfceb2eaff9)
+    * Interaction system. Not universal.
 
 # Contribute!
 
@@ -102,3 +107,5 @@ I'd love to further refine or polish this off for a wider audience. I invite eve
 [star-image]: https://img.shields.io/github/stars/brokenrockstudios/RockGameplayEvents?label=stars&style=plastic&color=blue
 [package-license-url]: https://opensource.org/licenses/MIT
 [package-license-image]: https://img.shields.io/badge/License-MIT-blue.svg?style=plastic&color=green
+[issues-open-image]: https://img.shields.io/github/issues/brokenrockstudios/RockGameplayEvents?label=Issues&style=plastic
+[issues-url]: https://github.com/brokenrockstudios/RockGameplayEvents/issues
