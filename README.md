@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://github.com/brokenrockstudios/RockGameplayEvents">
-    <img src="docs/images/banner.png" alt="Banner">
+    <img src="docs/images/banner-640.png" alt="Banner">
   </a>
 </div>
 
