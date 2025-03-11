@@ -5,6 +5,7 @@
 #include "Component/RockGameplayEventWorldSubsystem.h"
 
 #include "Component/RockDelegateConnectorComponent.h"
+#include "Misc/MiscHelperFunctions.h"
 
 void URockGameplayEventWorldSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
@@ -25,7 +26,7 @@ void URockGameplayEventWorldSubsystem::RemoveComponent(URockDelegateConnectorCom
 
 void URockGameplayEventWorldSubsystem::DestroyAllComponents()
 {
-	UE_LOG(LogTemp, Warning, TEXT("DestroyAllComponents 🤖"));
+	// UE_LOG(LogRockGameplayEvents, Display, TEXT("DestroyAllComponents 🤖"));
 	for (int i = 0; i < Components.Num(); i++)
 	{
 		URockDelegateConnectorComponent* Component = Components[i];

@@ -104,7 +104,7 @@ void SRockDelegateDropdownWidget::BuildDelegatesMenu(FMenuBuilder& MenuBuilder)
                 .Padding(FMargin(0, 0, 20, 0))
                 [
                     SNew(STextBlock)
-                    .Text(Delegate->GetSignatureFunctionString())
+                    .Text(FText::FromString(Delegate->GetSignatureFunctionString()))
                 ]
                 + SHorizontalBox::Slot()
                 .VAlign(VAlign_Center)

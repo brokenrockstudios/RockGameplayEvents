@@ -17,9 +17,8 @@ class ROCKGAMEPLAYEVENTS_API URockDelegateConnectorComponent : public UActorComp
 public:
 	URockDelegateConnectorComponent();
 
-	UPROPERTY(EditAnywhere, AdvancedDisplay)
-	bool bShowSparseDelegates = true;
-
+	// There is no need for this to be false at this time. Just remove the component after binding
+	// As we have no longer term functionality for this Component at this time.
 	UPROPERTY(EditAnywhere, AdvancedDisplay)
 	bool bAutoDestroyAfterBind = true;
 
@@ -36,7 +35,9 @@ protected:
 	virtual void OnUnregister() override;
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
-	//void PurgeStaleConnections();
+	// How would you know if a connection is stale? 
+	// Perhaps we are purging IncomingConnections?
+	// void PurgeStaleConnections();
 
 #if WITH_EDITOR
 	virtual EDataValidationResult IsDataValid(class FDataValidationContext& Context) const override;

@@ -3,6 +3,8 @@
 
 #include "Delegate/RockGameplayEventConnection.h"
 
+#include "Misc/MiscHelperFunctions.h"
+
 #if WITH_EDITOR
 #include "Misc/DataValidation.h"
 #endif
@@ -12,7 +14,7 @@ void FRockGameplayEventConnection::Connect(AActor* Actor, const UClass* SourceCl
 	if (!Actor || !SourceClass)
 	{
 		// UE_CLOG? Conditional logging
-		UE_LOG(LogTemp, Error, TEXT("Actor or SourceClass is null"));
+		UE_LOG(LogRockGameplayEvents, Error, TEXT("Actor or SourceClass is null"));
 		return;
 	}
 
@@ -51,10 +53,15 @@ void FRockGameplayEventConnection::Connect(AActor* Actor, const UClass* SourceCl
 		}
 	default:
 		{
-			UE_LOG(LogTemp, Error, TEXT("DelegateType not implemented"));
+			UE_LOG(LogRockGameplayEvents, Error, TEXT("DelegateType not implemented"));
 			break;
 		}
 	}
+}
+
+FString FRockGameplayEventConnection::GetDelegateNameString() const
+{
+	return DelegatePropertyName.ToString();
 }
 
 FString FRockGameplayEventConnection::ToString() const
@@ -92,7 +99,7 @@ EDataValidationResult FRockGameplayEventConnection::IsDataValid(class FDataValid
 // 		{
 // 			for (FRockGameplayEventBinding connection : Bindings)
 // 			{
-// 				UE_LOG(LogTemp, Warning, TEXT("SparseDelegate"));
+// 				UE_LOG(LogRockGameplayEvents, Warning, TEXT("SparseDelegate"));
 // 				connection.BindSparseDelegate(Actor, DelegatePropertyName, SparseDelegate);
 // 			}
 // 		}

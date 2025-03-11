@@ -33,6 +33,7 @@ public class RockGameplayEventsEditor : ModuleRules
 				"SlateCore",
 				"ToolWidgets",
 				"UnrealEd",
+				"DeveloperSettings"
 			]
 		);
 	}

@@ -3,7 +3,10 @@
 
 #include "Misc/MiscHelperFunctions.h"
 
-#include "Kismet2/BlueprintEditorUtils.h"
+#include "Component/RockDelegateConnectorComponent.h"
+#include "GameFramework/Actor.h"
+
+DEFINE_LOG_CATEGORY(LogRockGameplayEvents);
 
 TArray<FRockDelegateInfo> UMiscHelperFunctions::GetDelegatesForActor(AActor* InActor)
 {
@@ -18,12 +21,10 @@ TArray<FRockDelegateInfo> UMiscHelperFunctions::GetDelegatesForActor(AActor* InA
 TArray<FRockDelegateInfo> UMiscHelperFunctions::GetDelegatesForActorClass(const UClass* ActorClass)
 {
 	TArray<FRockDelegateInfo> DelegateInfos;
-
 	for (TFieldIterator<FProperty> PropIt(ActorClass, EFieldIteratorFlags::IncludeSuper); PropIt; ++PropIt)
 	{
 		FProperty* Property = *PropIt;
-
-		if (FMulticastDelegateProperty* MulticastDelegateProperty = CastField<FMulticastDelegateProperty>(Property))
+		if (const FMulticastDelegateProperty* MulticastDelegateProperty = CastField<FMulticastDelegateProperty>(Property))
 		{
 			FRockDelegateInfo Info;
 			Info.Name = MulticastDelegateProperty->GetName();
@@ -31,19 +32,14 @@ TArray<FRockDelegateInfo> UMiscHelperFunctions::GetDelegatesForActorClass(const 
 			{
 				Info.DefiningClass = MulticastDelegateProperty->GetOwnerClass();
 			}
-			Info.bIsMulticast = true;
-			Info.bIsSparse = MulticastDelegateProperty->GetClass()->HasAnyCastFlags(CASTCLASS_FMulticastSparseDelegateProperty);
-			// HasAnyCastFlags(CASTCLASS_FDelegateProperty | CASTCLASS_FMulticastDelegateProperty | CASTCLASS_FMulticastInlineDelegateProperty | CASTCLASS_FMulticastSparseDelegateProperty)
-			
+			Info.DelegateType = ERockDelegateType::MulticastDelegate;
 			if (MulticastDelegateProperty->SignatureFunction)
 			{
 				Info.SignatureFunction = MulticastDelegateProperty->SignatureFunction;
 			}
-			
-
 			DelegateInfos.Add(Info);
 		}
-		else if (FDelegateProperty* SingleDelegateProperty = CastField<FDelegateProperty>(Property))
+		else if (const FDelegateProperty* SingleDelegateProperty = CastField<FDelegateProperty>(Property))
 		{
 			FRockDelegateInfo Info;
 			Info.Name = SingleDelegateProperty->GetName();
@@ -51,8 +47,7 @@ TArray<FRockDelegateInfo> UMiscHelperFunctions::GetDelegatesForActorClass(const 
 			{
 				Info.DefiningClass = SingleDelegateProperty->GetOwnerClass();
 			}
-			Info.bIsMulticast = false;
-			Info.bIsSparse = SingleDelegateProperty->GetClass()->HasAnyCastFlags(CASTCLASS_FMulticastSparseDelegateProperty);
+			Info.DelegateType = ERockDelegateType::BlueprintDelegate;
 			if (SingleDelegateProperty->SignatureFunction)
 			{
 				Info.SignatureFunction = SingleDelegateProperty->SignatureFunction;
@@ -78,18 +73,6 @@ TArray<FRockDelegateInfo> UMiscHelperFunctions::GetDelegatesForActorClass(const 
 	return DelegateInfos;
 }
 
-
-void UMiscHelperFunctions::PrintDelegateInfo(TArray<FRockDelegateInfo> InDelegates)
-{
-	for (FRockDelegateInfo Info : InDelegates)
-	{
-		FString MulticastString = Info.bIsMulticast ? TEXT("[Multi]") : TEXT("[Single]");
-		FString SparseString = Info.bIsSparse ? TEXT("[Sparse]") : TEXT("");
-		UE_LOG(LogTemp, Warning, TEXT("%s::%s%s%s, Signature: %s"),
-			*Info.DefiningClass->GetName(), *Info.Name, *MulticastString, *SparseString, *Info.SignatureFunction->GetName());
-	}
-}
-
 TArray<FRockFunctionInfo> UMiscHelperFunctions::GetFunctionsForActor(AActor* InActor)
 {
 	TArray<FRockFunctionInfo> FunctionInfos;
@@ -98,7 +81,7 @@ TArray<FRockFunctionInfo> UMiscHelperFunctions::GetFunctionsForActor(AActor* InA
 		return FunctionInfos;
 	}
 
-	UClass* ActorClass = InActor->GetClass();
+	const UClass* ActorClass = InActor->GetClass();
 	for (TFieldIterator<UFunction> FuncIt(ActorClass); FuncIt; ++FuncIt)
 	{
 		UFunction* Function = *FuncIt;
@@ -117,7 +100,7 @@ TArray<FRockFunctionInfo> UMiscHelperFunctions::GetFunctionsForActor(AActor* InA
 		Info.bIsEvent = (Function->FunctionFlags & FUNC_Event) != 0;
 		Info.bIsNative = (Function->FunctionFlags & FUNC_Native) != 0;
 		Info.bIsRPC = (Function->FunctionFlags & FUNC_Net) != 0;
-		
+
 		FunctionInfos.Add(Info);
 	}
 
@@ -138,7 +121,7 @@ TArray<FRockFunctionInfo> UMiscHelperFunctions::GetFunctionsForActor(AActor* InA
 	return FunctionInfos;
 }
 
-void UMiscHelperFunctions::PrintFunctionInfo(TArray<FRockFunctionInfo> InFunctions)
+void UMiscHelperFunctions::LogFunctionInfo(TArray<FRockFunctionInfo> InFunctions)
 {
 	for (FRockFunctionInfo Info : InFunctions)
 	{
@@ -146,14 +129,24 @@ void UMiscHelperFunctions::PrintFunctionInfo(TArray<FRockFunctionInfo> InFunctio
 		FString NativeString = Info.bIsNative ? TEXT("Native") : TEXT("BP");
 		FString RPCString = Info.bIsRPC ? TEXT("[RPC]") : TEXT("");
 		FString DefiningClassString = Info.DefiningClass ? Info.DefiningClass->GetName() : TEXT("");
-		// Print all the parameters on 1 UE_Log line
-		FString ParamString = BuildFunctionParameterString(Info.Function);
-		UE_LOG(LogTemp, Warning, TEXT("Function: %s::%s%s::%s%s (%s)"), *DefiningClassString, *EventString, *NativeString, *Info.Name, *RPCString,
-			*ParamString);
+		FString ParamString = Info.GetSignatureFunctionString();
+		UE_LOG(LogRockGameplayEvents, Warning, TEXT("Function: %s::%s%s::%s%s %s"),
+			*DefiningClassString, *EventString, *NativeString, *Info.Name, *RPCString, *ParamString);
 	}
 }
 
-FString UMiscHelperFunctions::BuildFunctionParameterString(UFunction* InFunction, bool bIncludeParameterType, bool bIncludeParameterName, bool bIncludeParameterFlags)
+void UMiscHelperFunctions::LogDelegateInfo(TArray<FRockDelegateInfo> InDelegates)
+{
+	for (FRockDelegateInfo Info : InDelegates)
+	{
+		FString Name = Info.GetNameWithClass() + Info.GetDelegateTypeString();
+		UE_LOG(LogRockGameplayEvents, Warning, TEXT("%s %s, Signature: %s"),
+			*Info.GetNameWithClass(), *Info.GetDelegateTypeString(), *Info.SignatureFunction->GetName());
+	}
+}
+
+FString UMiscHelperFunctions::BuildFunctionParameterString(
+	UFunction* InFunction, bool bIncludeParameterType, bool bIncludeParameterName, bool bIncludeParameterFlags)
 {
 	FString ParamString = TEXT("");
 	if (!InFunction)
@@ -169,7 +162,7 @@ FString UMiscHelperFunctions::BuildFunctionParameterString(UFunction* InFunction
 	{
 		// We could add more info like the Type instead, which is what we need for compability purposes.
 		FProperty* Param = *ParamIt;
-		
+
 		// TODO: Move these to UDeveloperSettings
 		if (bIncludeParameterName)
 		{
@@ -195,36 +188,21 @@ FString UMiscHelperFunctions::BuildFunctionParameterString(UFunction* InFunction
 		ParamString += ", ";
 	}
 	ParamString.RemoveFromEnd(", ");
-	
+
 	return ParamString;
 }
 
-bool UMiscHelperFunctions::CanFunctionBindToDelegate(UFunction* InFunction, UFunction* DelegateFunction)
+void UMiscHelperFunctions::AddDelegateConnectorComponent(AActor* InActor)
 {
-	// UBlueprintBoundEventNodeSpawner::IsBindingCompatible
-	const bool bMatchingThreadSafeness = FBlueprintEditorUtils::HasFunctionBlueprintThreadSafeMetaData(InFunction) ==
-		FBlueprintEditorUtils::HasFunctionBlueprintThreadSafeMetaData(DelegateFunction);
-	const bool bIsSignatureCompatible = InFunction->IsSignatureCompatibleWith(DelegateFunction);
-
-	return bIsSignatureCompatible && bMatchingThreadSafeness;
-}
-
-TArray<FRockFunctionInfo> UMiscHelperFunctions::GetCompatibleFunctionsForDelegate(AActor* InActor, FRockDelegateInfo DelegateProperty)
-{
-	TArray<FRockFunctionInfo> CompatibleFunctions;
-	UFunction* DelegateSignature = DelegateProperty.SignatureFunction;
-
-	if (!InActor || !DelegateSignature)
+	if (!InActor)
 	{
-		return CompatibleFunctions;
+		return;
 	}
-	auto ActorFunctions = GetFunctionsForActor(InActor);
-	for (FRockFunctionInfo FuncInfo : ActorFunctions)
+	URockDelegateConnectorComponent* ConnectorComponent = InActor->GetComponentByClass<URockDelegateConnectorComponent>();
+	if (!ConnectorComponent)
 	{
-		if (CanFunctionBindToDelegate(FuncInfo.Function, DelegateSignature))
-		{
-			CompatibleFunctions.Add(FuncInfo);
-		}
+		ConnectorComponent = NewObject<URockDelegateConnectorComponent>(InActor);
+		ConnectorComponent->RegisterComponent();
+		InActor->AddInstanceComponent(ConnectorComponent);
 	}
-	return CompatibleFunctions;
 }

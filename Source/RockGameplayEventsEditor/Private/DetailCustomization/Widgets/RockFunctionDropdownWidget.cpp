@@ -11,6 +11,8 @@ void SRockFunctionDropdownWidget::Construct(const FArguments& InArgs)
     FunctionSelectedCallback = InArgs._OnFunctionSelected;
     MaxListHeight = InArgs._MaxListHeight;
     
+    FunctionReferenceHandle = InArgs._EventFunctionReferenceHandle;
+    
     if (InArgs._AvailableFunctions.Num() > 0)
     {
         AvailableFunctions = InArgs._AvailableFunctions;
@@ -22,7 +24,10 @@ void SRockFunctionDropdownWidget::Construct(const FArguments& InArgs)
         //.ButtonStyle(InArgs._ButtonStyle)
         .ButtonContent()
         [
-            InArgs._ButtonContent.Widget
+            //InArgs._ButtonContent.Widget
+            SNew(STextBlock)
+            .Text(this, &SRockFunctionDropdownWidget::GetFNameFromPropertyHandle, FunctionReferenceHandle)
+            
         ]
         .OnGetMenuContent(this, &SRockFunctionDropdownWidget::CreateDropdownMenu)
         .ContentPadding(InArgs._ContentPadding);
@@ -31,6 +36,22 @@ void SRockFunctionDropdownWidget::Construct(const FArguments& InArgs)
     [
         ComboButton.ToSharedRef()
     ];
+}
+
+FText SRockFunctionDropdownWidget::GetFNameFromPropertyHandle(TSharedPtr<IPropertyHandle> PropertyHandle) const
+{
+    if (AvailableFunctions.IsEmpty())
+    {
+        return FText::FromString("None");
+    }
+    void* StructData = nullptr;
+    if (PropertyHandle->GetValueData(StructData) == FPropertyAccess::Success)
+    {
+        check(StructData);
+        const FName Name = *static_cast<FName*>(StructData);
+        return FText::FromName(Name);
+    }
+    return FText::FromString("");
 }
 
 TSharedRef<SWidget> SRockFunctionDropdownWidget::CreateDropdownMenu()
@@ -173,6 +194,10 @@ void SRockFunctionDropdownWidget::HandleFunctionSelection(UFunction* Function, E
     {
         FunctionSelectedCallback.Execute(Function, SelectType);
     }
+    //FunctionReferenceHandle->NotifyPostChange(EPropertyChangeType::ValueSet);
+    //FunctionReferenceHandle->NotifyFinishedChangingProperties();
+    //ComboButton->Invalidate(EInvalidateWidget::Layout);
+    
 }
 
 

@@ -2,12 +2,12 @@
 
 #include "Misc/MiscHelperFunctions.h"
 
-FText FRockDelegateInfo::GetNameWithClass() const
+FString FRockDelegateInfo::GetNameWithClass() const
 {
-	return FText::FromString((DefiningClass ? DefiningClass->GetName() : "") + "::" + Name);
+	return (DefiningClass ? DefiningClass->GetName() : "") + "::" + Name;
 }
 
-FText FRockDelegateInfo::GetDisplayName() const
+FString FRockDelegateInfo::GetDisplayName() const
 {
 	// check UDeveloperSettings if we show GetName or GetSignatureFunctionString
 
@@ -23,20 +23,45 @@ FText FRockDelegateInfo::GetDisplayName() const
 	}
 }
 
-FText FRockDelegateInfo::GetSignatureFunctionString() const
+FString FRockDelegateInfo::GetSignatureFunctionString() const
 {
 	// get all the parameter types and put them in a foo(int, float, bool) format
-
-	auto parameters = UMiscHelperFunctions::BuildFunctionParameterString(SignatureFunction, false);
+	auto parameters = UMiscHelperFunctions::BuildFunctionParameterString(SignatureFunction, true);
 	if (parameters.Len() > 0)
 	{
 		parameters = "(" + parameters + ")";
 	}
 	const FString SignatureString = Name + parameters;
-	return FText::FromString(SignatureString);
+	return SignatureString;
 }
 
-FText FRockDelegateInfo::GetName() const
+FString FRockDelegateInfo::GetDelegateTypeString() const
 {
-	return FText::FromString(Name);
+	switch (DelegateType)
+	{
+	case ERockDelegateType::MulticastDelegate:
+		return "Multicast Delegate";
+	case ERockDelegateType::BlueprintDelegate:
+		return "Blueprint Delegate";
+	default:
+		return "Unknown";
+	}
+}
+
+FString FRockDelegateInfo::GetName() const
+{
+	return Name;
+}
+
+FString FRockFunctionInfo::GetSignatureFunctionString() const
+{
+	// get all the parameter types and put them in a foo(int, float, bool) format
+
+	auto parameters = UMiscHelperFunctions::BuildFunctionParameterString(Function, false);
+	if (parameters.Len() > 0)
+	{
+		parameters = "(" + parameters + ")";
+	}
+	const FString SignatureString = Name + parameters;
+	return SignatureString;
 }

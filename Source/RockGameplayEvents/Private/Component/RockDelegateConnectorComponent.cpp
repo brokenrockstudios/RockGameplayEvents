@@ -23,7 +23,7 @@ void URockDelegateConnectorComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	GetWorld()->GetSubsystem<URockGameplayEventWorldSubsystem>()->AddComponent(this);
-	
+
 	// DO NOT move to OnRegister, can end up multiple registering the same delegate, unless we were to add some kind of check
 	// Otherwise, we could store if it's been registered or not, but that's just more state to manage.
 	// Especially if we aren't careful about unbinding them during delete or other edge cases
@@ -39,7 +39,7 @@ void URockDelegateConnectorComponent::BeginPlay()
 void URockDelegateConnectorComponent::OnUnregister()
 {
 	Super::OnUnregister();
-	
+
 	// for (auto Connection : DelegateConnections)
 	// {
 	// 	Connection.Disconnect();
@@ -57,22 +57,19 @@ void URockDelegateConnectorComponent::EndPlay(const EEndPlayReason::Type EndPlay
 	Super::EndPlay(EndPlayReason);
 }
 
-// void URockDelegateConnectorComponent::PurgeStaleConnections()
-// {
-// 	
-// }
-
 #if WITH_EDITOR
 EDataValidationResult URockDelegateConnectorComponent::IsDataValid(class FDataValidationContext& Context) const
 {
 	EDataValidationResult SuperResult = Super::IsDataValid(Context);
-	
+
 	for (const FRockGameplayEventConnection& Connection : DelegateConnections)
 	{
-		EDataValidationResult ConnectionResult = Connection.IsDataValid(Context);
-		if (ConnectionResult == EDataValidationResult::Invalid)
+		if (Connection.IsDataValid(Context) == EDataValidationResult::Invalid)
 		{
-			Context.AddWarning(FText::Format( NSLOCTEXT("RockGameplayEvents", "DelegateConnectionInvalid", "Delegate Connection is invalid: {0}"), FText::FromString(Connection.ToString()) ) );
+			const FText NameOfComponent = FText::FromString(GetReadableName());
+			Context.AddWarning(FText::Format(
+				NSLOCTEXT("RockGameplayEvents", "DelegateConnectionInvalid", "[{0}] Has an invalid entry. {1}"),
+				NameOfComponent, FText::FromString(Connection.GetDelegateNameString())));
 			return EDataValidationResult::Invalid;
 		}
 	}

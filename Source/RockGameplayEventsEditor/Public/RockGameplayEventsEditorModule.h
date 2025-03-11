@@ -4,7 +4,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ComponentVisualizer.h"
 #include "Modules/ModuleManager.h"
 
 class FRockGameplayEventsEditorModule : public IModuleInterface

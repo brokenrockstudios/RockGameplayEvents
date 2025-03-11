@@ -20,8 +20,24 @@ struct ROCKGAMEPLAYEVENTS_API FRockGameplayEventConnection
 	// The owner's Multicast Delegate Property to bind to
 	UPROPERTY(EditAnywhere)
 	FName DelegatePropertyName;
+	// Multicast or Singular
+	ERockDelegateType DelegateType; 
 
-	ERockDelegateType DelegateType;
+	// The parmaeters
+//#if WITH_EDITORONLY_DATA
+	// Only viewable in editor
+	UPROPERTY(EditAnywhere)
+	FString DelegateParameterList;
+	UPROPERTY(EditAnywhere)
+	FText DelegateParameterListText;
+//# endif
+	
+	//UPROPERTY(EditAnywhere)
+	//UFunction* DelegateFunction;
+	//UPROPERTY(EditAnywhere)
+	//FMemberReference DelegateReference;
+	
+
 
 	UPROPERTY(EditAnywhere)
 	TArray<FRockGameplayEventBinding> Bindings;
@@ -31,6 +47,7 @@ private:
 	void Connect(AActor* actor, const UClass* SourceClass);
 
 	FString ToString() const;
+	FString GetDelegateNameString() const;
 
 #if WITH_EDITOR
 	EDataValidationResult IsDataValid(class FDataValidationContext& Context) const;
@@ -49,6 +66,9 @@ struct ROCKGAMEPLAYEVENTS_API FRockGameplayIncomingConnection
 	// This technically could be a FMemberReference? But what that extra data buys us is questionable?
 	UPROPERTY(EditAnywhere)
 	FName DelegatePropertyName;
+
+	
+	//FRockConnectionHandler ConnectionHandler;
 
 	bool operator==(const FRockGameplayIncomingConnection& other) const
 	{

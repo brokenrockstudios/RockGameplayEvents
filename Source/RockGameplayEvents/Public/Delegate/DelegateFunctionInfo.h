@@ -4,6 +4,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "RockDelegateType.h"
 #include "DelegateFunctionInfo.generated.h"
 
 USTRUCT(Blueprintable)
@@ -14,13 +15,15 @@ struct ROCKGAMEPLAYEVENTS_API FRockDelegateInfo
 	FString Name;
 	UClass* DefiningClass;
 	TObjectPtr<UFunction> SignatureFunction;
-	bool bIsMulticast;
-	bool bIsSparse;
+	ERockDelegateType DelegateType;
+	// bool bIsMulticast;
+	// bool bIsSparse;
 	// Should I add the DelegateOwner, or we can just infer it elsewhere
-	FText GetNameWithClass() const;
-	FText GetDisplayName() const;
-	FText GetSignatureFunctionString() const;
-	FText GetName() const;
+	FString GetNameWithClass() const;
+	FString GetDisplayName() const;
+	FString GetSignatureFunctionString() const;
+	FString GetDelegateTypeString() const;
+	FString GetName() const;
 };
 
 USTRUCT(Blueprintable)
@@ -35,4 +38,6 @@ struct ROCKGAMEPLAYEVENTS_API FRockFunctionInfo
 	bool bIsNative;
 	bool bIsRPC;
 	TObjectPtr<UFunction> Function;
+	
+	FString GetSignatureFunctionString() const;
 };

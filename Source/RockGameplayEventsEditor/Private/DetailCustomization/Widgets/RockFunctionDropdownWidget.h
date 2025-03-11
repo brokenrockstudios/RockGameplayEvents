@@ -16,7 +16,7 @@ class ROCKGAMEPLAYEVENTSEDITOR_API SRockFunctionDropdownWidget : public SCompoun
 		, _ButtonStyle(nullptr)
 		, _ContentPadding(FMargin(4.0f, 2.0f))
 		, _MaxListHeight(450.0f)
-		, _ButtonContent()
+		//, _ButtonContent()
 	{}
 	/** The visual style of the combo button */
 	SLATE_ARGUMENT(const FComboButtonStyle*, ComboButtonStyle)
@@ -27,11 +27,14 @@ class ROCKGAMEPLAYEVENTSEDITOR_API SRockFunctionDropdownWidget : public SCompoun
 	/** The max height of the dropdown list */
 	SLATE_ARGUMENT(float, MaxListHeight)
 	/** The content to be displayed in the button */
-	SLATE_DEFAULT_SLOT(FArguments, ButtonContent)
+	// Was running into validation/redrawing issues, so instead just passing in the IPropertyHandle here
+	// SLATE_DEFAULT_SLOT(FArguments, ButtonContent)
 	/** Callback for when a delegate is selected */
 	SLATE_EVENT(FOnFunctionSelected, OnFunctionSelected)
 	/** Optional list of available functions to show (will be generated if not provided) */
 	SLATE_ARGUMENT(TArray<UFunction*>, AvailableFunctions)
+	//void EventFunctionReferenceHandle(bool shared);
+	SLATE_ARGUMENT(TSharedPtr<IPropertyHandle>, EventFunctionReferenceHandle)
 	/** Base class to filter delegates/functions from (if generating the list) */
 	SLATE_ARGUMENT(UClass*, FilterByClass)
 SLATE_END_ARGS()
@@ -45,7 +48,8 @@ SLATE_END_ARGS()
 private:
 	/** Creates the dropdown menu widget */
 	TSharedRef<SWidget> CreateDropdownMenu();
-
+	TSharedPtr<IPropertyHandle> FunctionReferenceHandle;
+	
 	/** Builds the menu for functions */
 	void BuildFunctionsMenu(FMenuBuilder& MenuBuilder);
 
@@ -55,6 +59,8 @@ private:
 	/** Generates a list of available functions from the filter class */
 	void GenerateAvailableFunctionsFromClass(UClass* FilterClass);
 
+	
+	FText GetFNameFromPropertyHandle(TSharedPtr<IPropertyHandle> PropertyHandle) const;
 private:
 	/** Whether to show delegates or functions */
 	bool bShowDelegates = true;

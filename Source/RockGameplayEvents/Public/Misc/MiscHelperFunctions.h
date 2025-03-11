@@ -9,6 +9,9 @@
 
 #include "MiscHelperFunctions.generated.h"
 
+
+ROCKGAMEPLAYEVENTS_API DECLARE_LOG_CATEGORY_EXTERN(LogRockGameplayEvents, Log, All);
+
 /**
  *
  */
@@ -20,27 +23,25 @@ class ROCKGAMEPLAYEVENTS_API UMiscHelperFunctions : public UBlueprintFunctionLib
 public:
 	UFUNCTION(BlueprintCallable)
 	static TArray<FRockDelegateInfo> GetDelegatesForActorClass(const UClass* ActorClass);
-
+	
 	UFUNCTION(BlueprintCallable)
 	static TArray<FRockDelegateInfo> GetDelegatesForActor(AActor* InActor);
-
-	UFUNCTION(BlueprintCallable)
-	static void PrintDelegateInfo(TArray<FRockDelegateInfo> InDelegates);
-
+	
 	UFUNCTION(BlueprintCallable)
 	static TArray<FRockFunctionInfo> GetFunctionsForActor(AActor* InActor);
 
 	UFUNCTION(BlueprintCallable)
-	static void PrintFunctionInfo(TArray<FRockFunctionInfo> InFunctions);
-
-	UFUNCTION(BlueprintCallable)
 	static FString BuildFunctionParameterString(UFunction* InFunction, bool bIncludeParameterType = true, bool bIncludeParameterName = false, bool bIncludeParameterFlags = false);
-
+	
 	UFUNCTION(BlueprintCallable)
-	static bool CanFunctionBindToDelegate(UFunction* InFunction, UFunction* DelegateFunction);
-
+	static void AddDelegateConnectorComponent(AActor* InActor);
+	
+	// Internal Testing	
 	UFUNCTION(BlueprintCallable)
-	static TArray<FRockFunctionInfo> GetCompatibleFunctionsForDelegate(AActor* InActor, FRockDelegateInfo DelegateProperty);
+	static void LogFunctionInfo(TArray<FRockFunctionInfo> InFunctions);
+	// Internal Testing
+	UFUNCTION(BlueprintCallable)
+	static void LogDelegateInfo(TArray<FRockDelegateInfo> InDelegates);
 };
 
 
