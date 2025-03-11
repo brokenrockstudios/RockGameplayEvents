@@ -55,14 +55,16 @@ Our modified version of it https://github.com/brokenrockstudios/GameplayMessageR
 
 # Supported Delegates
 
-Blueprints
+### Blueprint:
 
-C++
+TODO: Add Image
+
+### C++:
 ```cpp
 // DECLARE_DYNAMIC_MULTICAST_DELEGATE
 UPROPERTY(BlueprintAssignable)
 FRockTestMulticast OnTestNativeMulticast;
-// DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE_OneParam
+// DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE
 UPROPERTY(BlueprintAssignable)
 FRockTestMulticastSparse OnTestNativeMulticastSparse;
 // DECLARE_DYNAMIC_DELEGATE
@@ -70,7 +72,6 @@ UPROPERTY(EditAnywhere, BlueprintReadWrite)
 FRockDelegateDynamic OnTestNativeDelegate;
 ```
 
-![img.png](img.png)
 
 # License
 
