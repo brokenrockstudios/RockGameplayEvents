@@ -11,4 +11,16 @@ class FRockGameplayEventsEditorModule : public IModuleInterface
 public:
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
+
+	/** Register all property type customizations */
+	void RegisterPropertyTypeCustomizations() const;
+	/** Unregister all property type customizations */
+	void UnregisterPropertyTypeCustomizations() const;
+
+private:
+	/** Array of registered component visualizers, so we know what to unregister */
+	TArray<FName> RegisteredComponentClassNames;
+	
+	void OnEditorSelectionChanged(UObject* object);
+	FDelegateHandle OnEditorSelectionChangedHandle;
 };

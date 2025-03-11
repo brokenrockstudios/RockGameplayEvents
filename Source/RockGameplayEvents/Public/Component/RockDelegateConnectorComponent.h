@@ -5,49 +5,48 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Delegate/RockGameplayEventConnection.h"
 #include "RockDelegateConnectorComponent.generated.h"
 
-USTRUCT(BlueprintType)
-struct FRockGameplayEventBinding
-{
-	GENERATED_BODY()
-	UPROPERTY(EditAnywhere)
-	TObjectPtr<AActor> TargetActor;
-
-	// This must match the signature of FRockGameplayEventConnection::DelegatePropertyName
-	UPROPERTY(EditAnywhere)
-	FName FunctionNameToBind; 
-};
-
-USTRUCT(BlueprintType)
-struct FRockGameplayEventConnection
-{
-	GENERATED_BODY()
-	// The owner's Multicast Delegate Property to bind to
-	UPROPERTY(EditAnywhere)
-	FName DelegatePropertyName;
-	
-	UPROPERTY(EditAnywhere)
-	TArray<FRockGameplayEventBinding> Bindings;
-
-private:
-	friend class URockDelegateConnectorComponent;
-	void Connect(const UClass* SourceClass);
-};
-
-
-UCLASS(ClassGroup=(RockGameplayEvents), meta=(BlueprintSpawnableComponent), HideCategories = (Activation, Navigation, Tags, Cooking, AssetUserData))
+UCLASS(ClassGroup="RockGameplayEvents", DisplayName="GameplayEventConnector",
+	meta=(BlueprintSpawnableComponent), HideCategories = (Activation, Navigation, Tags, Cooking, AssetUserData))
 class ROCKGAMEPLAYEVENTS_API URockDelegateConnectorComponent : public UActorComponent
 {
 	GENERATED_BODY()
+
 public:
 	URockDelegateConnectorComponent();
 
-	UPROPERTY(EditAnywhere, Category = "Delegates")
-	TArray<FRockGameplayEventConnection> DelegateConnections;
-	
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
+	// There is no need for this to be false at this time. Just remove the component after binding
+	// As we have no longer term functionality for this Component at this time.
+	UPROPERTY(EditAnywhere, AdvancedDisplay)
+	bool bAutoDestroyAfterBind = true;
 
+	UPROPERTY(EditAnywhere)
+	TArray<FRockGameplayEventConnection> DelegateConnections;
+
+	// Incoming readonly connections
+	UPROPERTY(VisibleAnywhere)
+	TArray<FRockGameplayIncomingConnection> IncomingConnections;
+
+protected:
+	virtual void OnRegister() override;
+	virtual void BeginPlay() override;
+	virtual void OnUnregister() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
+	// How would you know if a connection is stale? 
+	// Perhaps we are purging IncomingConnections?
+	// void PurgeStaleConnections();
+
+#if WITH_EDITOR
+	virtual EDataValidationResult IsDataValid(class FDataValidationContext& Context) const override;
+#endif
 };
+
+
+// We could creat a proxy VisualizationComponent that is only visible in the editor and is added when actor is 'targeted' and stores the stuff
+// It should cease to exist in play or in deployed modes?
+// This would allow us to see the connections in the editor without having to add the extra components to the actor long term
+// This would be a good way to visualize the connections without cluttering the actor
+// SetIsVisualizationComponent

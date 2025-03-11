@@ -5,14 +5,14 @@
 
 #include "RockGameplayEventsModule.h"
 
-void FRockGameplayEvents::StartupModule()
+void FRockGameplayEventsModule::StartupModule()
 {
 }
 
-void FRockGameplayEvents::ShutdownModule()
+void FRockGameplayEventsModule::ShutdownModule()
 {
 }
 
 #undef LOCTEXT_NAMESPACE
 
-IMPLEMENT_MODULE(FRockGameplayEvents, RockGameplayEventsModule);
+IMPLEMENT_MODULE(FRockGameplayEventsModule, RockGameplayEvents);

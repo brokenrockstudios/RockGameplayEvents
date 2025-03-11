@@ -3,9 +3,9 @@
 
 using UnrealBuildTool;
 
-public class RockGameplayEventsEditor : ModuleRules
+public class RockGameplayEventsVisualizers : ModuleRules
 {
-	public RockGameplayEventsEditor(ReadOnlyTargetRules Target) : base(Target)
+	public RockGameplayEventsVisualizers(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
@@ -33,7 +33,7 @@ public class RockGameplayEventsEditor : ModuleRules
 				"SlateCore",
 				"ToolWidgets",
 				"UnrealEd",
-				"DeveloperSettings",
+				"RockGameplayEventsEditor"
 			]
 		);
 	}
