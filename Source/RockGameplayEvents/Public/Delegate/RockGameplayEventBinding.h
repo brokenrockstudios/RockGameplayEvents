@@ -48,7 +48,7 @@ struct ROCKGAMEPLAYEVENTS_API FRockGameplayEventBinding
 	// TODO: Switch out for direction UFunction, so that we don't have to do the FindFunctionByName
 	//UPROPERTY()
 	// TObjectPtr<UFunction> FunctionToBind;
-
+	
 	void BindMulticastDelegate(UObject* DelegateOwner, const FMulticastDelegateProperty* DelegateProperty) const;
 	void BindBlueprintDelegate(UObject* DelegateOwner, const FDelegateProperty* DelegateProperty) const;
 

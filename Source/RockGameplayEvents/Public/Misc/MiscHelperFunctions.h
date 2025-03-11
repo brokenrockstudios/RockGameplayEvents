@@ -30,6 +30,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	static TArray<FRockFunctionInfo> GetFunctionsForActor(AActor* InActor);
 
+	
+	// UFUNCTION(BlueprintCallable)
+	//static FString BuildFunctionParameterString(UFunction* InFunction, bool bIncludeParameterType = true, bool bIncludeParameterName = false, bool bIncludeParameterFlags = false);
+
 	UFUNCTION(BlueprintCallable)
 	static FString BuildFunctionParameterString(UFunction* InFunction, bool bIncludeParameterType = true, bool bIncludeParameterName = false, bool bIncludeParameterFlags = false);
 	

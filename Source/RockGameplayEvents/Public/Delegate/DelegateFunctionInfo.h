@@ -19,11 +19,9 @@ struct ROCKGAMEPLAYEVENTS_API FRockDelegateInfo
 	// bool bIsMulticast;
 	// bool bIsSparse;
 	// Should I add the DelegateOwner, or we can just infer it elsewhere
-	FString GetNameWithClass() const;
-	FString GetDisplayName() const;
-	FString GetSignatureFunctionString() const;
-	FString GetDelegateTypeString() const;
 	FString GetName() const;
+	FString GetNameWithClass() const;
+	UFunction* GetSignatureFunction() const;
 };
 
 USTRUCT(Blueprintable)
@@ -39,5 +37,5 @@ struct ROCKGAMEPLAYEVENTS_API FRockFunctionInfo
 	bool bIsRPC;
 	TObjectPtr<UFunction> Function;
 	
-	FString GetSignatureFunctionString() const;
+	UFunction* GetSignatureFunction() const;
 };

@@ -27,7 +27,10 @@ void URockDelegateConnectorComponent::BeginPlay()
 	// DO NOT move to OnRegister, can end up multiple registering the same delegate, unless we were to add some kind of check
 	// Otherwise, we could store if it's been registered or not, but that's just more state to manage.
 	// Especially if we aren't careful about unbinding them during delete or other edge cases
-	// If this were to ever become a problem, we could investigate an OnRegister (pre beginplay approach?) 
+	// If this were to ever become a problem, we could investigate an OnRegister (pre beginplay approach?)
+	
+	// TODO Move this to the Connection, because later we might want to support binding to components or arbitrary objects.
+	// Which means when we are assigning it, we can just assign it then as the actor for now, makes upgrading easier later on.
 	AActor* Owner = GetOwner();
 	const UClass* OwnerClass = Owner->GetClass();
 	for (auto Connection : DelegateConnections)

@@ -6,7 +6,6 @@
 #include "DetailLayoutBuilder.h"
 #include "DetailWidgetRow.h"
 #include "IDetailChildrenBuilder.h"
-#include "IPropertyUtilities.h"
 #include "PropertyCustomizationHelpers.h"
 #include "RandomFunctions.h"
 #include "RockEventsEditorFunctionLibrary.h"
@@ -35,7 +34,6 @@ void FRockDelegateConnectionsCustomization::CustomizeHeader(
 	{
 		DelegatePropertyName = "None";
 	}
-	
 
 	uint32 NumElements;
 	BindingsHandler->GetNumChildren(NumElements);
@@ -44,9 +42,26 @@ void FRockDelegateConnectionsCustomization::CustomizeHeader(
 		.NameContent()
 		[
 			// Fetch the name from the FRockGameplayEventConnection::DelegatePropertyName
-			SNew(STextBlock)
-			.Text(this, &FRockDelegateConnectionsCustomization::GetSelectedDelegate)
-			.Font(IDetailLayoutBuilder::GetDetailFont())
+			SNew(SHorizontalBox)
+			+ SHorizontalBox::Slot()
+			.AutoWidth()
+			.VAlign(VAlign_Center)
+			[
+				SNew(STextBlock)
+				.Text(this, &FRockDelegateConnectionsCustomization::GetSelectedDelegate)
+				.Font(IDetailLayoutBuilder::GetDetailFont())
+			]
+			+ SHorizontalBox::Slot()
+			.AutoWidth()
+			.VAlign(VAlign_Center)
+			.Padding(FMargin(4.0f, 0.0f))
+			[
+				SNew(SImage)
+				.Image(FAppStyle::GetBrush("Icons.Info"))
+				// TODO Bind ot the full function signature
+				.ToolTipText(this, &FRockDelegateConnectionsCustomization::GetDelegateParameterList)
+				//LOCTEXT("DelegateWarning", "This delegate is not bound to any functions"))
+			]
 		]
 		.ValueContent()
 		[
@@ -75,45 +90,28 @@ void FRockDelegateConnectionsCustomization::CustomizeChildren(
 	// InStructCustomizationUtils.GetPropertyUtilities()
 	AvailableDelegates.Empty();
 	auto delegates = UMiscHelperFunctions::GetDelegatesForActorClass(CachedActorClass);
-	DelegateParameterList = InPropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FRockGameplayEventConnection, DelegateParameterList));
 	for (const FRockDelegateInfo& Delegate : delegates)
 	{
 		AvailableDelegates.Add(MakeShareable(new FRockDelegateInfo(Delegate)));
 	}
 
-
 	InChildBuilder.AddProperty(DelegatePropertyNameHandler.ToSharedRef())
 		.CustomWidget()
 		[
 			SAssignNew(Vert, SVerticalBox)
-			 + SVerticalBox::Slot()
-			 .FillHeight(1)
-			 [
-			 	SAssignNew(DelegateParamListRef, STextBlock)
-			 	.Text(this, &FRockDelegateConnectionsCustomization::GetDelegateParameterList)
-			 ]
-			 + SVerticalBox::Slot()
-			 .AutoHeight()
-			 [
-			SNew(SRockDelegateDropdownWidget)
-			.AvailableDelegates(AvailableDelegates)
-			.ContentPadding(FMargin(4.0f, 2.0f))
-			.OnDelegateSelected(this, &FRockDelegateConnectionsCustomization::OnMulticastDelegateSelected)
-			.ButtonContent()
+			+ SVerticalBox::Slot()
+			.Padding(FMargin(0.0f, 4, 0, 4.0f))
 			[
-				SNew(STextBlock)
-				.Text(this, &FRockDelegateConnectionsCustomization::GetSelectedDelegate)
+				SNew(SRockDelegateDropdownWidget)
+				.AvailableDelegates(AvailableDelegates)
+				.ContentPadding(FMargin(4.0f, 2.0f))
+				.OnDelegateSelected(this, &FRockDelegateConnectionsCustomization::OnMulticastDelegateSelected)
+				.ButtonContent()
+				[
+					SNew(STextBlock)
+					.Text(this, &FRockDelegateConnectionsCustomization::GetSelectedDelegate)
+				]
 			]
-			]
-		];
-	InChildBuilder.AddProperty(DelegateParameterList.ToSharedRef())
-		.Visibility(EVisibility::Visible)
-		.CustomWidget()
-		[
-			SAssignNew(DelegateParamListRef, STextBlock)
-			.Text(this, &FRockDelegateConnectionsCustomization::GetDelegateParameterList)
-			//.Text(this, &FRockDelegateConnectionsCustomization::GetSelectedDelegate)
-			.Font(IDetailLayoutBuilder::GetDetailFont())
 		];
 
 	uint32 NumChildren;
@@ -233,61 +231,39 @@ void FRockDelegateConnectionsCustomization::OnTargetActorSelected(
 
 void FRockDelegateConnectionsCustomization::OnMulticastDelegateSelected(TSharedPtr<FRockDelegateInfo> InItem, ESelectInfo::Type arg)
 {
-	//auto DelegateParameterList = MyPropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FRockGameplayEventConnection, DelegateParameterList));
-	FScopedTransaction Transaction(LOCTEXT("YourOperation", "Your Operation"));
-	if (DelegateParameterList.IsValid() && DelegatePropertyNameHandler.IsValid())
+	if (CachedConnection)
 	{
-
-		FString FunctionString = InItem->GetSignatureFunctionString();
-
-
-		// DelegateParameterList->NotifyPreChange();
-		// TArray<void*> rawDataArray;
-		// DelegateParameterList->AccessRawData(rawDataArray);
-		// FString* StrPtr = static_cast<FString*>(rawDataArray[0]);
-		// check(StrPtr);
-		// *StrPtr = FunctionString;		
-		// DelegatePropertyNameHandler->SetValue(InItem->Name);
-		// DelegateParameterList->NotifyPostChange(EPropertyChangeType::ValueSet);
-
-
-		// void* RawData;
-		// MyPropertyHandle->GetValueData(RawData);
-		// CachedConnection = static_cast<FRockGameplayEventConnection*>(RawData);
-		void* RawData;
-		if (MyPropertyHandle->GetValueData(RawData) == FPropertyAccess::Success)
+		// TODO: Will clean this up later
+		if (DelegateParameterListHandler.IsValid())
 		{
-			check(RawData);
-			FRockGameplayEventConnection* CachedConnection = static_cast<FRockGameplayEventConnection*>(RawData);
-			
-			DelegateParameterList->NotifyPreChange();
+			DelegateParameterListHandler->NotifyPreChange();
+		}
+		if (DelegatePropertyNameHandler.IsValid())
+		{
 			DelegatePropertyNameHandler->NotifyPreChange();
-			// Get the raw pointer
-			CachedConnection->DelegatePropertyName = *InItem->Name;
-			CachedConnection->DelegateParameterList = FunctionString;
-			CachedConnection->DelegateType = InItem->DelegateType;
-			DelegateParameterList->NotifyPostChange(EPropertyChangeType::ValueSet);
-			DelegatePropertyNameHandler->NotifyPostChange(EPropertyChangeType::ValueSet);
+		}
+		if (DelegateTypeHandler.IsValid())
+		{
+			DelegateTypeHandler->NotifyPreChange();
 		}
 
+		CachedConnection->DelegatePropertyName = *InItem->Name;
+		FString FunctionString = UMiscHelperFunctions::BuildFunctionParameterString(InItem->SignatureFunction, true, true);
+		CachedConnection->DelegateParameterList = FunctionString;
+		CachedConnection->DelegateType = InItem->DelegateType;
 
-		
-		
-		//UE_LOG(LogRockGameplayEvents, Warning, TEXT("OnMulticastDelegateSelected1 %s"), *InItem->GetSignatureFunctionString());
-		//FPropertyAccess::Result result = DelegateParameterList->SetValue(FunctionString, EPropertyValueSetFlags::NotTransactable);
-		
-		//DelegateParameterList->NotifyPostChange();
-		//UE_LOG(LogRockGameplayEvents, Warning, TEXT("OnMulticastDelegateSelected2 %s"), result == FPropertyAccess::Success ? TEXT("Success") : TEXT("Fail"));
-		
-		
-		PropUtils->ForceRefresh();
-		
-		
-	}
-	if (DelegateTypeHandler.IsValid())
-	{
-		int32 DelegateFlags = static_cast<int32>(InItem->DelegateType);
-		DelegateTypeHandler->SetValue(DelegateFlags);
+		if (DelegateParameterListHandler.IsValid())
+		{
+			DelegateParameterListHandler->NotifyPostChange(EPropertyChangeType::ValueSet);
+		}
+		if (DelegatePropertyNameHandler.IsValid())
+		{
+			DelegatePropertyNameHandler->NotifyPostChange(EPropertyChangeType::ValueSet);
+		}
+		if (DelegateTypeHandler.IsValid())
+		{
+			DelegateTypeHandler->NotifyPostChange(EPropertyChangeType::ValueSet);
+		}
 	}
 }
 
@@ -309,65 +285,43 @@ void FRockDelegateConnectionsCustomization::OnFunctionSelected(
 	if (!TargetActor)
 	{
 		UE_LOG(LogRockGameplayEvents, Warning, TEXT("OnFunctionSelected TargetActor: not valid"));
-	}
-
-	// In case we are changing an existing function, we need to remove the old one
-	FName PreviousFunctionName;
-	if (EventFunctionReferenceHandle.IsValid())
-	{
-		FString PrevFunctionStr;
-		EventFunctionReferenceHandle->GetValue(PrevFunctionStr);
-		PreviousFunctionName = *PrevFunctionStr;
-	}
-
-	URockDelegateConnectorComponent* ConnectorComponent = TargetActor->GetComponentByClass<URockDelegateConnectorComponent>();
-
-	const bool bIsSettingToNone = itemStr.IsEmpty() || itemStr == "None";
-
-	if (bIsSettingToNone)
-	{
-		if (ConnectorComponent && !PreviousFunctionName.IsNone())
-		{
-			// for (int32 i = ConnectorComponent->IncomingConnections.Num() - 1; i >= 0; --i)
-			// {
-			// 	if (ConnectorComponent->IncomingConnections[i].SourceActor == SourceActor
-			// 		&& ConnectorComponent->IncomingConnections[i].DelegatePropertyName == Delegate)
-			// 	{
-			// 		ConnectorComponent->IncomingConnections.RemoveAt(i);
-			// 	}
-			// }
-
-			// Remove the incoming connection
-			//FRockGameplayIncomingConnection incomingConnection{TargetActor, PreviousFunctionName};
-			//ConnectorComponent->IncomingConnections.Remove(incomingConnection);
-		}
-	}
-
-	// We are wanting to add a URockDelegateConnectorComponent to the actor
-	if (!ConnectorComponent)
-	{
-		ConnectorComponent = NewObject<URockDelegateConnectorComponent>(TargetActor);
-		ConnectorComponent->RegisterComponent();
-		TargetActor->AddInstanceComponent(ConnectorComponent);
+		return;
 	}
 
 	if (!itemStr.IsEmpty() && EventFunctionReferenceHandle.IsValid())
 	{
 		const FName SelectedFunctionName(*itemStr);
 		EventFunctionReferenceHandle->SetValue(SelectedFunctionName);
-
-		// We could update these later via ASYNC?
-		const FRockGameplayIncomingConnection incomingConnection{TargetActor, SelectedFunctionName};
-		ConnectorComponent->IncomingConnections.Add(incomingConnection);
 	}
-	else
+
+	// We are done setting the outgoing.
+	
+	// let's update the incoming connection of the target actor
+	if (itemStr.IsEmpty() || itemStr == "None")
 	{
-		UE_LOG(LogRockGameplayEvents, Warning, TEXT("OnFunctionSelected Item: not valid"));
+		// We have nothing left to do
+		return;
 	}
-
-	// Kick off Async Action to update ALL the incoming connections
-	// Clear them all out and regenerate them?
-	// Can Optimize it later.
+	
+	URockDelegateConnectorComponent* ConnectorComponent = TargetActor->GetComponentByClass<URockDelegateConnectorComponent>();
+	// If the connector component doesn't exist on the target actor, create it
+	if (!ConnectorComponent)
+	{
+		ConnectorComponent = NewObject<URockDelegateConnectorComponent>(TargetActor);
+		ConnectorComponent->RegisterComponent();
+		TargetActor->AddInstanceComponent(ConnectorComponent);
+	}
+	
+	// Add the incoming connection from current actor. 
+	if (ConnectorComponent && DelegatePropertyNameHandler.IsValid())
+	{
+		FName DelegateName;
+		if (DelegatePropertyNameHandler->GetValue(DelegateName) == FPropertyAccess::Success)
+		{
+			const FRockGameplayIncomingConnection IncomingConnection(CachedActor.Get(), DelegateName);
+			ConnectorComponent->IncomingConnections.Add(IncomingConnection);
+		}
+	}
 }
 
 FText FRockDelegateConnectionsCustomization::GetSelectedDelegate() const
@@ -382,19 +336,17 @@ FText FRockDelegateConnectionsCustomization::GetSelectedDelegate() const
 
 FText FRockDelegateConnectionsCustomization::GetDelegateParameterList() const
 {
-	// DelegateParameterList = MyPropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FRockGameplayEventConnection, DelegateParameterList));
-	
+	FName DelegateName;
+	if (DelegatePropertyNameHandler.IsValid())
+	{
+		DelegatePropertyNameHandler->GetValue(DelegateName);
+	}
 	FString DelegateParameterListStr;
-	if (DelegateParameterList.IsValid())
+	if (DelegateParameterListHandler.IsValid())
 	{
-		DelegateParameterList->GetValue(DelegateParameterListStr);
+		DelegateParameterListHandler->GetValue(DelegateParameterListStr);
 	}
-	else
-	{
-		UE_LOG(LogRockGameplayEvents, Warning, TEXT("GetDelegateParameterList ERR"));
-	}
-	// UE_LOG(LogRockGameplayEvents, Warning, TEXT("GetDelegateParameterList %s"), *DelegateParameterListStr);
-	return FText::FromString(DelegateParameterListStr);
+	return FText::FromString(DelegateName.ToString() + DelegateParameterListStr);
 }
 
 AActor* FRockDelegateConnectionsCustomization::GetActorFromHandle(const TSharedPtr<IPropertyHandle>& PropertyHandle) const
@@ -408,13 +360,14 @@ void FRockDelegateConnectionsCustomization::CacheData()
 {
 	BindingsHandler = MyPropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FRockGameplayEventConnection, Bindings));
 	DelegatePropertyNameHandler = MyPropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FRockGameplayEventConnection, DelegatePropertyName));
-	DelegateParameterList = MyPropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FRockGameplayEventConnection, DelegateParameterList));
+	DelegateParameterListHandler = MyPropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FRockGameplayEventConnection, DelegateParameterList));
 	DelegateTypeHandler = MyPropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FRockGameplayEventConnection, DelegateType));
 
-	void* RawData;
-	MyPropertyHandle->GetValueData(RawData);
-	CachedConnection = static_cast<FRockGameplayEventConnection*>(RawData);	
-	// = static_cast<FRockGameplayEventConnection*>();
+	void* RawData = nullptr;
+	if (MyPropertyHandle->GetValueData(RawData) == FPropertyAccess::Success)
+	{
+		CachedConnection = static_cast<FRockGameplayEventConnection*>(RawData);
+	}
 
 	CachedOuterObject = nullptr;
 	CachedActor = nullptr;
@@ -447,16 +400,6 @@ void FRockDelegateConnectionsCustomization::CacheData()
 		return;
 	}
 }
-
-// if (SelectedFunctionNameStr == "None")
-// {
-// 	// Set the function name to none
-// 	FString NoneFunction = "";
-// 	EventFunctionReferenceHandle->SetValue(NoneFunction);
-// 	UE_LOG(LogRockGameplayEvents, Warning, TEXT("OnFunctionSelected Item: None"));
-// 	return;
-// }
-
 
 //const void* ValueAddr = nullptr;
 //const FMulticastScriptDelegate * value = MulticastDelegateProperty->GetMulticastDelegate(ValueAddr);

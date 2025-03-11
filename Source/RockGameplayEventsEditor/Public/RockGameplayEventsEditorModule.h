@@ -20,4 +20,7 @@ public:
 private:
 	/** Array of registered component visualizers, so we know what to unregister */
 	TArray<FName> RegisteredComponentClassNames;
+	
+	void OnEditorSelectionChanged(UObject* object);
+	FDelegateHandle OnEditorSelectionChangedHandle;
 };

@@ -129,7 +129,7 @@ void UMiscHelperFunctions::LogFunctionInfo(TArray<FRockFunctionInfo> InFunctions
 		FString NativeString = Info.bIsNative ? TEXT("Native") : TEXT("BP");
 		FString RPCString = Info.bIsRPC ? TEXT("[RPC]") : TEXT("");
 		FString DefiningClassString = Info.DefiningClass ? Info.DefiningClass->GetName() : TEXT("");
-		FString ParamString = Info.GetSignatureFunctionString();
+		FString ParamString = UMiscHelperFunctions::BuildFunctionParameterString(Info.GetSignatureFunction());
 		UE_LOG(LogRockGameplayEvents, Warning, TEXT("Function: %s::%s%s::%s%s %s"),
 			*DefiningClassString, *EventString, *NativeString, *Info.Name, *RPCString, *ParamString);
 	}
@@ -139,9 +139,7 @@ void UMiscHelperFunctions::LogDelegateInfo(TArray<FRockDelegateInfo> InDelegates
 {
 	for (FRockDelegateInfo Info : InDelegates)
 	{
-		FString Name = Info.GetNameWithClass() + Info.GetDelegateTypeString();
-		UE_LOG(LogRockGameplayEvents, Warning, TEXT("%s %s, Signature: %s"),
-			*Info.GetNameWithClass(), *Info.GetDelegateTypeString(), *Info.SignatureFunction->GetName());
+		UE_LOG(LogRockGameplayEvents, Warning, TEXT("%s, Signature: %s"), *Info.GetNameWithClass(), *Info.SignatureFunction->GetName());
 	}
 }
 
@@ -189,8 +187,28 @@ FString UMiscHelperFunctions::BuildFunctionParameterString(
 	}
 	ParamString.RemoveFromEnd(", ");
 
+	// Add () if there are parameters, otherwise return empty string?
+	//if (ParamString.Len() > 0)
+	{
+		ParamString = "(" + ParamString + ")";
+	}
+	
 	return ParamString;
 }
+
+
+// FString FRockFunctionInfo::GetSignatureFunctionString() const
+// {
+// 	// get all the parameter types and put them in a foo(int, float, bool) format
+//
+// 	auto parameters = UMiscHelperFunctions::BuildFunctionParameterString(Function, false);
+// 	if (parameters.Len() > 0)
+// 	{
+// 		parameters = "(" + parameters + ")";
+// 	}
+// 	const FString SignatureString = Name + parameters;
+// 	return SignatureString;
+// }
 
 void UMiscHelperFunctions::AddDelegateConnectorComponent(AActor* InActor)
 {

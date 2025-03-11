@@ -9,9 +9,9 @@
 #include "Misc/DataValidation.h"
 #endif
 
-void FRockGameplayEventConnection::Connect(AActor* Actor, const UClass* SourceClass)
+void FRockGameplayEventConnection::Connect(UObject* DelegateOwner, const UClass* SourceClass)
 {
-	if (!Actor || !SourceClass)
+	if (!DelegateOwner || !SourceClass)
 	{
 		// UE_CLOG? Conditional logging
 		UE_LOG(LogRockGameplayEvents, Error, TEXT("Actor or SourceClass is null"));
@@ -34,7 +34,7 @@ void FRockGameplayEventConnection::Connect(AActor* Actor, const UClass* SourceCl
 			{
 				for (FRockGameplayEventBinding connection : Bindings)
 				{
-					connection.BindMulticastDelegate(Actor, DelegateProperty);
+					connection.BindMulticastDelegate(DelegateOwner, DelegateProperty);
 				}
 			}
 			break;
@@ -46,7 +46,7 @@ void FRockGameplayEventConnection::Connect(AActor* Actor, const UClass* SourceCl
 			{
 				for (FRockGameplayEventBinding connection : Bindings)
 				{
-					connection.BindBlueprintDelegate(Actor, DelegateProperty);
+					connection.BindBlueprintDelegate(DelegateOwner, DelegateProperty);
 				}
 			}
 			break;

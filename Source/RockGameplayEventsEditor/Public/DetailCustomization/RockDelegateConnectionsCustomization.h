@@ -40,7 +40,7 @@ public:
 	TSharedPtr<IPropertyHandle> MyPropertyHandle;
 	TSharedPtr<IPropertyHandle> BindingsHandler;
 	TSharedPtr<IPropertyHandle> DelegatePropertyNameHandler;
-	TSharedPtr<IPropertyHandle> DelegateParameterList;
+	TSharedPtr<IPropertyHandle> DelegateParameterListHandler;
 	TSharedPtr<IPropertyHandle> DelegateTypeHandler;
 
 	FRockGameplayEventConnection* CachedConnection;
