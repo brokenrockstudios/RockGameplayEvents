@@ -1,9 +1,17 @@
-<div style="text-align: center;>
+<div align="center">
+  <a href="https://github.com/brokenrockstudios/RockGameplayEvents">
+    <img src="docs/images/banner.png" alt="Banner">
+  </a>
+</div>
+
+<div align="center">
 
 [![Star][star-image]][star-url]
 [![Package License][package-license-image]][package-license-url]
 
 </div>
+
+<hr>
 
 # RockGameplayEvents
 A relatively simple event system for hooking up instanced actors and ability to broadcast events
@@ -72,4 +80,6 @@ I'd love to further refine or polish this off for a wider audience. I invite eve
 
 
 [star-url]: https://github.com/brokenrockstudios/RockGameplayEvents/stargazers
+[star-image]: https://img.shields.io/github/stars/brokenrockstudios/RockGameplayEvents?label=stars&style=plastic&color=blue
 [package-license-url]: https://opensource.org/licenses/MIT
+[package-license-image]: https://img.shields.io/badge/License-MIT-blue.svg?style=plastic&color=green
