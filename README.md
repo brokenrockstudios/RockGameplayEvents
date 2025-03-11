@@ -8,7 +8,7 @@
   
 [![Star][star-image]][star-url]
 [![Package License][package-license-image]][package-license-url]
-[![Issues][issues-open-image]][issues-url]
+
 </div>
 
 <hr>
