@@ -6,6 +6,7 @@
 #include "DetailLayoutBuilder.h"
 #include "DetailWidgetRow.h"
 #include "IDetailChildrenBuilder.h"
+#include "IPropertyUtilities.h"
 #include "PropertyCustomizationHelpers.h"
 #include "RandomFunctions.h"
 #include "RockEventsEditorFunctionLibrary.h"
@@ -34,9 +35,14 @@ void FRockDelegateConnectionsCustomization::CustomizeHeader(
 	{
 		DelegatePropertyName = "None";
 	}
-
 	uint32 NumElements;
 	BindingsHandler->GetNumChildren(NumElements);
+	const TSharedPtr<IPropertyUtilities> PropertyUtilities = InStructCustomizationUtils.GetPropertyUtilities();
+	BindingsHandler->SetOnPropertyValueChanged(FSimpleDelegate::CreateLambda([PropertyUtilities]()
+	{
+		// Without this, it doesn't certain aspects of the array properly. There is probably a more concise fix, but this works for now. 
+		PropertyUtilities->ForceRefresh();
+	}));
 
 	HeaderRow
 		.NameContent()
@@ -84,13 +90,6 @@ void FRockDelegateConnectionsCustomization::CustomizeChildren(
 	TSharedRef<IPropertyHandle> InPropertyHandle, IDetailChildrenBuilder& InChildBuilder, IPropertyTypeCustomizationUtils& InStructCustomizationUtils)
 {
 	PropUtils = InStructCustomizationUtils.GetPropertyUtilities().Get();
-
-	AvailableDelegates.Empty();
-	auto delegates = UMiscHelperFunctions::GetDelegatesForActorClass(CachedActorClass);
-	for (const FRockDelegateInfo& Delegate : delegates)
-	{
-		AvailableDelegates.Add(MakeShareable(new FRockDelegateInfo(Delegate)));
-	}
 
 	InChildBuilder.AddProperty(DelegatePropertyNameHandler.ToSharedRef())
 		.CustomWidget()
@@ -180,7 +179,7 @@ void FRockDelegateConnectionsCustomization::UpdateFunctionList(const TSharedPtr<
 		// We don't have a valid actor class to search for functions
 		return;
 	}
-	
+
 	FName DelegateName;
 	if (DelegatePropertyNameHandler.IsValid())
 	{
@@ -188,10 +187,9 @@ void FRockDelegateConnectionsCustomization::UpdateFunctionList(const TSharedPtr<
 	}
 	if (DelegateName == NAME_None)
 	{
-		UE_LOG(LogRockGameplayEvents, Warning, TEXT("DelegateName is None"));
 		return;
 	}
-	
+
 	const FString SelectedDelegateStr = DelegateName.ToString();
 
 	TObjectPtr<UFunction> DelegateSignatureFunction;
@@ -246,48 +244,27 @@ void FRockDelegateConnectionsCustomization::OnTargetActorSelected(
 
 void FRockDelegateConnectionsCustomization::OnMulticastDelegateSelected(TSharedPtr<FRockDelegateInfo> InItem, ESelectInfo::Type arg)
 {
-	//if (CachedConnection)
 	if (MyPropertyHandle.IsValid() && CachedConnection)
-		//DelegateParameterListHandler.IsValid() && DelegatePropertyNameHandler.IsValid() && DelegateTypeHandler.IsValid())
 	{
-		// Not sure which is best way to handle this
-		// TODO: revisit
 		MyPropertyHandle->NotifyPreChange();
-		
-		// void* RawData = nullptr;
-		// if (MyPropertyHandle->GetValueData(RawData) == FPropertyAccess::Success)
-		// {
-		// 	CachedConnection = static_cast<FRockGameplayEventConnection*>(RawData);
-		// }
-		//DelegateParameterListHandler->NotifyPreChange();
-		//DelegatePropertyNameHandler->NotifyPreChange();
-		//DelegateTypeHandler->NotifyPreChange();
-
-		CachedConnection->DelegatePropertyName = *InItem->Name;
-		FString FunctionString = UMiscHelperFunctions::BuildFunctionParameterString(InItem->SignatureFunction, true, true);
-		CachedConnection->DelegateParameterList = FunctionString;
-		CachedConnection->DelegateType = InItem->DelegateType;
-
-		//DelegatePropertyNameHandler->NotifyPostChange(EPropertyChangeType::ValueSet);
-		//DelegateParameterListHandler->NotifyPostChange(EPropertyChangeType::ValueSet);
-		//DelegateTypeHandler->NotifyPostChange(EPropertyChangeType::ValueSet);
+		{
+			CachedConnection->DelegatePropertyName = *InItem->Name;
+			FString FunctionString = UMiscHelperFunctions::BuildFunctionParameterString(InItem->SignatureFunction, true, true);
+			CachedConnection->DelegateParameterList = FunctionString;
+			CachedConnection->DelegateType = InItem->DelegateType;
+		}
 		MyPropertyHandle->NotifyPostChange(EPropertyChangeType::ValueSet);
-		
-		//DelegatePropertyNameHandler->NotifyFinishedChangingProperties();
-		//DelegateParameterListHandler->NotifyFinishedChangingProperties();
-		//DelegateTypeHandler->NotifyFinishedChangingProperties();
 		MyPropertyHandle->NotifyFinishedChangingProperties();
-		
 	}
 }
 
 void FRockDelegateConnectionsCustomization::OnFunctionSelected(
-	UFunction* theFunction, ESelectInfo::Type someType, TSharedPtr<IPropertyHandle> ElementHandle)
+	const UFunction* SelectedFunction, ESelectInfo::Type someType, TSharedPtr<IPropertyHandle> ElementHandle) const
 {
 	FString itemStr = "None";
-	if (theFunction)
+	if (SelectedFunction)
 	{
-		itemStr = *theFunction->GetName();
+		itemStr = *SelectedFunction->GetName();
 	}
 	const TSharedPtr<IPropertyHandle> TargetActorHandle = ElementHandle->GetChildHandle(
 		GET_MEMBER_NAME_CHECKED(FRockGameplayEventBinding, TargetActor), false);
@@ -308,15 +285,13 @@ void FRockDelegateConnectionsCustomization::OnFunctionSelected(
 		EventFunctionReferenceHandle->SetValue(SelectedFunctionName);
 	}
 
-	// We are done setting the outgoing.
-	
-	// let's update the incoming connection of the target actor
+	// We are done setting the outgoing. Let's update the incoming connection of the target actor
 	if (itemStr.IsEmpty() || itemStr == "None")
 	{
 		// We have nothing left to do
 		return;
 	}
-	
+
 	URockDelegateConnectorComponent* ConnectorComponent = TargetActor->GetComponentByClass<URockDelegateConnectorComponent>();
 	// If the connector component doesn't exist on the target actor, create it
 	if (!ConnectorComponent)
@@ -325,7 +300,7 @@ void FRockDelegateConnectionsCustomization::OnFunctionSelected(
 		ConnectorComponent->RegisterComponent();
 		TargetActor->AddInstanceComponent(ConnectorComponent);
 	}
-	
+
 	// Add the incoming connection from current actor. 
 	if (ConnectorComponent && DelegatePropertyNameHandler.IsValid())
 	{
@@ -413,26 +388,11 @@ void FRockDelegateConnectionsCustomization::CacheData()
 		UE_LOG(LogRockGameplayEvents, Error, TEXT("CacheData failed fetching OwnerClass"));
 		return;
 	}
+
+	AvailableDelegates.Empty();
+	auto delegates = UMiscHelperFunctions::GetDelegatesForActorClass(CachedActorClass);
+	for (const FRockDelegateInfo& Delegate : delegates)
+	{
+		AvailableDelegates.Add(MakeShareable(new FRockDelegateInfo(Delegate)));
+	}
 }
-
-//const void* ValueAddr = nullptr;
-//const FMulticastScriptDelegate * value = MulticastDelegateProperty->GetMulticastDelegate(ValueAddr);
-
-// if (const FDelegateProperty* CastProp = CastField<FDelegateProperty>(Prop))
-// {
-// 	const FScriptDelegate* Value = CastProp->GetPropertyValuePtr(ValueAddr);
-// 	OutPyObj = (PyObject*)FPyWrapperDelegateFactory::Get().CreateInstance(CastProp->SignatureFunction, (FScriptDelegate*)Value, OwnerContext, ConversionMethod);
-// 	return FPyConversionResult::Success();
-// }
-//
-// if (const FMulticastDelegateProperty* CastProp = CastField<FMulticastDelegateProperty>(Prop))
-// {
-// 	const FMulticastScriptDelegate* Value = CastProp->GetMulticastDelegate(ValueAddr);
-// 	OutPyObj = (PyObject*)FPyWrapperMulticastDelegateFactory::Get().CreateInstance(CastProp->SignatureFunction, (FMulticastScriptDelegate*)Value, OwnerContext, ConversionMethod);
-// 	return FPyConversionResult::Success();
-// }
-
-//FDelegateProperty* BindableProperty = FindFProperty<FDelegateProperty>(TargetWidget->GetClass(), FName(*( PropertyName.ToString() + TEXT("Delegate") )));
-//FDelegateProperty* EventProperty = FindFProperty<FDelegateProperty>(TargetWidget->GetClass(), PropertyName);
-// bool bNeedsToBePure = BindableProperty ? true : false;
-// FDelegateProperty* DelegateProperty = BindableProperty ? BindableProperty : EventProperty;
