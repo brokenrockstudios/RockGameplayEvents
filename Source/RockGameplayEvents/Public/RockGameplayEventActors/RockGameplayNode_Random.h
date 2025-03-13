@@ -13,7 +13,7 @@ class ROCKGAMEPLAYEVENTS_API ARockGameplayNode_Random : public ARockGameplayNode
 	GENERATED_BODY()
 
 public:
-	ARockGameplayNode_Random();
+	ARockGameplayNode_Random(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	/*
 	 * threshold for triggering
@@ -30,7 +30,7 @@ public:
 
 	// Input trigger to select a random output
 	UFUNCTION(BlueprintCallable, Category = "Rock|Logic Random")
-	void TriggerRandomSelection();
+	void TriggerRandomSelection(AActor* EventInstigator);
 
 private:
 	// Initialize the random stream

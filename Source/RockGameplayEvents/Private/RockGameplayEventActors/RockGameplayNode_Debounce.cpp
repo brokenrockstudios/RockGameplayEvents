@@ -3,7 +3,8 @@
 
 #include "RockGameplayEventActors/RockGameplayNode_Debounce.h"
 
-ARockGameplayNode_Debounce::ARockGameplayNode_Debounce()
+ARockGameplayNode_Debounce::ARockGameplayNode_Debounce(const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer)
 {
 	PrimaryActorTick.bCanEverTick = true;
 	
@@ -24,7 +25,7 @@ void ARockGameplayNode_Debounce::TriggerInput()
 	if (!bIsInCooldown)
 	{
 		// Not in cooldown, trigger output and start cooldown
-		TriggerOutput();
+		TriggerOutput(nullptr);
 		bIsInCooldown = true;
 		
 		// Start cooldown timer
@@ -57,7 +58,7 @@ void ARockGameplayNode_Debounce::OnCooldownEnd()
 	if (QueuedInputCount > 0)
 	{
 		// Trigger the queued inputs
-		TriggerOutput();
+		TriggerOutput(nullptr);
 		
 		QueuedInputCount--;
 

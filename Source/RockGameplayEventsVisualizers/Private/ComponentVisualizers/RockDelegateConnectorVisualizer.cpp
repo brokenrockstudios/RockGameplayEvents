@@ -12,7 +12,9 @@ void FRockDelegateConnectorVisualizer::DrawVisualization(const UActorComponent* 
 	if (!ConnectorComponent) { return; }
 	AActor* Owner = ConnectorComponent->GetOwner();
 	if (!Owner) { return; }
-	const FVector Start = ConnectorComponent->GetOwner()->GetActorLocation();
+	
+	const FBoxSphereBounds StartBounds = Owner->GetComponentsBoundingBox();
+	const FVector Start = StartBounds.Origin;
 	
 	
 	const bool bShowOutgoingConnections = GetDefault<URockDeveloperSettings>()->bShowOutgoingConnections;
@@ -33,7 +35,8 @@ void FRockDelegateConnectorVisualizer::DrawVisualization(const UActorComponent* 
 				{
 					continue;
 				}
-				FVector End = binding.TargetActor->GetActorLocation();
+				const FBoxSphereBounds EndBounds = binding.TargetActor->GetComponentsBoundingBox();
+				const FVector End = EndBounds.Origin;
 				// If the distance is > some threshold, draw the directional arrow like at 30% of the distance or something like that
 				// Depending on the distance, we might want to draw a dashed line instead of a solid line
 
@@ -82,8 +85,9 @@ void FRockDelegateConnectorVisualizer::DrawVisualization(const UActorComponent* 
 			{
 				continue;
 			}
-			FVector End = connection.SourceActor->GetActorLocation();
-
+			const FBoxSphereBounds EndBounds = connection.SourceActor->GetComponentsBoundingBox();
+			const FVector End = EndBounds.Origin;
+			
 			if (bIncomingConnectionDashedLines)
 			{
 				DrawDashedLine(PDI, Start, End, IncomingColor, 32 * IncomingLineThickness, bIncomingWorldSpace);

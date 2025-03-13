@@ -17,7 +17,7 @@ class ROCKGAMEPLAYEVENTS_API ARockGameplayNode_FixedData : public ARockGameplayN
 
 public:
 	// Sets default values for this actor's properties
-	ARockGameplayNode_FixedData();
+	ARockGameplayNode_FixedData(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	UPROPERTY()
 	FRockGameplayEvent_String OnTriggeredString;

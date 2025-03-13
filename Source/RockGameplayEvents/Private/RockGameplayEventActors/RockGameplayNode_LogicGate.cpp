@@ -3,7 +3,8 @@
 
 #include "RockGameplayEventActors/RockGameplayNode_LogicGate.h"
 
-ARockGameplayNode_LogicGate::ARockGameplayNode_LogicGate()
+ARockGameplayNode_LogicGate::ARockGameplayNode_LogicGate(const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer)
 {
 	PrimaryActorTick.bCanEverTick = true;
 }
@@ -87,7 +88,7 @@ void ARockGameplayNode_LogicGate::EvaluateGate()
 	}
 	if (ShouldTrigger != 0)
 	{
-		TriggerOutput();
+		TriggerOutput(nullptr);
 	}
 }
 

@@ -14,7 +14,7 @@ class ROCKGAMEPLAYEVENTS_API ARockGameplayNode_Debounce : public ARockGameplayNo
 
 public:
 	// Sets default values for this actor's properties
-	ARockGameplayNode_Debounce();
+	ARockGameplayNode_Debounce(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	// Cooldown period in seconds
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock|Logic Debounce")

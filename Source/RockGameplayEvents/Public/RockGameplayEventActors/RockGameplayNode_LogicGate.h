@@ -45,7 +45,7 @@ class ROCKGAMEPLAYEVENTS_API ARockGameplayNode_LogicGate : public ARockGameplayN
 
 public:
 	// Sets default values for this actor's properties
-	ARockGameplayNode_LogicGate();
+	ARockGameplayNode_LogicGate(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock|Logic Gate")
 	ERockLogicGateType GateType = ERockLogicGateType::AND;

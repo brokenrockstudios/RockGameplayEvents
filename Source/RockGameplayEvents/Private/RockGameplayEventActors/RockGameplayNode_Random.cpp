@@ -5,17 +5,18 @@
 
 
 // Sets default values
-ARockGameplayNode_Random::ARockGameplayNode_Random()
+ARockGameplayNode_Random::ARockGameplayNode_Random(const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer)
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 }
 
-void ARockGameplayNode_Random::TriggerRandomSelection()
+void ARockGameplayNode_Random::TriggerRandomSelection(AActor* EventInstigator)
 {
 	if (RandomStream.GetFraction() <= TriggerPercentage)
 	{
-		OnTriggered.Broadcast();
+		OnTriggered.Broadcast(EventInstigator);
 	}
 }
 

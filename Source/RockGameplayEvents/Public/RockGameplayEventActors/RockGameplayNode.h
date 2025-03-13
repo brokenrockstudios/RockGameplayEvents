@@ -13,29 +13,42 @@ class URockDelegateConnectorComponent;
 // Should these be Components?
 // Or at least some of the logic be moved to BPFL or Components
 // So that they can be 'composed' of in other ways?
-UCLASS()
+UCLASS(Blueprintable, BlueprintType)
 class ROCKGAMEPLAYEVENTS_API ARockGameplayNode : public AActor
 {
 	GENERATED_BODY()
+
 protected:
-	
-#if WITH_EDITORONLY_DATA
-	/** Editor only component used to display the sprite so as to be able to see the location of the Component  */
-	UPROPERTY(EditDefaultsOnly, Category = "Rock|Components")
-	TObjectPtr<UBillboardComponent> SpriteComponent;
-#endif
-	
+	//#if true
+	// Editor only component used to help display the functionality of this gameplay node at a glance.
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Rock|Components", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UBillboardComponent> EditorOnly_Sprite;
+
+	/** Editor only component used to display the sprite to be able to see the location of the Component */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Rock|Components", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UStaticMeshComponent> EditorOnly_Beam;
+
+	/** Editor only component used to display the sprite to be able to see the location of the Component */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Rock|Components", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UStaticMeshComponent> EditorOnly_RockBase;
+	// Do a line between bottom sprite and top sprite?
+	// #endif
+
+	// If you want an actual in-game mesh, you override add it here
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Rock|Components", meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UStaticMeshComponent> MeshComponent;
+
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Rock|Components")
-	TObjectPtr<URockDelegateConnectorComponent> GameplayConnector = nullptr;
-	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Rock|Components")
+	TObjectPtr<URockDelegateConnectorComponent> GameplayConnector;
+
 	// Sets default values for this actor's properties
-	ARockGameplayNode();
+	ARockGameplayNode(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	// Common output event for all logic nodes.
 	// Some gameplay nodes will have specific output events with parameters as needed. 
-    UPROPERTY(BlueprintAssignable, Category = "Rock|Events")
-    FRockGameplayEvent_Basic OnTriggered;
+	UPROPERTY(BlueprintAssignable, Category = "Rock|Events")
+	FRockGameplayEvent OnTriggered;
 
 
 	// Enable and Disable the Gameplay Node
@@ -47,14 +60,22 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Rock|Events")
 	bool IsEnabled() const;
-	
+
 protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Rock|Events", meta = (AllowPrivateAccess))
 	bool bIsEnabled = true;
-	
+
 	// Trigger the generic output event.
 	UFUNCTION(BlueprintCallable, Category = "Rock|Events")
-	virtual void TriggerOutput();
+	virtual void TriggerOutput(AActor* EventInstigator);
+
+private:
+	void UpdateBaseAndBeam();
+
+#if WITH_EDITOR
+	virtual void PostEditChangeProperty(struct FPropertyChangedEvent& PropertyChangedEvent) override;
+	virtual void PostEditMove(bool bFinished) override;
+#endif
 };
 
 
@@ -101,31 +122,11 @@ protected:
 // usage node, that only allows so many triggers before having 0 uses left?
 
 
-
-
-
-
 // FX
 // a 'bell' or 'speaker' node,  that plays a gameplay cue
 // a light node, that turns on or off a light
-  // This could be expanded a lot by like 'warm up time' and other things
-  // Though we could offer a 'simple version' with this plugin, and more custom ones internally, like make it 'extendable'.
+// This could be expanded a lot by like 'warm up time' and other things
+// Though we could offer a 'simple version' with this plugin, and more custom ones internally, like make it 'extendable'.
 // Play a particule effect
 // Perhaps it should be like a basic GameplayCue type thing? that can play a variety of things? or should they be separate actors?
-	// Perhaps a simple one for plugin, and more advanced ones are custom made per game
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// Perhaps a simple one for plugin, and more advanced ones are custom made per game
