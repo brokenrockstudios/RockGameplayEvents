@@ -7,7 +7,7 @@
 #include "UObject/Object.h"
 
 struct FRockDelegateInfo;
-DECLARE_DELEGATE_TwoParams(FOnFunctionSelected, UFunction*, ESelectInfo::Type);
+DECLARE_DELEGATE_TwoParams(FOnFunctionSelected, const UFunction*, ESelectInfo::Type);
 
 class ROCKGAMEPLAYEVENTSEDITOR_API SRockFunctionDropdownWidget : public SCompoundWidget
 {

@@ -25,7 +25,7 @@ public:
 	void OnTargetActorSelected(const FAssetData& asset_data, TSharedPtr<IPropertyHandle> ElementHandle);
 
 	void OnMulticastDelegateSelected(TSharedPtr<FRockDelegateInfo> InItem, ESelectInfo::Type arg);
-	void OnFunctionSelected(UFunction* theFunction, ESelectInfo::Type someType, TSharedPtr<IPropertyHandle> ElementHandle);
+	void OnFunctionSelected(const UFunction* SelectedFunction, ESelectInfo::Type someType, TSharedPtr<IPropertyHandle> ElementHandle)  const;
 	
 	FText GetSelectedDelegate() const;
 	FText GetDelegateParameterList() const;
