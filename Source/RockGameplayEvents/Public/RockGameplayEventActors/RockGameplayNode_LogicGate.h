@@ -61,23 +61,22 @@ public:
 	
 	// Input A event
 	UFUNCTION(BlueprintCallable, Category = "Rock|Logic Gate")
-	void InputA(bool bNewState);
+	void InputA(AActor* EventInstigator, bool bNewState);
 	UFUNCTION(BlueprintCallable, Category = "Rock|Logic Gate")
-	void InputA_On();
+	void InputA_On(AActor* EventInstigator);
 	UFUNCTION(BlueprintCallable, Category = "Rock|Logic Gate")
-	void InputA_Off();
+	void InputA_Off(AActor* EventInstigator);
 
 	// Input B event
 	UFUNCTION(BlueprintCallable, Category = "Rock|Logic Gate")
-	void InputB(bool bNewState);
+	void InputB(AActor* EventInstigator, bool bNewState);
 	UFUNCTION(BlueprintCallable, Category = "Rock|Logic Gate")
-	void InputB_On();
+	void InputB_On(AActor* EventInstigator);
 	UFUNCTION(BlueprintCallable, Category = "Rock|Logic Gate")
-	void InputB_Off();
+	void InputB_Off(AActor* EventInstigator);
 
 	// Reset the gate's state
-	UFUNCTION(BlueprintCallable, Category = "Rock|Logic Gate")
-	void ResetGate();
+	virtual void ResetNode(AActor* EventInstigator = nullptr) override;
 
 private:
 	// Track the state of each input
@@ -85,5 +84,5 @@ private:
 	bool bInputBState = false;
 
 	// Evaluate the gate logic based on current inputs
-	void EvaluateGate();
+	void EvaluateGate(AActor* EventInstigator);
 };

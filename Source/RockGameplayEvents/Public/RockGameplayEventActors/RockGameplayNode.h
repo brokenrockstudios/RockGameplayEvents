@@ -49,8 +49,7 @@ public:
 	// Some gameplay nodes will have specific output events with parameters as needed. 
 	UPROPERTY(BlueprintAssignable, Category = "Rock|Events")
 	FRockGameplayEvent OnTriggered;
-
-
+	
 	// Enable and Disable the Gameplay Node
 	UFUNCTION(BlueprintCallable, Category = "Rock|Events")
 	virtual void Enable(AActor* EventInstigator);
@@ -60,6 +59,9 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Rock|Events")
 	bool IsEnabled() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Rock|Events")
+	virtual void ResetNode(AActor* EventInstigator = nullptr);
 
 protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Rock|Events", meta = (AllowPrivateAccess))
@@ -95,7 +97,6 @@ private:
 // Some kind of 'string' lock node, that triggers an output when a certain string is inputted into it?
 
 
-// a spawner node. that spawns an actor, and then triggers an output when it is destroyed?
 // a 'destroy' node, that destroys an actor, and then triggers an output when it is destroyed?
 
 // a "distance sensor" node, that triggers an output when an actor gets within a certain distance of it

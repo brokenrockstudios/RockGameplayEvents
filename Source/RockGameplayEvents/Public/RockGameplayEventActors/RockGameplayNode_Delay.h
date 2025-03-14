@@ -16,7 +16,7 @@ public:
 	// Sets default values for this actor's properties
 	ARockGameplayNode_Delay(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-	UPROPERTY(EditAnywhere, Category = "Rock Gameplay Node", meta=(Units="Seconds"))
+	UPROPERTY(EditAnywhere, Category = "Rock|Delay", meta=(Units="Seconds"))
 	float Delay = 1.0;
 	
 protected:

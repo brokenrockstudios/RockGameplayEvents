@@ -21,6 +21,7 @@ public class RockGameplayEvents : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
+				"Niagara"
 			]
 		);
 	}

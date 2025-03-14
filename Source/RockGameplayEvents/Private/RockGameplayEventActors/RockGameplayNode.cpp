@@ -14,115 +14,79 @@ ARockGameplayNode::ARockGameplayNode(const FObjectInitializer& ObjectInitializer
 	PrimaryActorTick.bCanEverTick = true;
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
 	// set collision ignore all
-	// MeshComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
+	//MeshComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
 	MeshComponent->SetMobility(EComponentMobility::Movable);
 
 	RootComponent = MeshComponent;
 
 	// #if true
-
-	// if (!IsRunningCommandlet() && !IsRunningDedicatedServer())
+	if (!IsRunningCommandlet() && !IsRunningDedicatedServer())
 	{
-		// THIS IS ALL UGLY
-		// Can we spin this off to like a custom editor component or something?
-		EditorOnly_Sprite = CreateDefaultSubobject<UBillboardComponent>(TEXT("Sprite"));
-		if (EditorOnly_Sprite)
+		struct FConstructorStatics
 		{
-			// Structure to hold one-time initialization
-			struct FConstructorStatics
-			{
-				ConstructorHelpers::FObjectFinderOptional<UTexture2D> SpriteTextureObject;
-				FName ID_Effects;
-				FText NAME_Effects;
+			ConstructorHelpers::FObjectFinderOptional<UStaticMesh> BaseMesh;
+			ConstructorHelpers::FObjectFinderOptional<UStaticMesh> BeamMesh;
+			ConstructorHelpers::FObjectFinderOptional<UTexture2D> SpriteTextureObject;
+			FName Sprite_ID_Effects;
+			FText Sprite_NAME_Effects;
 
-				FConstructorStatics()
-					: SpriteTextureObject(TEXT("/Engine/EditorResources/Bad"))
-					  , ID_Effects(TEXT("Effects"))
-					  , NAME_Effects(NSLOCTEXT("SpriteCategory", "Effects", "Effects1"))
-				{
-				}
-			};
-			static FConstructorStatics ConstructorStatics;
-			EditorOnly_Sprite->SetMobility(EComponentMobility::Movable);
-			EditorOnly_Sprite->Sprite = ConstructorStatics.SpriteTextureObject.Get();
-			EditorOnly_Sprite->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
-			EditorOnly_Sprite->SetRelativeScale3D(FVector(1, 1, 1));
-			EditorOnly_Sprite->bHiddenInGame = true;
-			EditorOnly_Sprite->bIsScreenSizeScaled = true;
-			EditorOnly_Sprite->SpriteInfo.Category = ConstructorStatics.ID_Effects;
-			EditorOnly_Sprite->SpriteInfo.DisplayName = ConstructorStatics.NAME_Effects;
-			EditorOnly_Sprite->SetupAttachment(MeshComponent);
-			EditorOnly_Sprite->bReceivesDecals = false;
-			EditorOnly_Sprite->SetUsingAbsoluteScale(true);
-		}
+			// Sprite node is dependant upon the node
+			FConstructorStatics()
+				: BaseMesh(TEXT("/RockGameplayEvents/Rock_Base_2")),
+				  BeamMesh(TEXT("/RockGameplayEvents/Rock_Beam"))
+				  , SpriteTextureObject(TEXT("/RockGameplayEvents/Bubble_Empty"))
+				  , Sprite_ID_Effects(TEXT("Effects"))
+				  , Sprite_NAME_Effects(NSLOCTEXT("SpriteCategory", "Effects", "Effects1"))
+			{
+			}
+		};
+		static FConstructorStatics ConstructorStatics;
+
 		EditorOnly_RockBase = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RockBase"));
 
+		// THIS IS UGLY. Can we spin this off to like a custom editor component or something?
 		if (EditorOnly_RockBase)
 		{
-			struct FConstructorStatics
-			{
-				ConstructorHelpers::FObjectFinderOptional<UStaticMesh> SpriteTextureObject;
-				FName ID_Effects;
-				FText NAME_Effects;
-
-				FConstructorStatics()
-					: SpriteTextureObject(TEXT("/RockGameplayEvents/Rock_Base"))
-					  , ID_Effects(TEXT("Effects"))
-					  , NAME_Effects(NSLOCTEXT("SpriteCategory", "Effects", "Effects2"))
-				{
-				}
-			};
-			static FConstructorStatics ConstructorStatics;
-
 			EditorOnly_RockBase->SetMobility(EComponentMobility::Movable);
-			EditorOnly_RockBase->SetStaticMesh(ConstructorStatics.SpriteTextureObject.Get());
-			// 100 above 'root' location. So it's not in the ground.
-			// Later on perhaps we put a 'rock' that sticks to the ground, and the symbol up top. Like how UEFN does it?
-			// Line trace down from the Sprite to the ground
+			EditorOnly_RockBase->SetStaticMesh(ConstructorStatics.BaseMesh.Get());
 			FVector RockBaseLocation = EditorOnly_RockBase->GetRelativeLocation();
 			EditorOnly_RockBase->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
-			EditorOnly_RockBase->SetRelativeScale3D(FVector(.75f, 0.75f, 0.75f));
+			EditorOnly_RockBase->SetRelativeScale3D(FVector(1, 1, 1));
 			EditorOnly_RockBase->bHiddenInGame = true;
+			EditorOnly_RockBase->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			// EditorOnly_RockBase->SetCollisionResponseToAllChannels(ECR_Ignore);
 			//EditorOnly_RockBase->bIsScreenSizeScaled = true;
-			//EditorOnly_RockBase->SpriteInfo.Category = ConstructorStatics.ID_Effects;
-			//EditorOnly_RockBase->SpriteInfo.DisplayName = ConstructorStatics.NAME_Effects;
-			EditorOnly_RockBase->SetupAttachment(EditorOnly_Sprite);
-			//EditorOnly_RockBase->AttachToComponent(EditorOnly_Sprite, FAttachmentTransformRules::KeepRelativeTransform);
-			//EditorOnly_RockBase->Keep
+			EditorOnly_RockBase->SetupAttachment(MeshComponent);
 			EditorOnly_RockBase->bReceivesDecals = false;
 
 			EditorOnly_RockBase->SetUsingAbsoluteScale(true);
 		}
+		EditorOnly_Sprite = CreateDefaultSubobject<UBillboardComponent>(TEXT("Sprite"));
+		if (EditorOnly_Sprite)
+		{
+			EditorOnly_Sprite->SetMobility(EComponentMobility::Movable);
+			EditorOnly_Sprite->Sprite = ConstructorStatics.SpriteTextureObject.Get();
+			EditorOnly_Sprite->SetRelativeLocation(FVector(0.0f, 0.0f, 160.0f));
+			EditorOnly_Sprite->SetRelativeScale3D(FVector(1, 1, 1));
+			EditorOnly_Sprite->bHiddenInGame = true;
+			EditorOnly_Sprite->bIsScreenSizeScaled = true;
+			EditorOnly_Sprite->SpriteInfo.Category = ConstructorStatics.Sprite_ID_Effects;
+			EditorOnly_Sprite->SpriteInfo.DisplayName = ConstructorStatics.Sprite_NAME_Effects;
+			EditorOnly_Sprite->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+			EditorOnly_Sprite->SetupAttachment(EditorOnly_RockBase);
+			EditorOnly_Sprite->bReceivesDecals = false;
+			EditorOnly_Sprite->SetUsingAbsoluteScale(true);
+		}
 		EditorOnly_Beam = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Beam"));
 		if (EditorOnly_Beam)
 		{
-			struct FConstructorStatics
-			{
-				ConstructorHelpers::FObjectFinderOptional<UStaticMesh> SpriteTextureObject;
-				FName ID_Effects;
-				FText NAME_Effects;
-
-				FConstructorStatics()
-					: SpriteTextureObject(TEXT("/RockGameplayEvents/Rock_Beam"))
-					  , ID_Effects(TEXT("Effects"))
-					  , NAME_Effects(NSLOCTEXT("SpriteCategory", "Effects", "Effects3"))
-				{
-				}
-			};
 			EditorOnly_Beam->SetMobility(EComponentMobility::Movable);
-			static FConstructorStatics ConstructorStatics;
-			EditorOnly_Beam->SetStaticMesh(ConstructorStatics.SpriteTextureObject.Get());
-			// 100 above 'root' location. So it's not in the ground.
-			// Later on perhaps we put a 'rock' that sticks to the ground, and the symbol up top. Like how UEFN does it?
-			// Calculate height difference distance between Base and Sprite dynamically.
+			EditorOnly_Beam->SetStaticMesh(ConstructorStatics.BeamMesh.Get());
 			EditorOnly_Beam->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
-			float HeightDifference = EditorOnly_Beam->GetRelativeLocation().Z - EditorOnly_Sprite->GetRelativeLocation().Z;
-			HeightDifference = FMath::Clamp(HeightDifference, 1, 300);
-			EditorOnly_Beam->SetRelativeScale3D(FVector(1, 1, 1));
+			EditorOnly_Beam->SetRelativeScale3D(FVector(1, 1, 160));
 			EditorOnly_Beam->bHiddenInGame = true;
+			EditorOnly_Beam->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 			//EditorOnly_Beam->bIsScreenSizeScaled = true;
-			//EditorOnly_Beam->SpriteInfo.Category = ConstructorStatics.ID_Effects;
-			//EditorOnly_Beam->SpriteInfo.DisplayName = ConstructorStatics.NAME_Effects;
 			EditorOnly_Beam->SetupAttachment(EditorOnly_RockBase);
 			EditorOnly_Beam->bReceivesDecals = false;
 			EditorOnly_Beam->SetUsingAbsoluteScale(true);
@@ -131,8 +95,6 @@ ARockGameplayNode::ARockGameplayNode(const FObjectInitializer& ObjectInitializer
 	// #endif
 
 	GameplayConnector = CreateDefaultSubobject<URockDelegateConnectorComponent>(TEXT("DelegateConnector"));
-	// GameplayConnector->OnComponentCreated();
-	// GameplayConnector->RegisterComponent();
 }
 
 void ARockGameplayNode::Enable(AActor* EventInstigator)
@@ -150,6 +112,11 @@ bool ARockGameplayNode::IsEnabled() const
 	return bIsEnabled;
 }
 
+void ARockGameplayNode::ResetNode(AActor* EventInstigator)
+{
+	// Nothing to reset in base node
+}
+
 void ARockGameplayNode::TriggerOutput(AActor* EventInstigator)
 {
 	if (bIsEnabled)
@@ -161,56 +128,47 @@ void ARockGameplayNode::TriggerOutput(AActor* EventInstigator)
 void ARockGameplayNode::UpdateBaseAndBeam()
 {
 #if WITH_EDITOR
-	if (!GetWorld() || GetWorld()->WorldType != EWorldType::Editor)
-	{
-		return;
-	}
-
-	float MaxBaseLength = 256.7f;
+	// if (!GetWorld() || GetWorld()->WorldType != EWorldType::Editor)
+	// {
+	// 	return;
+	// }
+	//
+	// float MaxBaseLength = 384.84f;
 	//
 	// // Get sprite's world location
-	FVector SpriteLocation = EditorOnly_Sprite->GetComponentLocation();
+	// FVector SpriteLocation = EditorOnly_Sprite->GetComponentLocation();
+	// // Perform line trace to find ground
+	// FHitResult HitResult;
+	// const FVector TraceStart = SpriteLocation;
+	// const FVector TraceEnd = TraceStart - FVector(0, 0, MaxBaseLength);
 	//
-	// Perform line trace to find ground
-	FHitResult HitResult;
-	FVector TraceStart = SpriteLocation;
-	FVector TraceEnd = TraceStart - FVector(0, 0, MaxBaseLength);
-
-	FCollisionQueryParams QueryParams;
-	QueryParams.AddIgnoredActor(this);
-
-	bool bHit = GetWorld()->LineTraceSingleByChannel(
-		HitResult,
-		TraceStart,
-		TraceEnd,
-		ECollisionChannel::ECC_WorldStatic,
-		QueryParams
-	);
-	TArray<AActor*> ActorsToIgnore = {this};
-	UKismetSystemLibrary::LineTraceSingle(this, TraceStart, TraceEnd,
-		ETraceTypeQuery::TraceTypeQuery1, false, ActorsToIgnore,
-		EDrawDebugTrace::ForDuration, HitResult, true,
-		FLinearColor::Red, FLinearColor::Green, 1.0f);
-
-	float DistanceToGround = MaxBaseLength;
-	if (bHit)
-	{
-		DistanceToGround = FMath::Min((SpriteLocation - HitResult.Location).Size(), MaxBaseLength);
-	}
-	float BaseWidth = 0.5f;
+	// FCollisionQueryParams QueryParams;
+	// QueryParams.AddIgnoredActor(this);
+	//
+	// const bool bHit = GetWorld()->LineTraceSingleByChannel(
+	// 	HitResult,
+	// 	TraceStart,
+	// 	TraceEnd,
+	// 	ECollisionChannel::ECC_WorldStatic,
+	// 	QueryParams
+	// );
+	// // TArray<AActor*> ActorsToIgnore = {this};
+	// // UKismetSystemLibrary::LineTraceSingle(this, TraceStart, TraceEnd,ETraceTypeQuery::TraceTypeQuery1, false, ActorsToIgnore,	EDrawDebugTrace::ForDuration, HitResult, true,		FLinearColor::Red, FLinearColor::Green, 1.0f);
+	// float DistanceToGround = MaxBaseLength;
+	// if (bHit)
+	// {
+	// 	DistanceToGround = FMath::Min((SpriteLocation - HitResult.Location).Size(), MaxBaseLength);
+	// }
 	// // Update base component
-	EditorOnly_RockBase->SetRelativeLocation(FVector(0.0f, 0.0f, -DistanceToGround), false, nullptr, ETeleportType::TeleportPhysics);
-	EditorOnly_RockBase->SetRelativeScale3D(FVector(1, 1, 1));
-	//
-	float BeamWidth = 1;
+	// EditorOnly_RockBase->SetRelativeLocation(FVector(0.0f, 0.0f, -DistanceToGround), false, nullptr, ETeleportType::TeleportPhysics);
+	// EditorOnly_RockBase->SetRelativeScale3D(FVector(1, 1, 1));
 	//
 	// // Update beam component - place at ground level
-	FVector BeamLocation = SpriteLocation - FVector(0, 0, DistanceToGround);
-	EditorOnly_Beam->SetWorldLocation(BeamLocation);
-	EditorOnly_Beam->SetRelativeScale3D(FVector(BeamWidth, BeamWidth, DistanceToGround));
-	//
-	// // Rotate beam to be vertical
+	// FVector BeamLocation = SpriteLocation - FVector(0, 0, DistanceToGround);
+	// EditorOnly_Beam->SetWorldLocation(BeamLocation);
+	// EditorOnly_Beam->SetRelativeScale3D(FVector(1, 1, DistanceToGround));
 	// EditorOnly_Beam->SetRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
+
 #endif
 }
 
@@ -237,7 +195,7 @@ void ARockGameplayNode::PostEditChangeProperty(struct FPropertyChangedEvent& Pro
 void ARockGameplayNode::PostEditMove(bool bFinished)
 {
 	Super::PostEditMove(bFinished);
-	UpdateBaseAndBeam();
+	//UpdateBaseAndBeam();
 }
 
 

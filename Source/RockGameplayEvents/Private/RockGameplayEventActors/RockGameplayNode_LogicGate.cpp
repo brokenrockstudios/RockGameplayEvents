@@ -3,52 +3,69 @@
 
 #include "RockGameplayEventActors/RockGameplayNode_LogicGate.h"
 
+#include "Components/BillboardComponent.h"
+
 ARockGameplayNode_LogicGate::ARockGameplayNode_LogicGate(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
 	PrimaryActorTick.bCanEverTick = true;
+#if WITH_EDITORONLY_DATA
+	struct FConstructorStatics
+	{
+		ConstructorHelpers::FObjectFinderOptional<UTexture2D> SpriteTextureObject;
+		FConstructorStatics(): SpriteTextureObject(TEXT("/RockGameplayEvents/Bubble_Logic"))
+		{
+		}
+	};
+	static FConstructorStatics ConstructorStatics;
+	EditorOnly_Sprite->Sprite = ConstructorStatics.SpriteTextureObject.Get();
+#endif
 }
 
-void ARockGameplayNode_LogicGate::InputA(bool bNewState)
+void ARockGameplayNode_LogicGate::InputA(AActor* EventInstigator, bool bNewState)
 {
 	bInputAState = bNewState;
-	EvaluateGate();
+	EvaluateGate(EventInstigator);
 }
 
-void ARockGameplayNode_LogicGate::InputA_On()
+void ARockGameplayNode_LogicGate::InputA_On(AActor* EventInstigator)
 {
-	 InputA(true);
+	InputA(EventInstigator, true);
 }
 
-void ARockGameplayNode_LogicGate::InputA_Off()
+void ARockGameplayNode_LogicGate::InputA_Off(AActor* EventInstigator)
 {
-	InputA(false);
+	InputA(EventInstigator, false);
 }
 
-void ARockGameplayNode_LogicGate::InputB(bool bNewState)
+void ARockGameplayNode_LogicGate::InputB(AActor* EventInstigator, bool bNewState)
 {
 	bInputBState = bNewState;
-	EvaluateGate();
+	EvaluateGate(EventInstigator);
 }
 
-void ARockGameplayNode_LogicGate::InputB_On()
+void ARockGameplayNode_LogicGate::InputB_On(AActor* EventInstigator)
 {
-	InputB(true);
+	InputB(EventInstigator, true);
 }
 
-void ARockGameplayNode_LogicGate::InputB_Off()
+void ARockGameplayNode_LogicGate::InputB_Off(AActor* EventInstigator)
 {
-	InputB(false);
+	InputB(EventInstigator, false);
 }
 
-void ARockGameplayNode_LogicGate::ResetGate()
+void ARockGameplayNode_LogicGate::ResetNode(AActor* EventInstigator)
 {
+	Super::ResetNode(EventInstigator);
 	bInputAState = false;
 	bInputBState = false;
 }
 
-void ARockGameplayNode_LogicGate::EvaluateGate()
+void ARockGameplayNode_LogicGate::EvaluateGate(AActor* EventInstigator)
 {
+	// We could add things like 'filter logic'
+	// If we didn't want certain event instigators to trigger the gate
+
 	int32 ShouldTrigger = 0;
 	switch (GateType)
 	{
@@ -80,17 +97,14 @@ void ARockGameplayNode_LogicGate::EvaluateGate()
 
 	if (ShouldTrigger != 0)
 	{
-		OnTrueOutput.Broadcast(nullptr);
+		OnTrueOutput.Broadcast(EventInstigator);
 	}
 	else
 	{
-		OnFalseOutput.Broadcast(nullptr);
+		OnFalseOutput.Broadcast(EventInstigator);
 	}
 	if (ShouldTrigger != 0)
 	{
-		TriggerOutput(nullptr);
+		TriggerOutput(EventInstigator);
 	}
 }
-
-
-

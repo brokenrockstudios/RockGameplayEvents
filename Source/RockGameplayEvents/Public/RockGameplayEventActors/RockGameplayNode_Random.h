@@ -24,6 +24,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock|Logic Random", meta = (ClampMin = "0.0", ClampMax = "1.0", Units = "%"))
 	float TriggerPercentage = 0.5f;
 
+	// When you want to inversion of OnTrigger
+	UPROPERTY(BlueprintAssignable, Category = "Rock|Events")
+	FRockGameplayEvent OnTriggered_Inverted;
+	
 	// Seed for random number generation (0 = use system time)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock|Logic Random")
 	int32 RandomSeed = 0;
@@ -32,6 +36,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Rock|Logic Random")
 	void TriggerRandomSelection(AActor* EventInstigator);
 
+	
+	virtual void ResetNode(AActor* EventInstigator = nullptr) override;
 private:
 	// Initialize the random stream
 	virtual void BeginPlay() override;

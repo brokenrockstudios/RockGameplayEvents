@@ -11,24 +11,24 @@ UCLASS()
 class ROCKGAMEPLAYEVENTS_API ARockGameplayNode_Debounce : public ARockGameplayNode
 {
 	GENERATED_BODY()
-
 public:
-	// Sets default values for this actor's properties
 	ARockGameplayNode_Debounce(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+	
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	// Cooldown period in seconds
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock|Logic Debounce")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock|Debounce")
 	float CooldownPeriod = 1.0f;
 	// Should we queue inputs during the cooldown period?
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock|Logic Debounce")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock|Debounce")
 	bool bQueueInputDuringCooldown = false;
 
-	UFUNCTION(BlueprintCallable, Category = "Rock|Logic Debounce")
-	void TriggerInput();
-	UFUNCTION(BlueprintCallable, Category = "Rock|Logic Debounce")
-	void ResetNode();
-	UFUNCTION(BlueprintCallable, Category = "Rock|Logic Debounce")
+	UFUNCTION(BlueprintCallable, Category = "Rock|Debounce")
+	void TriggerInput(AActor* EventInstigator);
+
+	UFUNCTION(BlueprintCallable, Category = "Rock|Debounce")
 	bool IsCoolingDown() const;
+	
+	virtual void ResetNode(AActor* EventInstigator) override;
 
 private:
 	bool bIsInCooldown = false;

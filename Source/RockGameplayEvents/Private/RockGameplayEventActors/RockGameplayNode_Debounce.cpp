@@ -3,37 +3,51 @@
 
 #include "RockGameplayEventActors/RockGameplayNode_Debounce.h"
 
+#include "Components/BillboardComponent.h"
+
 ARockGameplayNode_Debounce::ARockGameplayNode_Debounce(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
 	PrimaryActorTick.bCanEverTick = true;
-	
+
 	CooldownPeriod = 1.0f;
 	bQueueInputDuringCooldown = false;
 	bIsInCooldown = false;
 	QueuedInputCount = 0;
+#if WITH_EDITORONLY_DATA
+	struct FConstructorStatics
+	{
+		ConstructorHelpers::FObjectFinderOptional<UTexture2D> SpriteTextureObject;
+
+		FConstructorStatics(): SpriteTextureObject(TEXT("/RockGameplayEvents/Bubble_Debounce"))
+		{
+		}
+	};
+	static FConstructorStatics ConstructorStatics;
+	EditorOnly_Sprite->Sprite = ConstructorStatics.SpriteTextureObject.Get();
+#endif
 }
 
 void ARockGameplayNode_Debounce::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
-	ResetNode();
+	ResetNode(nullptr);
 }
 
-void ARockGameplayNode_Debounce::TriggerInput()
+void ARockGameplayNode_Debounce::TriggerInput(AActor* EventInstigator)
 {
 	if (!bIsInCooldown)
 	{
 		// Not in cooldown, trigger output and start cooldown
 		TriggerOutput(nullptr);
 		bIsInCooldown = true;
-		
+
 		// Start cooldown timer
 		GetWorldTimerManager().SetTimer(
-			CooldownTimerHandle, 
-			this, 
-			&ARockGameplayNode_Debounce::OnCooldownEnd, 
-			CooldownPeriod, 
+			CooldownTimerHandle,
+			this,
+			&ARockGameplayNode_Debounce::OnCooldownEnd,
+			CooldownPeriod,
 			false
 		);
 	}
@@ -44,13 +58,6 @@ void ARockGameplayNode_Debounce::TriggerInput()
 	}
 }
 
-void ARockGameplayNode_Debounce::ResetNode()
-{
-	bIsInCooldown = false;
-	QueuedInputCount = 0;
-	GetWorldTimerManager().ClearTimer(CooldownTimerHandle);
-}
-
 void ARockGameplayNode_Debounce::OnCooldownEnd()
 {
 	bIsInCooldown = false;
@@ -59,7 +66,7 @@ void ARockGameplayNode_Debounce::OnCooldownEnd()
 	{
 		// Trigger the queued inputs
 		TriggerOutput(nullptr);
-		
+
 		QueuedInputCount--;
 
 		// If there are still queued inputs, wait for the cooldown period before triggering the next one
@@ -67,10 +74,10 @@ void ARockGameplayNode_Debounce::OnCooldownEnd()
 		{
 			bIsInCooldown = true;
 			GetWorldTimerManager().SetTimer(
-				CooldownTimerHandle, 
-				this, 
-				&ARockGameplayNode_Debounce::OnCooldownEnd, 
-				CooldownPeriod, 
+				CooldownTimerHandle,
+				this,
+				&ARockGameplayNode_Debounce::OnCooldownEnd,
+				CooldownPeriod,
 				false
 			);
 		}
@@ -82,3 +89,9 @@ bool ARockGameplayNode_Debounce::IsCoolingDown() const
 	return GetWorld()->GetTimerManager().IsTimerActive(CooldownTimerHandle);
 }
 
+void ARockGameplayNode_Debounce::ResetNode(AActor* EventInstigator)
+{
+	bIsInCooldown = false;
+	QueuedInputCount = 0;
+	GetWorldTimerManager().ClearTimer(CooldownTimerHandle);
+}
