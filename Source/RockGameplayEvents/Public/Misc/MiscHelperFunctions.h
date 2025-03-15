@@ -9,12 +9,8 @@
 
 #include "MiscHelperFunctions.generated.h"
 
-
 ROCKGAMEPLAYEVENTS_API DECLARE_LOG_CATEGORY_EXTERN(LogRockGameplayEvents, Log, All);
 
-/**
- *
- */
 UCLASS()
 class ROCKGAMEPLAYEVENTS_API UMiscHelperFunctions : public UBlueprintFunctionLibrary
 {

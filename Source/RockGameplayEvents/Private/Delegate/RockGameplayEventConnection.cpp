@@ -85,11 +85,11 @@ EDataValidationResult FRockGameplayEventConnection::IsDataValid(class FDataValid
 }
 #endif
 
+
 // It's unclear to me, but Inline and Sparse seems to successfully bind to the above Delegate
 // Even in the PyConversion.cpp,  they only handle FMulticastDelegateProperty and FDelegateProperty
 // Though they do have a 'TODO' about SparseDelegateProperty?
 // I think it's because all 3 (Multicast, Sparse, and Inline) of them override the same AddDelegate? 
-
 
 // case ERockDelegateType::Sparse:
 // 	{
@@ -105,7 +105,6 @@ EDataValidationResult FRockGameplayEventConnection::IsDataValid(class FDataValid
 // 		}
 // 		break;
 // 	}
-
 
 // TODO thought?
 //{

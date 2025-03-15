@@ -1,4 +1,5 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Broken Rock Studios LLC. All Rights Reserved.
+// See the LICENSE file for details.
 
 #pragma once
 
@@ -6,9 +7,6 @@
 #include "Components/StaticMeshComponent.h"
 #include "RockEditorOnlyMeshComponent.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class ROCKGAMEPLAYEVENTS_API URockEditorOnlyMeshComponent : public UStaticMeshComponent
 {
@@ -16,7 +14,4 @@ class ROCKGAMEPLAYEVENTS_API URockEditorOnlyMeshComponent : public UStaticMeshCo
 	// USed with the Gameplay Node actors for debug visuals in editor only
 public:
 	URockEditorOnlyMeshComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
-	 
-
-	
 };

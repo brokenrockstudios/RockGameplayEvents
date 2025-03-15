@@ -6,16 +6,15 @@
 #include "Components/BillboardComponent.h"
 
 
-// Sets default values
 ARockGameplayNode_Delay::ARockGameplayNode_Delay(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 #if WITH_EDITORONLY_DATA
 	struct FConstructorStatics
 	{
 		ConstructorHelpers::FObjectFinderOptional<UTexture2D> SpriteTextureObject;
+
 		FConstructorStatics(): SpriteTextureObject(TEXT("/RockGameplayEvents/Bubble_Delay"))
 		{
 		}

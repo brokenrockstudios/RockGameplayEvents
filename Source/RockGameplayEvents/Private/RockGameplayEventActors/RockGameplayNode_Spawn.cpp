@@ -69,10 +69,13 @@ void ARockGameplayNode_Spawn::TriggerInput(AActor* EventInstigator)
 	}
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 
-	UE_LOG(LogTemp, Warning, TEXT("SpawnedActors.Num() = %d at Location %s"), SpawnedActors.Num(), *GetActorLocation().ToString());
+	// FVector RelativeLocation = GetTransform().InverseTransformPosition(SpawnTransform.GetLocation());
+	FVector RelativeLocation = GetActorRotation().RotateVector(SpawnTransform.GetLocation());
+
+	//UE_LOG(LogTemp, Warning, TEXT("SpawnedActors.Num() = %d at Location %s"), SpawnedActors.Num(), *GetActorLocation().ToString());
 	AActor* spawnedActor = GetWorld()->SpawnActor<AActor>(
 		ActorToSpawn,
-		GetActorLocation() + SpawnTransform.GetLocation(),
+		GetActorLocation() + RelativeLocation, //SpawnTransform.GetLocation(),
 		SpawnTransform.Rotator(),
 		SpawnParams);
 	if (spawnedActor)

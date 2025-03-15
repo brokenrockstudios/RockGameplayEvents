@@ -1,7 +1,7 @@
 {
 	"FileVersion": 3,
 	"Version": 1,
-	"VersionName": "1.2",
+	"VersionName": "1.3",
 	"FriendlyName": "RockGameplayEvents",
 	"Description": "GameplayEvents for editor event binding and helper gameplay event actors",
 	"Category": "Broken Rock Tools",
@@ -28,6 +28,12 @@
 			"Name": "RockGameplayEventsVisualizers",
 			"Type": "Editor",
 			"LoadingPhase": "PostEngineInit"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "Niagara",
+			"Enabled": true
 		}
 	]
 }

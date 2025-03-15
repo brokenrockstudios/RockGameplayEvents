@@ -16,25 +16,25 @@ public:
 	// Sets default values for this actor's properties
 	ARockGameplayNode_Spawn(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-	UFUNCTION(BlueprintCallable, Category = "Rock Gameplay Node")
+	UFUNCTION(BlueprintCallable, Category = "Rock|Spawn")
 	void DestroyAllSpawnedActors(AActor* EventInstigator);
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock Gameplay Node")
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock|Spawn")
 	TSubclassOf<AActor> ActorToSpawn;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock Gameplay Node", meta = (MakeEditWidget = true))
-	FTransform SpawnTransform;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock|Spawn", meta = (MakeEditWidget = true))
+	FTransform SpawnTransform = FTransform(FVector(0, 0, 200));
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock Gameplay Node")
-	bool bUseInstigatorAsOwner;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock|Spawn")
+	bool bUseInstigatorAsOwner = true;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock Gameplay Node")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock|Spawn")
 	int32 MaxSpawnCount = 15;
 
-	UFUNCTION(BlueprintCallable, Category = "Rock Gameplay Node")
-	void TriggerInput(AActor* EventInstigator); 
-	
+	UFUNCTION(BlueprintCallable, Category = "Rock|Spawn")
+	void TriggerInput(AActor* EventInstigator);
+
 protected:
 	UPROPERTY()
-	TArray<AActor*> SpawnedActors;
+	TArray<TObjectPtr<AActor>> SpawnedActors;
 };

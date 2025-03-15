@@ -20,7 +20,7 @@ public:
 	float Delay = 1.0;
 	
 protected:
-	UFUNCTION( BlueprintCallable, Category = "Rock|Delay" )
+	UFUNCTION(BlueprintCallable, Category = "Rock|Delay" )
 	void TriggerDelayed(AActor* EventInstigator);
 
 	FTimerHandle TimerHandle;

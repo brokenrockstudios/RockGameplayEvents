@@ -21,23 +21,23 @@ public:
 	// Sets default values for this actor's properties
 	ARockGameplayNode_FixedData(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, Category = "Rock|FixedData")
+	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, Category = "Rock|FixedData")
 	FRockGameplayEvent_String OnTriggeredString;
-	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, Category = "Rock|FixedData")
+	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, Category = "Rock|FixedData")
 	FRockGameplayEvent_Int OnTriggeredInt;
-	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, Category = "Rock|FixedData")
+	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, Category = "Rock|FixedData")
 	FRockGameplayEvent_Float OnTriggeredFloat;
-	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, Category = "Rock|FixedData")
+	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, Category = "Rock|FixedData")
 	FRockGameplayEvent_Bool OnTriggeredBool;
-	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, Category = "Rock|FixedData")
+	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, Category = "Rock|FixedData")
 	FRockGameplayEvent_Vector OnTriggeredVector;
-	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, Category = "Rock|FixedData")
+	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, Category = "Rock|FixedData")
 	FRockGameplayEvent_Rotator OnTriggeredRotator;
-	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, Category = "Rock|FixedData")
+	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, Category = "Rock|FixedData")
 	FRockGameplayEvent_Transform OnTriggeredTransform;
-	// UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, Category = "Rock|FixedData")
+	// UPROPERTY(BlueprintAssignable, BlueprintReadWrite, Category = "Rock|FixedData")
 	// FRockGameplayEvent_Actor OnTriggeredActor;
-	// UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, Category = "Rock|FixedData")
+	// UPROPERTY(BlueprintAssignable, BlueprintReadWrite, Category = "Rock|FixedData")
 	// FRockGameplayEvent_Object OnTriggeredObject;
 
 	UFUNCTION(BlueprintCallable, Category = "Rock|FixedData")

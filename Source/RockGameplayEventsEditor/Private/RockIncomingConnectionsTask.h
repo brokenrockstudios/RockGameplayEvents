@@ -1,4 +1,5 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright Broken Rock Studios LLC. All Rights Reserved.
+// See the LICENSE file for details.
 
 #pragma once
 
@@ -11,8 +12,8 @@ class FRockIncomingConnectionsTask : public FNonAbandonableTask
 {
 public:
 	FRockIncomingConnectionsTask(TWeakObjectPtr<AActor> InActor, TWeakObjectPtr<URockDelegateConnectorComponent> InConnector)
-		: WeakActor(InActor)
-		, WeakConnector(InConnector)
+		: WeakActor(InActor),
+		  WeakConnector(InConnector)
 	{
 	}
 

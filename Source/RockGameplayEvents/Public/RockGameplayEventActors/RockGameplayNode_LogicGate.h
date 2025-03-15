@@ -47,32 +47,32 @@ public:
 	// Sets default values for this actor's properties
 	ARockGameplayNode_LogicGate(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock|Logic Gate")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock|Logic")
 	ERockLogicGateType GateType = ERockLogicGateType::AND;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock|Logic Gate")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock|Logic")
 	bool bResetOnTrigger = false;
 
 	// Will trigger on any inputs
-	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, Category = "Rock|Logic Gate")
+	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, Category = "Rock|Logic")
 	FRockGameplayEvent OnTrueOutput;
-	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, Category = "Rock|Logic Gate")
+	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, Category = "Rock|Logic")
 	FRockGameplayEvent OnFalseOutput;
 	
 	// Input A event
-	UFUNCTION(BlueprintCallable, Category = "Rock|Logic Gate")
+	UFUNCTION(BlueprintCallable, Category = "Rock|Logic")
 	void InputA(AActor* EventInstigator, bool bNewState);
-	UFUNCTION(BlueprintCallable, Category = "Rock|Logic Gate")
+	UFUNCTION(BlueprintCallable, Category = "Rock|Logic")
 	void InputA_On(AActor* EventInstigator);
-	UFUNCTION(BlueprintCallable, Category = "Rock|Logic Gate")
+	UFUNCTION(BlueprintCallable, Category = "Rock|Logic")
 	void InputA_Off(AActor* EventInstigator);
 
 	// Input B event
-	UFUNCTION(BlueprintCallable, Category = "Rock|Logic Gate")
+	UFUNCTION(BlueprintCallable, Category = "Rock|Logic")
 	void InputB(AActor* EventInstigator, bool bNewState);
-	UFUNCTION(BlueprintCallable, Category = "Rock|Logic Gate")
+	UFUNCTION(BlueprintCallable, Category = "Rock|Logic")
 	void InputB_On(AActor* EventInstigator);
-	UFUNCTION(BlueprintCallable, Category = "Rock|Logic Gate")
+	UFUNCTION(BlueprintCallable, Category = "Rock|Logic")
 	void InputB_Off(AActor* EventInstigator);
 
 	// Reset the gate's state

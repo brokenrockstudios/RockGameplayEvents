@@ -18,7 +18,7 @@ class ROCKGAMEPLAYEVENTS_API ARockGameplayNode_FX : public ARockGameplayNode
 public:
 	ARockGameplayNode_FX( const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get() );
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock Gameplay Node", meta = (MakeEditWidget = true))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Rock|FX", meta = (MakeEditWidget = true))
 	FTransform SpawnTransform;
 
 	UPROPERTY( EditAnywhere, BlueprintReadWrite, Category = "Rock|FX" )

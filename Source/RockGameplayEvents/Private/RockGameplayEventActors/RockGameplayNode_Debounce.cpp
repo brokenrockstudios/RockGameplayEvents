@@ -14,6 +14,7 @@ ARockGameplayNode_Debounce::ARockGameplayNode_Debounce(const FObjectInitializer&
 	bQueueInputDuringCooldown = false;
 	bIsInCooldown = false;
 	QueuedInputCount = 0;
+
 #if WITH_EDITORONLY_DATA
 	struct FConstructorStatics
 	{

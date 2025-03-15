@@ -19,27 +19,28 @@ class ROCKGAMEPLAYEVENTS_API ARockGameplayNode : public AActor
 	GENERATED_BODY()
 
 protected:
-	//#if true
+	
+#if WITH_EDITORONLY_DATA
 	// Editor only component used to help display the functionality of this gameplay node at a glance.
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Rock|Components", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY()
 	TObjectPtr<UBillboardComponent> EditorOnly_Sprite;
 
 	/** Editor only component used to display the sprite to be able to see the location of the Component */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Rock|Components", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY()
 	TObjectPtr<UStaticMeshComponent> EditorOnly_Beam;
 
 	/** Editor only component used to display the sprite to be able to see the location of the Component */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Rock|Components", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY()
 	TObjectPtr<UStaticMeshComponent> EditorOnly_RockBase;
 	// Do a line between bottom sprite and top sprite?
-	// #endif
+#endif
 
 	// If you want an actual in-game mesh, you override add it here
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Rock|Components", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly,meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UStaticMeshComponent> MeshComponent;
 
 public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Rock|Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<URockDelegateConnectorComponent> GameplayConnector;
 
 	// Sets default values for this actor's properties

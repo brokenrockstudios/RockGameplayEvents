@@ -17,22 +17,22 @@ public:
 	ARockGameplayNode_Compare(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	// Will trigger on any inputs
-	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, Category = "Rock|Compare")
+	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, Category = "Rock|Compare")
 	FRockGameplayEvent OnLessThanOutput;
-	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, Category = "Rock|Compare")
+	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, Category = "Rock|Compare")
 	FRockGameplayEvent OnLessThanOrEqualOutput;
-	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, Category = "Rock|Compare")
+	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, Category = "Rock|Compare")
 	FRockGameplayEvent OnEqualOutput;
-	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, Category = "Rock|Compare")
+	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, Category = "Rock|Compare")
 	FRockGameplayEvent OnNotEqualOutput;
-	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, Category = "Rock|Compare")
+	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, Category = "Rock|Compare")
 	FRockGameplayEvent OnGreaterThanOutput;
-	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, EditAnywhere, Category = "Rock|Compare")
+	UPROPERTY(BlueprintAssignable, BlueprintReadWrite, Category = "Rock|Compare")
 	FRockGameplayEvent OnGreaterThanOrEqualOutput;
 protected:
-	UFUNCTION(BlueprintCallable, Category = "Rock|Logic")
+	UFUNCTION(BlueprintCallable, Category = "Rock|Compare")
 	void InputA(AActor* EventInstigator, FString bNewState);
-	UFUNCTION(BlueprintCallable, Category = "Rock|Logic")
+	UFUNCTION(BlueprintCallable, Category = "Rock|Compare")
 	void InputB(AActor* EventInstigator, FString bNewState);
 	// Reset the gate's state
 	

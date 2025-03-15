@@ -1,15 +1,17 @@
 // Copyright Broken Rock Studios LLC. All Rights Reserved.
 // See the LICENSE file for details.
 
-
 #include "Component/RockGameplayEventWorldSubsystem.h"
 
 #include "Component/RockDelegateConnectorComponent.h"
-#include "Misc/MiscHelperFunctions.h"
 
 void URockGameplayEventWorldSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
+	
+	// Alternatively, we could wait 1-2 frames after any registration is called.
+	// In the event there is some 'late added' components? Since likely any level streaming, and possibly some world partition is going to break this stuff?
+	// Since presumably most components will register on BeginPlay
 	// We need to delay 1 frame tick, so that all the component's had a chance for their BeginPlay to be called and bindings to occur
 	GetWorld()->GetTimerManager().SetTimerForNextTick(this, &URockGameplayEventWorldSubsystem::DestroyAllComponents);
 }
@@ -17,6 +19,7 @@ void URockGameplayEventWorldSubsystem::Initialize(FSubsystemCollectionBase& Coll
 void URockGameplayEventWorldSubsystem::AddComponent(URockDelegateConnectorComponent* Component)
 {
 	Components.Add(Component);
+	
 }
 
 void URockGameplayEventWorldSubsystem::RemoveComponent(URockDelegateConnectorComponent* Component)

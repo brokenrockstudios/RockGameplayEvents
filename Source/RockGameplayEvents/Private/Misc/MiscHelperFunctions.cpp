@@ -196,20 +196,6 @@ FString UMiscHelperFunctions::BuildFunctionParameterString(
 	return ParamString;
 }
 
-
-// FString FRockFunctionInfo::GetSignatureFunctionString() const
-// {
-// 	// get all the parameter types and put them in a foo(int, float, bool) format
-//
-// 	auto parameters = UMiscHelperFunctions::BuildFunctionParameterString(Function, false);
-// 	if (parameters.Len() > 0)
-// 	{
-// 		parameters = "(" + parameters + ")";
-// 	}
-// 	const FString SignatureString = Name + parameters;
-// 	return SignatureString;
-// }
-
 void UMiscHelperFunctions::AddDelegateConnectorComponent(AActor* InActor)
 {
 	if (!InActor)

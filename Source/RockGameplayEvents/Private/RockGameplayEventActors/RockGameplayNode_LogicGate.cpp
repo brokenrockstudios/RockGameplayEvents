@@ -13,6 +13,7 @@ ARockGameplayNode_LogicGate::ARockGameplayNode_LogicGate(const FObjectInitialize
 	struct FConstructorStatics
 	{
 		ConstructorHelpers::FObjectFinderOptional<UTexture2D> SpriteTextureObject;
+
 		FConstructorStatics(): SpriteTextureObject(TEXT("/RockGameplayEvents/Bubble_Logic"))
 		{
 		}

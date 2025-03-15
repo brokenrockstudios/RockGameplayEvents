@@ -5,7 +5,6 @@
 
 #include "Component/RockDelegateConnectorComponent.h"
 #include "Components/BillboardComponent.h"
-#include "Kismet/KismetSystemLibrary.h"
 
 
 ARockGameplayNode::ARockGameplayNode(const FObjectInitializer& ObjectInitializer)
@@ -14,12 +13,11 @@ ARockGameplayNode::ARockGameplayNode(const FObjectInitializer& ObjectInitializer
 	PrimaryActorTick.bCanEverTick = true;
 	MeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComponent"));
 	// set collision ignore all
-	//MeshComponent->SetCollisionResponseToAllChannels(ECR_Ignore);
 	MeshComponent->SetMobility(EComponentMobility::Movable);
-
 	RootComponent = MeshComponent;
 
-	// #if true
+
+#if WITH_EDITORONLY_DATA
 	if (!IsRunningCommandlet() && !IsRunningDedicatedServer())
 	{
 		struct FConstructorStatics
@@ -30,7 +28,6 @@ ARockGameplayNode::ARockGameplayNode(const FObjectInitializer& ObjectInitializer
 			FName Sprite_ID_Effects;
 			FText Sprite_NAME_Effects;
 
-			// Sprite node is dependant upon the node
 			FConstructorStatics()
 				: BaseMesh(TEXT("/RockGameplayEvents/Rock_Base_2")),
 				  BeamMesh(TEXT("/RockGameplayEvents/Rock_Beam"))
@@ -47,15 +44,13 @@ ARockGameplayNode::ARockGameplayNode(const FObjectInitializer& ObjectInitializer
 		// THIS IS UGLY. Can we spin this off to like a custom editor component or something?
 		if (EditorOnly_RockBase)
 		{
-			EditorOnly_RockBase->SetMobility(EComponentMobility::Movable);
 			EditorOnly_RockBase->SetStaticMesh(ConstructorStatics.BaseMesh.Get());
+			EditorOnly_RockBase->SetMobility(EComponentMobility::Movable);
 			FVector RockBaseLocation = EditorOnly_RockBase->GetRelativeLocation();
 			EditorOnly_RockBase->SetRelativeLocation(FVector(0.0f, 0.0f, 0.0f));
 			EditorOnly_RockBase->SetRelativeScale3D(FVector(1, 1, 1));
 			EditorOnly_RockBase->bHiddenInGame = true;
 			EditorOnly_RockBase->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-			// EditorOnly_RockBase->SetCollisionResponseToAllChannels(ECR_Ignore);
-			//EditorOnly_RockBase->bIsScreenSizeScaled = true;
 			EditorOnly_RockBase->SetupAttachment(MeshComponent);
 			EditorOnly_RockBase->bReceivesDecals = false;
 
@@ -64,8 +59,8 @@ ARockGameplayNode::ARockGameplayNode(const FObjectInitializer& ObjectInitializer
 		EditorOnly_Sprite = CreateDefaultSubobject<UBillboardComponent>(TEXT("Sprite"));
 		if (EditorOnly_Sprite)
 		{
+			EditorOnly_Sprite->SetSprite(ConstructorStatics.SpriteTextureObject.Get());
 			EditorOnly_Sprite->SetMobility(EComponentMobility::Movable);
-			EditorOnly_Sprite->Sprite = ConstructorStatics.SpriteTextureObject.Get();
 			EditorOnly_Sprite->SetRelativeLocation(FVector(0.0f, 0.0f, 160.0f));
 			EditorOnly_Sprite->SetRelativeScale3D(FVector(1, 1, 1));
 			EditorOnly_Sprite->bHiddenInGame = true;
@@ -86,13 +81,12 @@ ARockGameplayNode::ARockGameplayNode(const FObjectInitializer& ObjectInitializer
 			EditorOnly_Beam->SetRelativeScale3D(FVector(1, 1, 160));
 			EditorOnly_Beam->bHiddenInGame = true;
 			EditorOnly_Beam->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-			//EditorOnly_Beam->bIsScreenSizeScaled = true;
 			EditorOnly_Beam->SetupAttachment(EditorOnly_RockBase);
 			EditorOnly_Beam->bReceivesDecals = false;
 			EditorOnly_Beam->SetUsingAbsoluteScale(true);
 		}
 	}
-	// #endif
+#endif
 
 	GameplayConnector = CreateDefaultSubobject<URockDelegateConnectorComponent>(TEXT("DelegateConnector"));
 }
