@@ -47,7 +47,7 @@ void ARockGameplayNode_Spawn::TriggerInput(AActor* EventInstigator)
 		}
 	}
 
-	if (SpawnedActors.Num() >= MaxSpawnCount)
+	if (MaxSpawnCount!= -1 && SpawnedActors.Num() >= MaxSpawnCount)
 	{
 		// UE_LOG(LogTemp, Warning, TEXT("MaxSpawnedActors reached, cannot spawn more actors"));
 		return;
