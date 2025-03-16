@@ -1,4 +1,4 @@
-// Copyright Broken Rock Studios LLC. All Rights Reserved.
+// Copyright 2025 Broken Rock Studios LLC. All Rights Reserved.
 // See the LICENSE file for details.
 
 #pragma once
@@ -38,9 +38,9 @@ protected:
 	
 	virtual void ResetNode(AActor* EventInstigator) override;
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Rock|Compare")
 	FString StateA = "0";
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Rock|Compare")
    	FString StateB = "0";
 	
 	void Evaluate(AActor* EventInstigator);

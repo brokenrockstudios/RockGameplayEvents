@@ -1,4 +1,4 @@
-// Copyright Broken Rock Studios LLC. All Rights Reserved.
+// Copyright 2025 Broken Rock Studios LLC. All Rights Reserved.
 // See the LICENSE file for details.
 
 #pragma once
@@ -19,14 +19,14 @@ public:
 
 	// There is no need for this to be false at this time. Just remove the component after binding
 	// As we have no longer term functionality for this Component at this time.
-	UPROPERTY(EditAnywhere, AdvancedDisplay)
+	UPROPERTY(EditAnywhere, AdvancedDisplay, Category = "Rock Delegate Connector")
 	bool bAutoDestroyAfterBind = true;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Rock Delegate Connector")
 	TArray<FRockGameplayEventConnection> DelegateConnections;
 
 	// Incoming readonly connections
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, Category = "Rock Delegate Connector")
 	TArray<FRockGameplayIncomingConnection> IncomingConnections;
 
 protected:

@@ -1,9 +1,8 @@
-// Copyright Broken Rock Studios LLC. All Rights Reserved.
+// Copyright 2025 Broken Rock Studios LLC. All Rights Reserved.
 // See the LICENSE file for details.
 
 #include "RockEventsEditorFunctionLibrary.h"
 
-#include "Component/RockDelegateConnectorComponent.h"
 #include "Kismet2/BlueprintEditorUtils.h"
 #include "Misc/MiscHelperFunctions.h"
 

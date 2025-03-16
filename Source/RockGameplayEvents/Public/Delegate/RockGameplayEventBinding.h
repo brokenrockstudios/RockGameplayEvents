@@ -1,4 +1,4 @@
-// Copyright Broken Rock Studios LLC. All Rights Reserved.
+// Copyright 2025 Broken Rock Studios LLC. All Rights Reserved.
 // See the LICENSE file for details.
 
 #pragma once
@@ -39,11 +39,11 @@ USTRUCT(BlueprintType)
 struct ROCKGAMEPLAYEVENTS_API FRockGameplayEventBinding
 {
 	GENERATED_BODY()
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "RockGameplayEvents")
 	TObjectPtr<AActor> TargetActor;
 
 	// This must match the signature of FRockGameplayEventConnection::DelegatePropertyName
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "RockGameplayEvents")
 	FName FunctionNameToBind;
 	// TODO: Switch out for direction UFunction, so that we don't have to do the FindFunctionByName
 	//UPROPERTY()

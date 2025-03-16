@@ -1,4 +1,4 @@
-// Copyright Broken Rock Studios LLC. All Rights Reserved.
+// Copyright 2025 Broken Rock Studios LLC. All Rights Reserved.
 // See the LICENSE file for details.
 
 #pragma once
@@ -36,11 +36,11 @@ protected:
 #endif
 
 	// If you want an actual in-game mesh, you override add it here
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly,meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly,meta = (AllowPrivateAccess = "true"), Category = "Rock")
 	TObjectPtr<UStaticMeshComponent> MeshComponent;
 
 public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Rock")
 	TObjectPtr<URockDelegateConnectorComponent> GameplayConnector;
 
 	// Sets default values for this actor's properties

@@ -1,4 +1,4 @@
-// Copyright Broken Rock Studios LLC. All Rights Reserved.
+// Copyright 2025 Broken Rock Studios LLC. All Rights Reserved.
 // See the LICENSE file for details.
 
 #pragma once
@@ -17,31 +17,26 @@ class ROCKGAMEPLAYEVENTS_API UMiscHelperFunctions : public UBlueprintFunctionLib
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "RockGameplayEvents")
 	static TArray<FRockDelegateInfo> GetDelegatesForActorClass(const UClass* ActorClass);
-	
-	UFUNCTION(BlueprintCallable)
+
+	UFUNCTION(BlueprintCallable, Category = "RockGameplayEvents")
 	static TArray<FRockDelegateInfo> GetDelegatesForActor(AActor* InActor);
-	
-	UFUNCTION(BlueprintCallable)
+
+	UFUNCTION(BlueprintCallable, Category = "RockGameplayEvents")
 	static TArray<FRockFunctionInfo> GetFunctionsForActor(AActor* InActor);
 
-	
-	// UFUNCTION(BlueprintCallable)
-	//static FString BuildFunctionParameterString(UFunction* InFunction, bool bIncludeParameterType = true, bool bIncludeParameterName = false, bool bIncludeParameterFlags = false);
+	UFUNCTION(BlueprintCallable, Category = "RockGameplayEvents")
+	static FString BuildFunctionParameterString(
+		UFunction* InFunction, bool bIncludeParameterType = true, bool bIncludeParameterName = false, bool bIncludeParameterFlags = false);
 
-	UFUNCTION(BlueprintCallable)
-	static FString BuildFunctionParameterString(UFunction* InFunction, bool bIncludeParameterType = true, bool bIncludeParameterName = false, bool bIncludeParameterFlags = false);
-	
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "RockGameplayEvents")
 	static void AddDelegateConnectorComponent(AActor* InActor);
-	
+
 	// Internal Testing	
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "RockGameplayEvents")
 	static void LogFunctionInfo(TArray<FRockFunctionInfo> InFunctions);
 	// Internal Testing
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "RockGameplayEvents")
 	static void LogDelegateInfo(TArray<FRockDelegateInfo> InDelegates);
 };
-
-

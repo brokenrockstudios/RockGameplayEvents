@@ -1,4 +1,4 @@
-// Copyright Broken Rock Studios LLC. All Rights Reserved.
+// Copyright 2025 Broken Rock Studios LLC. All Rights Reserved.
 // See the LICENSE file for details.
 
 #pragma once
@@ -29,13 +29,13 @@ public:
 	// UFUNCTION(BlueprintCallable)
 	// static FString BuildFunctionParameterString(UFunction* InFunction, bool bIncludeParameterType = true, bool bIncludeParameterName = false, bool bIncludeParameterFlags = false);
 	//
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Rock|Function Library")
 	static TArray<FRockFunctionInfo> GetCompatibleFunctionsForDelegate(AActor* InActor, FRockDelegateInfo DelegateProperty);
 	
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Rock|Function Library")
 	static bool CanFunctionBindToDelegate(UFunction* InFunction, UFunction* DelegateFunction);
 	
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Category = "Rock|Function Library")
 	static bool IsFunctionsCompatible(UFunction* InFunction, UFunction* DelegateFunction);
 	//
 	// UFUNCTION(BlueprintCallable)
