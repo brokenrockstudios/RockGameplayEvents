@@ -9,21 +9,24 @@ public class RockGameplayEvents : ModuleRules
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		// PCHUsage = ModuleRules.PCHUsageMode.NoPCHs;
-		
+
 		PublicDependencyModuleNames.AddRange(
-			[
-				"Core", "GameplayTags"
-			]
+			new string[]
+			{
+				"Core",
+				"GameplayTags"
+			}
 		);
 
 		PrivateDependencyModuleNames.AddRange(
-			[
+			new string[]
+			{
 				"CoreUObject",
 				"Engine",
 				"Slate",
 				"SlateCore",
 				"Niagara"
-			]
+			}
 		);
 	}
 }

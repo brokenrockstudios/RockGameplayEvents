@@ -8,18 +8,20 @@ public class RockGameplayEventsVisualizers : ModuleRules
 	public RockGameplayEventsVisualizers(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-		
+
 		PublicDependencyModuleNames.AddRange(
-			[
+			new string[]
+			{
 				"Core",
 				"CoreUObject",
 				"RockGameplayEvents",
 				"UnrealEd"
-			]
+			}
 		);
-		
+
 		PrivateDependencyModuleNames.AddRange(
-			[
+			new string[]
+			{
 				"BlueprintGraph",
 				"Core",
 				"CoreUObject",
@@ -34,7 +36,7 @@ public class RockGameplayEventsVisualizers : ModuleRules
 				"ToolWidgets",
 				"UnrealEd",
 				"RockGameplayEventsEditor"
-			]
+			}
 		);
 	}
 }
