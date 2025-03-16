@@ -4,8 +4,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PropertyHandle.h"
 #include "Delegate/RockGameplayEventConnection.h"
 #include "UObject/Object.h"
+#include "Widgets/Text/STextBlock.h"
 
 struct FRockDelegateInfo;
 class URockDelegateConnectorComponent;

@@ -6,6 +6,7 @@
 #include "CoreMinimal.h"
 #include "Delegate/RockGameplayEventBinding.h"
 #include "GameFramework/Actor.h"
+
 #include "RockGameplayNode.generated.h"
 
 class URockDelegateConnectorComponent;

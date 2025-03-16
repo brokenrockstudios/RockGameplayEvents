@@ -4,6 +4,10 @@
 #include "RockGameplayEventActors/RockGameplayNode_Spawn.h"
 
 #include "Components/BillboardComponent.h"
+#include "Engine/World.h"
+#include "Engine/Texture2D.h"
+#include "GameFramework/Pawn.h"
+#include "UObject/ConstructorHelpers.h"
 
 
 ARockGameplayNode_Spawn::ARockGameplayNode_Spawn(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)

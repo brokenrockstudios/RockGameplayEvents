@@ -8,7 +8,8 @@ public class RockGameplayEvents : ModuleRules
 	public RockGameplayEvents(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
-
+		// PCHUsage = ModuleRules.PCHUsageMode.NoPCHs;
+		
 		PublicDependencyModuleNames.AddRange(
 			[
 				"Core", "GameplayTags"

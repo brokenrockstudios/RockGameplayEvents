@@ -5,6 +5,10 @@
 
 #include "Component/RockDelegateConnectorComponent.h"
 #include "Components/BillboardComponent.h"
+#include "Engine/Texture2D.h"
+#include "Engine/StaticMesh.h"
+#include "Components/StaticMeshComponent.h"
+#include "UObject/ConstructorHelpers.h"
 
 
 ARockGameplayNode::ARockGameplayNode(const FObjectInitializer& ObjectInitializer)

@@ -2,8 +2,9 @@
 // See the LICENSE file for details.
 
 #include "RockGameplayEventActors/RockGameplayNode_Random.h"
-
+#include "Engine/Texture2D.h"
 #include "Components/BillboardComponent.h"
+#include "UObject/ConstructorHelpers.h"
 
 ARockGameplayNode_Random::ARockGameplayNode_Random(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)

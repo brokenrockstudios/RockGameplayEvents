@@ -3,6 +3,8 @@
 
 #include "RockFunctionDropdownWidget.h"
 
+#include "Widgets/Layout/SScrollBox.h"
+
 //-----------------------------------------------------------------------------
 // SRockFunctionDropdownWidget implementation
 //-----------------------------------------------------------------------------

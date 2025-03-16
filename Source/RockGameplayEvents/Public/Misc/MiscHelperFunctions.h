@@ -5,7 +5,7 @@
 
 #include "CoreMinimal.h"
 #include "Delegate/DelegateFunctionInfo.h"
-#include "UObject/Object.h"
+#include "Kismet/BlueprintFunctionLibrary.h"
 
 #include "MiscHelperFunctions.generated.h"
 

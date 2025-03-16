@@ -19,8 +19,7 @@
       "Type": "Runtime",
       "LoadingPhase": "Default",
       "PlatformAllowList": [
-        "Win64",
-        "Win32"
+        "Win64"
       ]
     },
     {
@@ -28,8 +27,7 @@
       "Type": "Editor",
       "LoadingPhase": "Default",
       "PlatformAllowList": [
-        "Win64",
-        "Win32"
+        "Win64"
       ]
     },
     {
@@ -37,8 +35,7 @@
       "Type": "Editor",
       "LoadingPhase": "PostEngineInit",
       "PlatformAllowList": [
-        "Win64",
-        "Win32"
+        "Win64"
       ]
     }
   ],

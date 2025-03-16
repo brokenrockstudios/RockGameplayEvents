@@ -5,9 +5,9 @@
 
 #include "RockIncomingConnectionsTask.h"
 #include "Selection.h"
+#include "Async/AsyncWork.h"
 #include "Component/RockDelegateConnectorComponent.h"
 #include "DetailCustomization/RockDelegateConnectionsCustomization.h"
-#include "Misc/MiscHelperFunctions.h"
 
 #define LOCTEXT_NAMESPACE "FRockGameplayEventMessagesModule"
 

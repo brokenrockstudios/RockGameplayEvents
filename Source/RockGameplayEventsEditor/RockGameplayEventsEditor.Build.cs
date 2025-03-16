@@ -8,6 +8,7 @@ public class RockGameplayEventsEditor : ModuleRules
 	public RockGameplayEventsEditor(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
+		
 		IncludeOrderVersion = EngineIncludeOrderVersion.Latest;
 		
 		PublicDependencyModuleNames.AddRange(

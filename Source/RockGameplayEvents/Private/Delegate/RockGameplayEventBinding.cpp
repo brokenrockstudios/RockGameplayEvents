@@ -2,6 +2,7 @@
 // See the LICENSE file for details.
 
 #include "Delegate/RockGameplayEventBinding.h"
+#include "GameFramework/Actor.h"
 
 void FRockGameplayEventBinding::BindMulticastDelegate(UObject* DelegateOwner, const FMulticastDelegateProperty* DelegateProperty) const
 {

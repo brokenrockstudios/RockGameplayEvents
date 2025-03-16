@@ -2,8 +2,9 @@
 // See the LICENSE file for details.
 
 #include "RockGameplayEventActors/RockGameplayNode_FixedData.h"
-
+#include "Engine/Texture2D.h"
 #include "Components/BillboardComponent.h"
+#include "UObject/ConstructorHelpers.h"
 
 ARockGameplayNode_FixedData::ARockGameplayNode_FixedData(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)

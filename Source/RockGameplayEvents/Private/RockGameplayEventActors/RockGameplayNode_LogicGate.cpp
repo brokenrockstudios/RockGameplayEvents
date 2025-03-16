@@ -2,8 +2,9 @@
 // See the LICENSE file for details.
 
 #include "RockGameplayEventActors/RockGameplayNode_LogicGate.h"
-
+#include "Engine/Texture2D.h"
 #include "Components/BillboardComponent.h"
+#include "UObject/ConstructorHelpers.h"
 
 ARockGameplayNode_LogicGate::ARockGameplayNode_LogicGate(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)

@@ -4,7 +4,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Framework/MultiBox/MultiBoxBuilder.h"
 #include "UObject/Object.h"
+#include "Widgets/SCompoundWidget.h"
+#include "Widgets/Input/SComboButton.h"
 
 struct FRockDelegateInfo;
 DECLARE_DELEGATE_TwoParams(FOnDelegateSelected, TSharedPtr<FRockDelegateInfo>, ESelectInfo::Type);

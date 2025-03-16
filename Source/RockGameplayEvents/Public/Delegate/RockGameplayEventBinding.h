@@ -8,6 +8,8 @@
 
 #include "RockGameplayEventBinding.generated.h"
 
+class AActor;
+
 /* 
 * Generally it's useful to know 'who' triggered a thing for many gameplay systems.
 * Having AActor in the signature, helps eliminate some of the default delegates and function object dropdowns.

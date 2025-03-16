@@ -4,7 +4,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PropertyHandle.h"
+#include "Framework/MultiBox/MultiBoxBuilder.h"
 #include "UObject/Object.h"
+#include "Widgets/SCompoundWidget.h"
+#include "Widgets/Input/SComboButton.h"
 
 struct FRockDelegateInfo;
 DECLARE_DELEGATE_TwoParams(FOnFunctionSelected, const UFunction*, ESelectInfo::Type);

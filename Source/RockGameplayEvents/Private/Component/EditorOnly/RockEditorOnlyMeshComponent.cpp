@@ -2,6 +2,8 @@
 // See the LICENSE file for details.
 
 #include "Component/EditorOnly/RockEditorOnlyMeshComponent.h"
+#include "Engine/Texture2D.h"
+#include "UObject/ConstructorHelpers.h"
 
 URockEditorOnlyMeshComponent::URockEditorOnlyMeshComponent(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)

@@ -8,6 +8,8 @@
 #include "RockGameplayNode_FX.generated.h"
 
 
+class UForceFeedbackEffect;
+class UCameraShakeBase;
 class UNiagaraSystem;
 // A simple example of burst FX inspired by the GameplayCueNotify_BurstEffects
 UCLASS()

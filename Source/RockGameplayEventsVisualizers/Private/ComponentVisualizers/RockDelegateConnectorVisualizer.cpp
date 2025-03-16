@@ -5,6 +5,7 @@
 
 #include "Component/RockDelegateConnectorComponent.h"
 #include "RockDeveloperSettings.h"
+#include "SceneManagement.h"
 
 void FRockDelegateConnectorVisualizer::DrawVisualization(const UActorComponent* Component, const FSceneView* View, FPrimitiveDrawInterface* PDI)
 {

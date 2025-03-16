@@ -3,7 +3,11 @@
 
 #include "RockGameplayEventActors/RockGameplayNode_Delay.h"
 
+#include "TimerManager.h"
 #include "Components/BillboardComponent.h"
+#include "Engine/World.h"
+#include "Engine/Texture2D.h"
+#include "UObject/ConstructorHelpers.h"
 
 
 ARockGameplayNode_Delay::ARockGameplayNode_Delay(const FObjectInitializer& ObjectInitializer)

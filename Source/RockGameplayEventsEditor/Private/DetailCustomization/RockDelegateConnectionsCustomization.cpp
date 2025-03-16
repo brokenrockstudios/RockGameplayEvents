@@ -11,9 +11,12 @@
 #include "RandomFunctions.h"
 #include "RockEventsEditorFunctionLibrary.h"
 #include "Component/RockDelegateConnectorComponent.h"
+#include "GameFramework/Actor.h"
 #include "Misc/MiscHelperFunctions.h"
 #include "Widgets/RockDelegateDropdownWidget.h"
 #include "Widgets/RockFunctionDropdownWidget.h"
+#include "Widgets/Images/SImage.h"
+#include "Widgets/Layout/SSplitter.h"
 #include "Widgets/Text/STextBlock.h"
 
 #define LOCTEXT_NAMESPACE "FRockEventDelegateDetails"

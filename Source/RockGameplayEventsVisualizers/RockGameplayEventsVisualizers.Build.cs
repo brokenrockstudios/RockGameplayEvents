@@ -8,7 +8,7 @@ public class RockGameplayEventsVisualizers : ModuleRules
 	public RockGameplayEventsVisualizers(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
-	
+		
 		PublicDependencyModuleNames.AddRange(
 			[
 				"Core",

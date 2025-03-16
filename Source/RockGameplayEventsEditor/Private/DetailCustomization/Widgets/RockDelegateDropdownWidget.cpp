@@ -4,6 +4,7 @@
 #include "RockDelegateDropdownWidget.h"
 #include "Delegate/DelegateFunctionInfo.h"
 #include "Misc/MiscHelperFunctions.h"
+#include "Widgets/Layout/SScrollBox.h"
 
 //-----------------------------------------------------------------------------
 // SRockDelegateDropdownWidget implementation

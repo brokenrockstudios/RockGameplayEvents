@@ -4,8 +4,12 @@
 #include "RockGameplayEventActors/RockGameplayNode_FX.h"
 
 #include "NiagaraFunctionLibrary.h"
+#include "Camera/CameraShakeBase.h"
 #include "Components/BillboardComponent.h"
+#include "Engine/World.h"
+#include "Engine/Texture2D.h"
 #include "Kismet/GameplayStatics.h"
+#include "UObject/ConstructorHelpers.h"
 
 ARockGameplayNode_FX::ARockGameplayNode_FX(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {

@@ -4,6 +4,7 @@
 #include "Component/RockDelegateConnectorComponent.h"
 
 #include "Component/RockGameplayEventWorldSubsystem.h"
+#include "Engine/World.h"
 
 #if WITH_EDITOR
 #include "Misc/DataValidation.h"

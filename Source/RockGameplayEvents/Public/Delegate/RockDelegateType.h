@@ -3,6 +3,9 @@
 
 #pragma once
 
+#include "CoreMinimal.h"
+#include "RockDelegateType.generated.h"
+
 UENUM()
 enum class ERockDelegateType : uint8
 {

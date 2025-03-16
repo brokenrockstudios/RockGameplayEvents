@@ -4,9 +4,11 @@
 #include "RockIncomingConnectionsTask.h"
 
 #include "RockDeveloperSettings.h"
+#include "Async/TaskGraphInterfaces.h"
 #include "Component/RockDelegateConnectorComponent.h"
 #include "Delegate/RockGameplayEventConnection.h"
 #include "Misc/MiscHelperFunctions.h"
+#include "UObject/UObjectIterator.h"
 
 void FRockIncomingConnectionsTask::DoWork()
 {
