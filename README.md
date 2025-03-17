@@ -11,6 +11,10 @@
 
 </div>
 
+Officially released on FAB! 
+https://www.fab.com/listings/1a2f6fb0-803d-470f-9989-d75fe98d649f
+
+
 <hr>
 
 # RockGameplayEvents
